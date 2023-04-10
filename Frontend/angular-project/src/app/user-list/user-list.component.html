@@ -1,5 +1,5 @@
-<div class="h1 text-primary py-3 mx-5">{{title}}:</div>
-<div class="row g-0 text-center text-white fw-bold bg-success py-3 mx-5">
+<div class="h1 text-primary py-3 mx-4">{{title}}:</div>
+<div class="row g-0 text-center text-white fw-bold bg-success py-3 mx-4">
   <div class="col-4 col-sm-2">{{headers.imagen}}</div>
   <div class="col-4 col-sm-2">{{headers.usuario}}</div>
   <div class="col-md-2 d-none d-md-block">{{headers.nombre}}</div>
@@ -7,7 +7,7 @@
   <div class="col-lg-1 d-none d-lg-block">{{headers.telefono}}</div>
   <div class="col-4 col-sm-3 col-md-2">{{headers.recetas}}</div>
 </div>
-<div class="row g-0 text-center align-items-center mx-5" [ngClass]="{'text-white fondo-negro':isEven, 'bg-light':!isEven}"
+<div class="row g-0 text-center align-items-center mx-4" [ngClass]="{'text-white fondo-negro':isEven, 'bg-light':!isEven}"
   *ngFor="let user of users; even as isEven">
   <div class="col-4 col-sm-2" *ngIf="user.imagen; else sinFoto"><img [src]="user.imagen" [alt]="user.imagen"></div>
   <ng-template #sinFoto>
@@ -33,4 +33,4 @@
     </button>
   </div>
 </div>
-<div class="py-3 mx-5">¿Quieres formar parte de nuestra comunidad? <a [routerLink]="['/registro']">Regístrate</a></div>
+<div class="py-3 mx-4">¿Quieres formar parte de nuestra comunidad? <a [routerLink]="['/registro']">Regístrate</a></div>
