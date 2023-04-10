@@ -1,0 +1,8 @@
+#imagen img{
+  width: 100%;
+  height: 885px;
+  object-fit: cover;
+}
+#centrar{
+  margin-top:20%;
+}

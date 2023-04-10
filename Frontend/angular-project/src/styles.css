@@ -1,0 +1,9 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/@fortawesome/fontawesome-free/css/all.min.css";
+body{
+  background-image: url('assets/fondo.png');
+  background-attachment: fixed;
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

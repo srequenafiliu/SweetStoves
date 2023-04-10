@@ -1,0 +1,75 @@
+<form class="form">
+  <fieldset class="row g-0 d-flex align-items-center">
+    <legend class="mt-4 offset-1 col-10 col-lg-3">Ordenar recetas:</legend>
+    <div class="btn-group dropdown offset-1 col-10 offset-lg-0" [ngClass]="{'col-lg-3': difA || difD, 'col-lg-2 offset-lg-1': !difA && !difD}">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        Por dificultad <span *ngIf="difA">(Ascendente)</span> <span *ngIf="difD">(Descendente)</span>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <button class="dropdown-item" [ngClass]="{'active':difA}" type="button" (click)="orderDificultadA()">Ascendente</button>
+        <button class="dropdown-item" [ngClass]="{'active':difD}" type="button" (click)="orderDificultadD()">Descendente</button>
+      </ul>
+    </div>
+    <div class="btn-group dropdown offset-1 col-10 offset-lg-0" [ngClass]="{'col-lg-4': fechaA || fechaD, 'col-lg-3': !fechaA && !fechaD}">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        Por fecha de publicación <span *ngIf="fechaA"><br class="d-sm-none">(Ascendente)</span>
+        <span *ngIf="fechaD"><br class="d-sm-none">(Descendente)</span>
+      </button>
+      <ul class="dropdown-menu">
+        <button class="dropdown-item" [ngClass]="{'active':fechaA}" type="button" (click)="orderFechaA()">Ascendente</button>
+        <button class="dropdown-item" [ngClass]="{'active':fechaD}" type="button" (click)="orderFechaD()">Descendente</button>
+      </ul>
+    </div>
+  </fieldset>
+  <fieldset class="row g-0 d-flex align-items-center">
+    <legend class="offset-1 col-10 mt-4">Filtros:</legend>
+    <div class="form-floating offset-1 col-10 col-lg-2 mb-2">
+      <input type="text" [(ngModel)]="search" class="form-control" name="filterDesc" id="filterDesc" placeholder="Nombre de la receta">
+      <label for="floatingInput">Nombre de la receta</label>
+    </div>
+    <div class="form-group row offset-1 col-10 offset-lg-0 col-lg-3 mb-2">
+      <label class="form-label">Tipo:&nbsp;</label>
+      <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio1" value="dulce" [(ngModel)]="tipo">
+        <label class="btn btn-outline-danger" for="btnradio1">Dulce</label>
+        <input type="radio" class="btn-check" name="btnradio" id="btnradio2" value="salado" [(ngModel)]="tipo">
+        <label class="btn btn-outline-info" for="btnradio2">Salado</label>
+      </div>
+    </div>
+    <div class="form-group row g-0 offset-1 col-10 col-sm-4 offset-lg-0 col-lg-4 mb-2">
+      <label class="form-label">Necesidades especiales:&nbsp;</label>
+      <div class="row g-0">
+        <div class="form-check form-switch col-lg-4">
+          <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault" value="glutenFree" [(ngModel)]="glutenFree">
+          <label class="form-check-label" for="flexSwitchCheckDefault">Sin gluten</label>
+        </div>
+        <div class="form-check form-switch col-lg-4">
+          <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault" value="lactosaFree" [(ngModel)]="lactosaFree">
+          <label class="form-check-label" for="flexSwitchCheckDefault">Sin lactosa</label>
+        </div>
+        <div class="form-check form-switch col-lg-4">
+          <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault" value="vegan" [(ngModel)]="vegan">
+          <label class="form-check-label" for="flexSwitchCheckDefault">Veganas</label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group offset-1 col-10 offset-sm-2 col-sm-2 offset-lg-0 col-lg-1 star-container">
+      <label class="form-label">Dificultad:&nbsp;</label><br>
+      <span *ngFor="let star of [1, 2, 3, 4 , 5]" class="fa-star"
+      [ngClass]="{'fas':star<=level, 'far':star>level}"
+      (click)="changeLevel(star)"></span>
+    </div>
+    <div class="h1 offset-1 col-4 col-lg-4 my-2 text-primary">{{title}}:</div>
+    <button type="reset" class="btn btn-secondary btn-icon-split float-right offset-2 col-4 offset-lg-4 col-lg-2" (click)="reset()">
+      <span class="icon text-white-50"><i class="fas fa-trash"></i></span>
+      <span class="text"> Borrar<span class="d-none d-lg-inline"> todos los</span> filtros</span>
+    </button>
+  </fieldset>
+</form>
+
+<div class="row g-0" *ngIf="repices && repices.length; else noRepices">
+  <repice-item class="offset-1 col-10 col-lg-4 mt-4" [ngClass]="{'offset-lg-2':!isEven, 'offset-lg-1':isEven}" [repice]="repice" *ngFor="let repice of repices | repiceFilter:search | typeFilter:tipo
+  | needsFilter:glutenFree:'Sin gluten' | needsFilter:lactosaFree:'Sin lactosa' | needsFilter:vegan:'Vegana' | levelFilter:level, even as isEven">
+  </repice-item>
+</div>
+<ng-template #noRepices><h3>No hay recetas disponibles</h3></ng-template>

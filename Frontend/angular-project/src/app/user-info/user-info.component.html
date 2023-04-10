@@ -1,0 +1,84 @@
+<div *ngIf="user, else userNotFound">
+  <div class="row g-0">
+    <div class="offset-md-3 col-md-6">
+      <div class="row g-0 align-items-center">
+        <h1 class="display-3 text-success text-center fw-bold mt-5">Cuenta de {{user.usuario}}</h1>
+        <div class="text-danger text-center mb-5">Tenga en cuenta que esta página es una simulación de login ya que no está implementado</div>
+        <div class="offset-2 col offset-md-0 col-md-7 col-lg-5">
+          <img [src]="user.imagen" [alt]="user.usuario" *ngIf="user.imagen, else sinFoto">
+          <ng-template #sinFoto><div class="text-center">
+            <span class="fa-stack fa-4x">
+              <i class="fas fa-circle fa-stack-2x text-primary"></i>
+              <i class="fas fa-bell-concierge fa-stack-1x fa-inverse"></i>
+            </span>
+          </div></ng-template>
+        </div>
+        <div class="offset-2 col offset-md-0 col-md-5 col-lg-7 h2 my-2">{{user.datosUsuario!.nombre}} {{user.datosUsuario!.apellido}}</div>
+        <div class="offset-2 col offset-md-0 col-md-8 my-2 my-lg-4"><span class="h5 text-primary">Correo: </span>{{user.correo}}</div>
+        <div class="offset-2 col offset-md-0 col-md-4 my-2 my-lg-4">
+          <span class="h5 text-primary">Teléfono: </span>
+          <span *ngIf="user.datosUsuario!.telefono, else sinTelefono">{{user.datosUsuario!.telefono}}</span>
+          <ng-template #sinTelefono>Sin teléfono</ng-template>
+        </div>
+        <div class="offset-2 col offset-md-0 col-7 col-md-6 mb-4">
+          <button class="btn btn-info" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+            ¿Quieres hacer algo hoy?
+          </button>
+          <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title text-primary" id="offcanvasExampleLabel">Menú de usuario</h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <div class="mb-3">
+                {{user.usuario}}, tus aportes siempre son bienvenidos. Elige cualquiera de las opciones que se muestran a continuación:
+              </div>
+              <div class="row">
+                <button type="button" class="btn btn-outline-secondary offset-md-1 col-md-6 my-2" [ngClass]="{'active':lista}" placement="right"
+                ngbTooltip="Comprueba las recetas que has creado" (click)="mostrarLista()">Tu lista de recetas</button>
+                <button type="button" class="btn btn-outline-success offset-md-1 col-md-6 my-2" [ngClass]="{'active':recetaNueva}" placement="right"
+                ngbTooltip="Crea una nueva receta que se vinculará a tu cuenta" (click)="mostrarAdd()">Nueva receta</button>
+                <button type="button" class="btn btn-outline-warning offset-md-1 col-md-6 my-2" [ngClass]="{'active':actualizarDatos}" placement="right"
+                ngbTooltip="Cambia cualquiera de tus datos" (click)="mostrarUpdate()">Actualiza tu cuenta</button>
+                <button type="button" class="btn btn-outline-danger offset-md-1 col-md-6 my-2" [ngClass]="{'active':borrarUsuario}" placement="right"
+                ngbTooltip="Puedes borrar tu cuenta sin compromiso, pero te echaremos de menos" (click)="mostrarBorrado()">Borra tu cuenta</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="offset-2 col offset-md-0 col-5 col-md-6 mb-4 text-end">
+          <button class="btn btn-warning" type="button" (click)="logout()">Cierra sesión</button>
+        </div>
+      </div>
+      <div class="col row g-0" [ngClass]="{'d-none': !borrarUsuario}">
+        <h1 class="col-12 display-5 text-danger text-center fw-bold mt-5">Borrar cuenta</h1>
+        <div class="col-12 row g-0 h5 text-center">
+          <div class="col-12">¿Estás seguro de que quieres borrar tu cuenta?</div>
+          <div class="col-12 text-danger my-2">Se borrarán todas tus recetas, por lo que nadie podrá verlas.</div>
+          <div class="col-12">Si aun así deseas borrar tu cuenta, pulsa en el siguiente botón:</div>
+          <button type="button" class="offset-3 col-6 btn btn-danger my-5" (click)="deleteUsuario()">Borrar datos</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-0" [ngClass]="{'d-none': !lista}" *ngIf="recetas && recetas.length; else noRepices">
+    <h1 class="display-5 text-secondary text-center fw-bold mt-5">Lista de tus recetas</h1>
+    <repice-item class="col-12 col-lg-4 mt-4" [ngClass]="{'offset-lg-2':!isEven, 'offset-lg-1':isEven}"
+    (deleteRepice)="borrarReceta($event)" [repice]="repice" *ngFor="let repice of recetas, even as isEven">
+    </repice-item>
+  </div>
+  <ng-template #noRepices><div class="h3 offset-md-3 col-md-6 text-center pb-5" [ngClass]="{'d-none': !lista}">
+    No has guardado ninguna receta todavía
+  </div></ng-template>
+
+  <repice-add [ngClass]="{'d-none': !recetaNueva}" [user]="user" (addNewRepice)="addNewRepice($event)"></repice-add>
+
+  <user-update [ngClass]="{'d-none': !actualizarDatos}" [user]="user" (modificarUsuario)="modificarUsuario($event)"></user-update>
+</div>
+
+<ng-template #userNotFound>
+  <div class="row g-0">
+    <h1 class="display-3 text-danger text-center fw-bold mt-5">No se ha encontrado ningún usuario</h1>
+  </div>
+</ng-template>

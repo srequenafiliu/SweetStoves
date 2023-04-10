@@ -1,0 +1,56 @@
+<h1 class="display-1 text-center fw-bold text-primary"> {{repice.nombre}} </h1>
+<div class="row g-0">
+  <div class="offset-1 col-10 offset-lg-1 col-lg-4 my-4">
+    <div class="card">
+      <div class="card-header text-white h3 text-center" [ngClass]="{'bg-danger':repice.tipo === 'Dulce', 'bg-info':repice.tipo !== 'Dulce'}"> Datos de la receta </div>
+      <div class="d-none d-lg-block col-lg-12"><img [src]="repice.imagen" alt="" style="width: 100%;"></div>
+      <div class="card-block p-3 row g-0">
+        <div class="card-text col-md-6"><span class="fw-bold h5">Ingredientes</span>
+          <ul>
+            <li *ngFor="let ing of repice.ingredientes">{{ing}}</li>
+          </ul>
+        </div>
+        <div class="card-text col-md-6"><span class="fw-bold h5">Necesidades especiales</span>
+          <ul>
+            <li *ngFor="let need of repice.necesidades">{{need}}</li>
+          </ul>
+        </div>
+        <div class="card-text d-flex align-items-center">
+          <span class="fw-bold">Dificultad:&nbsp;</span>
+          <difficulty-level class="my-1" [ngClass]="{'text-danger':repice.tipo === 'Dulce', 'text-info':repice.tipo !== 'Dulce'}" [level]="repice.dificultad"></difficulty-level>
+        </div>
+        <div class="card-text col-md-6">
+          <span class="fw-bold">Publicado por: </span>{{ repice.usuario.usuario }}
+        </div>
+        <div class="card-text col-md-6 text-end">
+          <span class="fw-bold">Fecha: </span>{{ repice.creacion | date:'dd/MM/y' }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="accordion offset-1 col-10 offset-lg-2 col-lg-4 my-4" id="accordionRepice">
+    <div class="accordion-item" *ngFor="let paso of repice.elaboracion">
+      <h2 class="accordion-header" [id]="'heading'+numeroPaso(paso)">
+        <button class="accordion-button" [ngClass]="{'collapsed':!primerPaso(paso)}" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse'+numeroPaso(paso)" [attr.aria-expanded]="primerPaso(paso)" [attr.aria-controls]="'collapse'+numeroPaso(paso)">
+          Paso nº{{numeroPaso(paso)}}
+        </button>
+      </h2>
+      <div [id]="'collapse'+numeroPaso(paso)" class="accordion-collapse collapse" [ngClass]="{'show':primerPaso(paso)}" [attr.aria-labelledby]="'heading'+numeroPaso(paso)" data-bs-parent="#accordionRepice">
+        <div class="accordion-body">{{paso}}</div>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingFinal">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"data-bs-target="#collapseFinal" aria-expanded="false" aria-controls="collapseFinal">
+          Fin de la receta
+        </button>
+      </h2>
+      <div id="collapseFinal" class="accordion-collapse collapse" aria-labelledby="headingFinal" data-bs-parent="#accordionRepice">
+        <div class="accordion-body">
+          Enhorabuena, has finalizado la receta. Pulsa el botón para volver al menú de recetas
+          <div class="my-2"><button type="button" class="btn" [ngClass]="{'btn-danger':repice.tipo === 'Dulce', 'btn-info':repice.tipo !== 'Dulce'}" (click)="goBack()">Volver</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

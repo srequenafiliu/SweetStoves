@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-reverse-engineering PUBLIC "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN" "http://hibernate.org/dtd/hibernate-reverse-engineering-3.0.dtd" >
+
+<hibernate-reverse-engineering>
+	<table-filter match-name="receta" />
+	<table-filter match-name="usuario"></table-filter>
+	<table-filter match-name="datos_usuario"></table-filter>
+	<table-filter match-name="recetas_seguidas_usuario"></table-filter>
+</hibernate-reverse-engineering>

@@ -1,0 +1,4 @@
+<div class="card-text star-container">
+  <span *ngFor="let star of [1, 2, 3, 4 , 5]" class="fa-star"
+  [ngClass]="{'fas':star<=level, 'far':star>level}"></span>
+</div>

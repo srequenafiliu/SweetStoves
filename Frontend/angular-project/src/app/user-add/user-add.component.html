@@ -1,0 +1,88 @@
+<div class="row g-0">
+  <div class="d-none d-md-block col-md-6 p-0" id="imagen">
+    <img src="../../assets/sanji.jpg" alt="Registro" class="img-fluid">
+  </div>
+  <div class="col-md-6" id="centrar">
+    <div class="h1 text-primary fw-bold text-center">Crea tu cuenta</div>
+    <form (ngSubmit)="addUser(newUser, fileImage)" #form="ngForm">
+      <div class="row g-0">
+        <div class="h3 text-info text-center text-decoration-underline mb-3">Datos personales</div>
+
+        <div class="form-group form-floating my-1 offset-md-1 col-md-4">
+          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!newUser.datosUsuario!.nombre.match('^\\D+$') && newUser.datosUsuario!.nombre,
+          'is-valid':newUser.datosUsuario!.nombre.match('^\\D+$')}" name="nombre" placeholder="Nombre" [(ngModel)]="newUser.datosUsuario!.nombre" required pattern="^\D+$">
+          <div class="invalid-feedback">El nombre no es válido</div>
+          <div class="valid-feedback">Nombre válido</div>
+          <label>Nombre<span class="text-danger">*</span></label>
+        </div>
+        <div class="form-group form-floating my-1 offset-md-2 col-md-4">
+          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!newUser.datosUsuario!.apellido.match('^\\D+$') && newUser.datosUsuario!.apellido,
+          'is-valid':newUser.datosUsuario!.apellido.match('^\\D+$')}" name="apellido" placeholder="Apellido" [(ngModel)]="newUser.datosUsuario!.apellido" [required]="validarApellido(newUser.datosUsuario!.apellido)" pattern="^\D+$">
+          <label>Apellido</label>
+        </div>
+        <div class="form-group form-floating my-1 offset-md-4 col-md-4">
+          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!newUser.datosUsuario!.telefono.match('\\d{9}') && newUser.datosUsuario!.telefono,
+          'is-valid':newUser.datosUsuario!.telefono.match('\\d{9}')}" name="telefono" placeholder="Teléfono" [(ngModel)]="newUser.datosUsuario!.telefono" [required]="validarTelefono(newUser.datosUsuario!.telefono)" pattern="\d{9}">
+          <div class="invalid-feedback">El número de teléfono no es válido</div>
+          <div class="valid-feedback">Número de teléfono válido</div>
+          <label>Teléfono</label>
+        </div>
+
+        <div class="h3 text-info text-center text-decoration-underline mt-2 mb-3">Datos de la cuenta</div>
+
+        <div class="form-group form-floating my-1 offset-md-1 col-md-4">
+          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!newUser.usuario.match('\\S{4,}') && newUser.usuario || usuarioExistente(newUser.usuario),
+          'is-valid':newUser.usuario.match('\\S{4,}') && !usuarioExistente(newUser.usuario)}" name="usuario" placeholder="Usuario" [(ngModel)]="newUser.usuario" required pattern="\S{4,}">
+          <div class="invalid-feedback" *ngIf="!usuarioExistente(newUser.usuario), else usuarioRepetido">La longitud del usuario debe ser de 4 caracteres mínimo</div>
+          <ng-template #usuarioRepetido><div class="invalid-feedback">Este usuario ya existe</div></ng-template>
+          <div class="valid-feedback">Usuario válido</div>
+          <label>Usuario<span class="text-danger">*</span></label>
+        </div>
+        <div class="form-group form-floating my-1 offset-md-2 col-md-4">
+          <input type="email" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!newUser.correo.match('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$') && newUser.correo,
+          'is-valid':newUser.correo.match('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')}" name="correo" placeholder="Correo electrónico" [(ngModel)]="newUser.correo" required pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+          <div class="invalid-feedback">El correo electrónico no es válido</div>
+          <div class="valid-feedback">Correo electrónico válido</div>
+          <label>Correo electrónico<span class="text-danger">*</span></label>
+        </div>
+        <div class="form-group form-floating my-1 offset-md-1 col-md-4">
+          <input type="password" class="form-control" [ngClass]="{'is-invalid':!newPassword.match('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$') && newPassword,
+          'is-valid':newPassword.match('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$')}" name="password" placeholder="Contraseña" [(ngModel)]="newPassword" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$">
+          <div class="invalid-feedback">
+            La longitud de la contraseña debe ser de 8 caracteres mínimo, y debe contener al menos:
+            <ul>
+              <li>Una letra mayúscula</li>
+              <li>Una letra minúscula</li>
+              <li>Un número</li>
+            </ul>
+          </div>
+          <div class="valid-feedback">Contraseña válida</div>
+          <label>Contraseña<span class="text-danger">*</span></label>
+        </div>
+        <div class="form-group form-floating my-1 offset-md-2 col-md-4">
+          <input type="password" class="form-control" [ngClass]="{'is-invalid':newUser.password !== newPassword,
+          'is-valid':newUser.password === newPassword && newPassword}" name="password2" placeholder="Confirma la contraseña" [(ngModel)]="newUser.password" required [pattern]="newPassword">
+          <div class="invalid-feedback">Las contraseñas no coinciden</div>
+          <div class="valid-feedback">Las contraseñas coinciden</div>
+          <label>Confirma la contraseña<span class="text-danger">*</span></label>
+        </div>
+        <div class="form-group offset-md-1 col-md-10 col-lg-6">
+          <label for="image">Imagen</label>
+          <input type="file" class="form-control" name="image" #fileImage (change)="changeImage(fileImage)">
+        </div>
+        <img *ngIf="newUser.imagen" [src]="newUser.imagen" alt="" class="bg-info img-thumbnail rounded-circle offset-3 offset-lg-1 col-md-6 col-lg-2" accept="image/png">
+      </div>
+      <div class="row g-0 my-2 align-items-center">
+        <div class="text-danger fw-light col offset-md-1">*Campos obligatorios</div>
+        <div class="col-md-10 d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary" (click)="reset(fileImage)">Borrar datos</button>
+          <div class="mx-3"></div>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid || usuarioExistente(newUser.usuario)">Registrarse</button>
+        </div>
+      </div>
+    </form>
+    <div class="text-center">
+      <a [routerLink]="['/login']">Prefiero iniciar sesión</a>
+    </div>
+  </div>
+</div>
