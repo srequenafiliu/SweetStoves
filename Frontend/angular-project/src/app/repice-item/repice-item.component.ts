@@ -12,7 +12,7 @@ export class RepiceItemComponent {
   @Input() repice!:IRepice;
   constructor(private repicesService:RepicesService,private router : Router) {}
   cuentaUsuario():boolean{
-    return this.router.url === '/recetas';
+    return this.router.url === '/usuario/'+this.repice.usuario.id;
   }
   @Output() deleteRepice = new EventEmitter<IRepice>();
   borrarReceta(){

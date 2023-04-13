@@ -35,7 +35,7 @@
               </div>
               <div class="row">
                 <button type="button" class="btn btn-outline-secondary offset-md-1 col-md-6 my-2" [ngClass]="{'active':lista}" placement="right"
-                ngbTooltip="Comprueba las recetas que has creado" (click)="mostrarLista()">Tu lista de recetas</button>
+                ngbTooltip="Comprueba las recetas que has creado y seguido" (click)="mostrarLista()">Tu lista de recetas</button>
                 <button type="button" class="btn btn-outline-success offset-md-1 col-md-6 my-2" [ngClass]="{'active':recetaNueva}" placement="right"
                 ngbTooltip="Crea una nueva receta que se vinculará a tu cuenta" (click)="mostrarAdd()">Nueva receta</button>
                 <button type="button" class="btn btn-outline-warning offset-md-1 col-md-6 my-2" [ngClass]="{'active':actualizarDatos}" placement="right"
@@ -62,10 +62,10 @@
     </div>
   </div>
 
-  <div class="row g-0" [ngClass]="{'d-none': !lista}" *ngIf="recetas && recetas.length; else noRepices">
+  <div class="row g-0" [ngClass]="{'d-none': !lista}" *ngIf="recetas_seguidas && recetas_seguidas.length; else noRepices">
     <h1 class="display-5 text-secondary text-center fw-bold mt-5">Lista de tus recetas</h1>
     <repice-item class="col-12 col-lg-4 mt-4" [ngClass]="{'offset-lg-2':!isEven, 'offset-lg-1':isEven}"
-    (deleteRepice)="borrarReceta($event)" [repice]="repice" *ngFor="let repice of recetas, even as isEven">
+    (deleteRepice)="borrarReceta($event)" [repice]="repice" *ngFor="let repice of recetas_seguidas, even as isEven">
     </repice-item>
   </div>
   <ng-template #noRepices><div class="h3 offset-md-3 col-md-6 text-center pb-5" [ngClass]="{'d-none': !lista}">

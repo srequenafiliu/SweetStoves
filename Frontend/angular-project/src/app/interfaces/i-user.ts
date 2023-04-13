@@ -9,4 +9,5 @@ export interface IUser {
   imagen:string|null;
   datosUsuario?:IUserinfo;
   recetas?:IRepice[];
+  recetas_seguidas?:IRepice[];
 }

@@ -8,7 +8,7 @@
     <span class="card-text row g-0">
       <span class="fw-bold col-lg-3">Dificultad:&nbsp;</span>
       <difficulty-level class="col-lg-3" [level]="repice.dificultad"></difficulty-level>
-      <span class="col-lg-6 text-end" *ngIf="!cuentaUsuario()">
+      <span class="col-lg-6 text-end" *ngIf="cuentaUsuario()">
         <button type="button" class="btn btn-light" placement="left" (click)="borrarReceta()"
         ngbTooltip="Se borrará la receta para todos. Si estás seguro de borrarla, pulsa el botón">Borrar receta</button></span>
     </span>
