@@ -25,14 +25,13 @@ export class UserInfoComponent implements OnInit {
 
   ngOnInit() {
     const id = +this.route.snapshot.params['id'];
-    // Recibimos parámetro
     this.usersService.getUser(id).subscribe({
-      next:(u) => (this.user = u),
-      error:(error) => console.error(error)
-    });
-    // Recibimos las recetas
-    this.repicesService.getRepicesUser(id).subscribe({
-      next:(r) => (this.recetas = r),
+      next:(u) => (
+        this.user = u,
+        u.recetas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
+          next:(u) => (this.recetas.push(u)),
+          error:(error) => console.error(error)}))
+        ),
       error:(error) => console.error(error)
     });
   }
