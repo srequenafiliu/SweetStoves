@@ -17,14 +17,6 @@ export class RepicesService {
     );
   }
 
-  getRepicesUser(idUsuario:number):Observable<IRepice[]> {
-    return this.http.get<IRepice[]>(this.repiceURL).pipe(
-      map(response=>response.filter(repice => repice.usuario.id == idUsuario)),
-      catchError((resp: HttpErrorResponse) => throwError( () =>
-        `Error obteniendo recetas. Código de servidor: ${resp.status}. Mensaje: ${resp.message}`))
-    );
-  }
-
   getRepice(idReceta:number):Observable<IRepice> {
     return this.http.get<IRepice>(this.repiceURL+'/'+idReceta).pipe(response=>response);
   }
