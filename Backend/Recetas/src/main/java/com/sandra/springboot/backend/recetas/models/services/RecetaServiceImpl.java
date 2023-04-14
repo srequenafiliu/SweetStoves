@@ -6,49 +6,49 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sandra.springboot.backend.recetas.models.dao.IrecetaDao;
 import com.sandra.springboot.backend.recetas.models.entity.Receta;
+import com.sandra.springboot.backend.recetas.models.repositories.Ireceta;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
 
 @Service
 public class RecetaServiceImpl implements IrecetaService {
 	
 	@Autowired
-	private IrecetaDao recetaDao;
+	private Ireceta receta;
 
 	private final ImageUtils imageUtils = new ImageUtils();
 	
 	@Override
 	@Transactional(readOnly = true)
 	public List<Receta> findAll() {
-		return (List<Receta>) recetaDao.findAll();
+		return (List<Receta>) receta.findAll();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Receta findById(int id) {
-		return recetaDao.findById(id).orElse(null);
+		return receta.findById(id).orElse(null);
 	}
 
 	@Override
 	public void delete(int id) {
-		Receta recetaActual = recetaDao.findById(id).orElse(null);
+		Receta recetaActual = receta.findById(id).orElse(null);
 		if(recetaActual!=null) {
 			if(recetaActual.getImagen()!=null) {
 				// borrado del fichero de la imagen
 				imageUtils.deleteImage("public", recetaActual.getImagen());
 			}
-			recetaDao.deleteById(id);
+			receta.deleteById(id);
 		}
 	}
 
 	@Override
-	public Receta save(Receta receta) {
-		if(receta.getImagen()!=null) {
-			String ruta = imageUtils.saveImageBase64("recetas", receta.getImagen());
-			receta.setImagen(ruta);
+	public Receta save(Receta recetaNew) {
+		if(recetaNew.getImagen()!=null) {
+			String ruta = imageUtils.saveImageBase64("recetas", recetaNew.getImagen());
+			recetaNew.setImagen(ruta);
 		}
-		return recetaDao.save(receta);
+		return receta.save(recetaNew);
 	}
 
 }

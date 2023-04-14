@@ -24,6 +24,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.sandra.springboot.backend.recetas.models.entity.Receta;
 import com.sandra.springboot.backend.recetas.models.services.IrecetaService;
+import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
 
 @CrossOrigin(origins = {"*"})
 @RestController
@@ -124,6 +125,8 @@ public class RecetaRestController {
 		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.CREATED);
 	}
 	
+	private final ImageUtils imageUtils = new ImageUtils();
+	
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@RequestBody Receta receta, @PathVariable int id, BindingResult result){
 		Receta recetaActual = null;
@@ -157,7 +160,11 @@ public class RecetaRestController {
 			recetaActual.setIngredientes(receta.getIngredientes());
 			recetaActual.setElaboracion(receta.getElaboracion());
 			recetaActual.setDificultad(receta.getDificultad());
-			if(receta.getImagen()!=null) recetaActual.setImagen(receta.getImagen());
+			if(receta.getImagen()!=null) {
+				recetaActual.setImagen(receta.getImagen());
+				String ruta = imageUtils.saveImageBase64("recetas", receta.getImagen());
+				receta.setImagen(ruta);
+			}
 			recetaUpdated = recetaService.save(recetaActual);
 			if(receta.getImagen()!=null)
 				recetaUpdated.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + recetaUpdated.getImagen());
