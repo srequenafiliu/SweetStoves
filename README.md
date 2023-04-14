@@ -114,7 +114,7 @@ Cuando se mantiene el cursor en uno de los botones, aparece una ventana con una 
 
 - Nueva receta: Este formulario solo está disponible para los usuarios de SweetStoves, ya que la receta debe estar vinculada a un usuario. Al igual que los otros formularios, el botón para enviar los datos estará disponible cuando todos los campos obligatorios se rellenen correctamente.
 
-<img src="images/17_menu_usuario_receta_nueva.png"
+<img src="images/17_menu_usuario_receta_nueva.png">
 
 - Actualiza tu cuenta: En este formulario aparecen ya los campos rellenados con los datos actuales del usuario. Funciona de la misma manera que el formulario de registro en cuanto a errores se refiere. Nada más enviarlo, los cambios se verán reflejados en el menú de usuario.
 
