@@ -170,6 +170,7 @@ public class UsuarioRestController {
 			usuarioActual.getDatosUsuario().setApellido(usuario.getDatosUsuario().getApellido());
 			usuarioActual.getDatosUsuario().setTelefono(usuario.getDatosUsuario().getTelefono());
 			usuarioActual.setRecetas(usuario.getRecetas());
+			usuarioActual.setRecetas_seguidas(usuario.getRecetas_seguidas());
 			usuarioUpdated = usuarioService.save(usuarioActual);
 			if(usuario.getImagen()!=null && usuario.getImagen()!="")
 				usuarioUpdated.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + usuarioUpdated.getImagen());
