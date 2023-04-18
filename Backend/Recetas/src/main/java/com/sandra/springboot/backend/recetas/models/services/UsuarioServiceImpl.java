@@ -44,10 +44,6 @@ public class UsuarioServiceImpl implements IusuarioService {
 
 	@Override
 	public Usuario save(Usuario usuarioNew) {
-		if(usuarioNew.getImagen()!=null) {
-			String ruta = imageUtils.saveImageBase64("usuarios", usuarioNew.getImagen());
-			usuarioNew.setImagen(ruta);
-		}
 		return usuario.save(usuarioNew);
 	}
 

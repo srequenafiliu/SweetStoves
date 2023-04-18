@@ -44,10 +44,6 @@ public class RecetaServiceImpl implements IrecetaService {
 
 	@Override
 	public Receta save(Receta recetaNew) {
-		if(recetaNew.getImagen()!=null) {
-			String ruta = imageUtils.saveImageBase64("recetas", recetaNew.getImagen());
-			recetaNew.setImagen(ruta);
-		}
 		return receta.save(recetaNew);
 	}
 

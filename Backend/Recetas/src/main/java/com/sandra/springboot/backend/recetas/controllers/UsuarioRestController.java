@@ -31,6 +31,8 @@ import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
 @RequestMapping("/usuarios")
 public class UsuarioRestController {
 	
+	private final ImageUtils imageUtils = new ImageUtils();
+	
 	@Autowired
 	private IusuarioService usuarioService;
 	
@@ -112,7 +114,7 @@ public class UsuarioRestController {
 		}
 		try {
 			if(usuario.getImagen()!=null) {
-				String ruta = imageUtils.saveImageBase64("recetas", usuario.getImagen());
+				String ruta = imageUtils.saveImageBase64("usuarios", usuario.getImagen());
 				usuario.setImagen(ruta);
 			}
 			usuarioNew = usuarioService.save(usuario);
@@ -128,8 +130,6 @@ public class UsuarioRestController {
 		response.put("usuario", usuarioNew);
 		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.CREATED);
 	}
-	
-	private final ImageUtils imageUtils = new ImageUtils();
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@RequestBody Usuario usuario, @PathVariable int id, BindingResult result){

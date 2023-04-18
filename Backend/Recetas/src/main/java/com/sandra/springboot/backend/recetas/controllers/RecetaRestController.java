@@ -31,6 +31,8 @@ import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
 @RequestMapping("/recetas")
 public class RecetaRestController {
 	
+	private final ImageUtils imageUtils = new ImageUtils();
+	
 	@Autowired
 	private IrecetaService recetaService;
 	
@@ -111,6 +113,10 @@ public class RecetaRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		try {
+			if(receta.getImagen()!=null) {
+				String ruta = imageUtils.saveImageBase64("recetas", receta.getImagen());
+				receta.setImagen(ruta);
+			}
 			recetaNew = recetaService.save(receta);
 			if(receta.getImagen()!=null)
 				recetaNew.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + recetaNew.getImagen());
@@ -124,8 +130,6 @@ public class RecetaRestController {
 		response.put("receta", recetaNew);
 		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.CREATED);
 	}
-	
-	private final ImageUtils imageUtils = new ImageUtils();
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@RequestBody Receta receta, @PathVariable int id, BindingResult result){
