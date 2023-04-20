@@ -1,5 +1,5 @@
 export interface IUserinfo {
   nombre:string;
-  apellido:string;
-  telefono:string;
+  apellido:string|null;
+  telefono:string|null;
 }

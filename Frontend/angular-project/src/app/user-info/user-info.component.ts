@@ -24,19 +24,15 @@ export class UserInfoComponent implements OnInit {
   recetas_seguidas:IRepice[] = [];
 
   ngOnInit() {
-    const id = +this.route.snapshot.params['id'];
-    this.usersService.getUser(id).subscribe({
-      next:(u) => (
-        this.user = u,
-        u.recetas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
-          next:(u) => (this.recetas.push(u)),
-          error:(error) => console.error(error)})),
-          u.recetas_seguidas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
-            next:(u) => (this.recetas_seguidas.push(u)),
-            error:(error) => console.error(error)}))
-        ),
+    this.user = this.globalService.user;
+    this.globalService.user.recetas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
+      next:(u) => (this.recetas.push(u)),
       error:(error) => console.error(error)
-    });
+    })),
+    this.globalService.user.recetas_seguidas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
+      next:(u) => (this.recetas_seguidas.push(u)),
+      error:(error) => console.error(error)
+    }))
   }
 
   lista = false;

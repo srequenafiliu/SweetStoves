@@ -15,7 +15,7 @@ export const APP_ROUTES:Route[]=[
   { path: 'usuarios', component: UserListComponent },
   { path: 'login', component: UserLoginComponent },
   { path: 'registro', component: UserAddComponent },
-  { path: 'usuario/:id', component: UserInfoComponent },
+  { path: 'perfil_usuario', component: UserInfoComponent },
   // Ruta por defecto (vacía) -> Redirigir a /inicio
   { path: '', redirectTo: '/inicio', pathMatch: 'full' },
   // Ruta que no coincide con ninguna de las anteriores

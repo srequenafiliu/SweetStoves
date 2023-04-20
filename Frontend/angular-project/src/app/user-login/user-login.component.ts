@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalService } from '../global.service';
 import { IUser } from '../interfaces/i-user';
@@ -48,13 +48,11 @@ export class UserLoginComponent implements OnInit {
     for(let user of this.users) if (user.usuario == usuario) this.userLogin=user;
   }
 
-  @Output() loggedIn = new EventEmitter<any>();
-
   login() {
     this.globalService.id = this.userLogin.id;
     this.globalService.usuario = this.userLogin.usuario;
     this.globalService.user = this.userLogin;
     this.globalService.logged = true;
-    this.router.navigate(['/usuario', this.userLogin.id]);
+    this.router.navigate(['/perfil_usuario']);
   }
 }

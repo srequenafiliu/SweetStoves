@@ -16,13 +16,13 @@
           <label>Nombre<span class="text-danger">*</span></label>
         </div>
         <div class="form-group form-floating my-1 offset-md-2 col-md-4">
-          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!newUser.datosUsuario!.apellido.match('^\\D+$') && newUser.datosUsuario!.apellido,
-          'is-valid':newUser.datosUsuario!.apellido.match('^\\D+$')}" name="apellido" placeholder="Apellido" [(ngModel)]="newUser.datosUsuario!.apellido" [required]="validarApellido(newUser.datosUsuario!.apellido)" pattern="^\D+$">
+          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!newUser.datosUsuario!.apellido!.match('^\\D+$') && newUser.datosUsuario!.apellido,
+          'is-valid':newUser.datosUsuario!.apellido!.match('^\\D+$')}" name="apellido" placeholder="Apellido" [(ngModel)]="newUser.datosUsuario!.apellido" [required]="validarApellido(newUser.datosUsuario!.apellido!)" pattern="^\D+$">
           <label>Apellido</label>
         </div>
         <div class="form-group form-floating my-1 offset-md-4 col-md-4">
-          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!newUser.datosUsuario!.telefono.match('\\d{9}') && newUser.datosUsuario!.telefono,
-          'is-valid':newUser.datosUsuario!.telefono.match('\\d{9}')}" name="telefono" placeholder="Teléfono" [(ngModel)]="newUser.datosUsuario!.telefono" [required]="validarTelefono(newUser.datosUsuario!.telefono)" pattern="\d{9}">
+          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!newUser.datosUsuario!.telefono!.match('\\d{9}') && newUser.datosUsuario!.telefono,
+          'is-valid':newUser.datosUsuario!.telefono!.match('\\d{9}')}" name="telefono" placeholder="Teléfono" [(ngModel)]="newUser.datosUsuario!.telefono" [required]="validarTelefono(newUser.datosUsuario!.telefono!)" pattern="\d{9}">
           <div class="invalid-feedback">El número de teléfono no es válido</div>
           <div class="valid-feedback">Número de teléfono válido</div>
           <label>Teléfono</label>

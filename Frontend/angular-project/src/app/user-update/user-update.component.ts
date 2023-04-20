@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
 import { IUser } from '../interfaces/i-user';
 import { UsersService } from '../services/users.service';
+import { GlobalService } from '../global.service';
 
 @Component({
   selector: 'user-update',
@@ -10,33 +10,37 @@ import { UsersService } from '../services/users.service';
 })
 export class UserUpdateComponent implements OnInit {
   @Input() user!:IUser;
+  nuevoApellido!:string;
+  nuevoTelefono!:string;
   newPassword = '';
   userUpdate!:IUser;
   users:IUser[] = [];
 
-  constructor(private usersService:UsersService, private routeDirecto: Router) {}
+  constructor(private usersService:UsersService, public globalService:GlobalService) {}
   ngOnInit(): void {
-    this.initUser();
+    this.initUser(this.user);
     this.usersService.getUsers().subscribe(u=>this.users=u);
   }
 
-  initUser() {
+  initUser(usuario:IUser) {
     this.userUpdate = {
-      id: this.user.id,
-      usuario: this.user.usuario,
-      correo: this.user.correo,
-      password: this.user.password,
+      id: usuario.id,
+      usuario: usuario.usuario,
+      correo: usuario.correo,
+      password: usuario.password,
       imagen: null,
       datosUsuario: {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        nombre: this.user.datosUsuario!.nombre,
+        nombre: usuario.datosUsuario!.nombre,
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        apellido: this.user.datosUsuario!.apellido,
+        apellido: usuario.datosUsuario!.apellido,
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        telefono: this.user.datosUsuario!.telefono
+        telefono: usuario.datosUsuario!.telefono
       },
       recetas: []
     };
+    this.nuevoApellido = (typeof usuario.datosUsuario?.apellido == 'string') ? usuario.datosUsuario.apellido : '';
+    this.nuevoTelefono = (typeof usuario.datosUsuario?.telefono == 'string') ? usuario.datosUsuario.telefono : '';
   }
 
   validarApellido(apellido:string):boolean {
@@ -65,18 +69,27 @@ export class UserUpdateComponent implements OnInit {
   }
 
   @Output() modificarUsuario = new EventEmitter<IUser>();
+
   updateUser(newUser:IUser, fileImage:HTMLInputElement) {
     if (fileImage.value!='') newUser.imagen = fileImage.value;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.userUpdate.datosUsuario!.apellido = (this.nuevoApellido == '') ? null: this.nuevoApellido;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    this.userUpdate.datosUsuario!.telefono = (this.nuevoTelefono == '') ? null: this.nuevoTelefono;
     this.usersService.updateUser(newUser).subscribe({
       next:respu=>{
-        newUser.imagen = this.user.imagen;this.modificarUsuario.emit(newUser);console.log(respu)},
+        newUser.imagen = this.user.imagen;
+        this.modificarUsuario.emit(newUser);
+        this.user = newUser;
+        this.globalService.user = newUser;
+        this.reset(newUser, fileImage);
+        console.log(respu)},
       error:e=>console.log(e)
     });
-    this.reset(fileImage);
   }
-  reset(fileImage:HTMLInputElement){
+  reset(newUser:IUser, fileImage:HTMLInputElement){
     if (fileImage.value!='') this.userUpdate.imagen = fileImage.value;
-    this.initUser();
+    this.initUser(newUser);
     this.newPassword = '';
     fileImage.value = '';
   }
