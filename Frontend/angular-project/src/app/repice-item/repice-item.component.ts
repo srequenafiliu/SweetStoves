@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { IRepice } from '../interfaces/i-repice';
 import { RepicesService } from '../services/repices.service';
+import { GlobalService } from '../global.service';
 
 @Component({
   selector: 'repice-item',
@@ -10,9 +11,9 @@ import { RepicesService } from '../services/repices.service';
 })
 export class RepiceItemComponent {
   @Input() repice!:IRepice;
-  constructor(private repicesService:RepicesService,private router : Router) {}
+  constructor(private repicesService:RepicesService, private router : Router, public globalService:GlobalService) {}
   cuentaUsuario():boolean{
-    return this.router.url === '/usuario/'+this.repice.usuario.id;
+    return this.router.url !== '/recetas' && this.globalService.usuario === this.repice.usuario.usuario;
   }
   @Output() deleteRepice = new EventEmitter<IRepice>();
   borrarReceta(){
