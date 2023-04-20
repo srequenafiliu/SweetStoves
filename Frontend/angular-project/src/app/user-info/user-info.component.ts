@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { GlobalService } from '../global.service';
 import { IRepice } from '../interfaces/i-repice';
 import { IUser } from '../interfaces/i-user';
@@ -14,7 +14,6 @@ import { UsersService } from '../services/users.service';
 export class UserInfoComponent implements OnInit {
   user!:IUser;
   constructor(
-    private route: ActivatedRoute,
     private usersService: UsersService,
     private repicesService: RepicesService,
     private routeDirecto: Router,

@@ -37,7 +37,8 @@ export class UserUpdateComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         telefono: usuario.datosUsuario!.telefono
       },
-      recetas: []
+      recetas: [],
+      recetas_seguidas: usuario.recetas_seguidas
     };
     this.nuevoApellido = (typeof usuario.datosUsuario?.apellido == 'string') ? usuario.datosUsuario.apellido : '';
     this.nuevoTelefono = (typeof usuario.datosUsuario?.telefono == 'string') ? usuario.datosUsuario.telefono : '';
