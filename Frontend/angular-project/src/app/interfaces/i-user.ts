@@ -1,5 +1,4 @@
 import { IRepice } from "./i-repice";
-import { IUserinfo } from "./i-userinfo";
 
 export interface IUser {
   id:number;
@@ -10,4 +9,10 @@ export interface IUser {
   datosUsuario?:IUserinfo;
   recetas?:IRepice[];
   recetas_seguidas?:IRepice[];
+}
+
+export interface IUserinfo {
+  nombre:string;
+  apellido:string|null;
+  telefono:string|null;
 }

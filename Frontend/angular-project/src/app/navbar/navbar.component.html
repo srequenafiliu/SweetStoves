@@ -16,7 +16,7 @@
           <a class="nav-link" [routerLink]="['/usuarios']" [routerLinkActive]="['active']">Usuarios</a>
         </li>
       </ul>
-      <ul class="navbar-nav" *ngIf="!globalService.logged, else cuentaUser">
+      <ul class="navbar-nav" *ngIf="!logged, else cuentaUser">
         <li class="nav-item">
           <a class="nav-link"  [routerLink]="['/login']" [routerLinkActive]="['active']">Login</a>
         </li>
@@ -30,7 +30,7 @@
       <ng-template #cuentaUser>
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/perfil_usuario']" [routerLinkActive]="['active']">{{globalService.usuario}}</a>
+            <a class="nav-link" [routerLink]="['/perfil_usuario']" [routerLinkActive]="['active']">{{user.usuario}}</a>
           </li>
         </ul>
       </ng-template>

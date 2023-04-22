@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IUser } from '../interfaces/i-user';
 import { UsersService } from '../services/users.service';
-import { GlobalService } from '../global.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'user-update',
@@ -16,7 +16,7 @@ export class UserUpdateComponent implements OnInit {
   userUpdate!:IUser;
   users:IUser[] = [];
 
-  constructor(private usersService:UsersService, public globalService:GlobalService) {}
+  constructor(private usersService:UsersService, private authService:AuthService) {}
   ngOnInit(): void {
     this.initUser(this.user);
     this.usersService.getUsers().subscribe(u=>this.users=u);
@@ -82,7 +82,7 @@ export class UserUpdateComponent implements OnInit {
         newUser.imagen = this.user.imagen;
         this.modificarUsuario.emit(newUser);
         this.user = newUser;
-        this.globalService.user = newUser;
+        this.authService.setUser(newUser);
         this.reset(newUser, fileImage);
         console.log(respu)},
       error:e=>console.log(e)

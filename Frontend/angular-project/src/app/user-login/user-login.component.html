@@ -7,24 +7,22 @@
     <form (ngSubmit)="login()" #form="ngForm">
       <div class="row g-0">
         <div class="form-group form-floating my-1 offset-md-3 col-md-6">
-          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-valid':usuarioExistente(nameUser)}"
-          name="usuario" placeholder="Usuario" [(ngModel)]="nameUser" required (input)="getUsuario(nameUser)">
-          <div class="valid-feedback">Hola {{userLogin.datosUsuario!.nombre}}, te echábamos de menos</div>
+          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-valid':usuarioExistente(userLogin.usuario)}"
+          name="usuario" placeholder="Usuario" [(ngModel)]="userLogin.usuario" required>
+          <div class="valid-feedback">Hola {{userLogin.usuario}}, te echábamos de menos</div>
           <label>Usuario</label>
         </div>
-        <div class="form-group form-floating my-1 offset-md-3 col-md-6" [hidden]="!usuarioExistente(nameUser)">
-          <input type="password" class="form-control" [ngClass]="{'is-invalid':userLogin.password !== passwordLogin && passwordLogin,
-          'is-valid':userLogin.password === passwordLogin && passwordLogin}" name="password" placeholder="Contraseña"
-          [(ngModel)]="passwordLogin" required [pattern]="userLogin.password!">
-          <div class="invalid-feedback">Tu contraseña no es esa...</div>
-          <div class="valid-feedback">Contraseña correcta</div>
+        <div class="form-group form-floating my-1 offset-md-3 col-md-6" [hidden]="!usuarioExistente(userLogin.usuario)">
+          <input type="password" class="form-control" [ngClass]="{'is-invalid':invalidPassword}" name="password"
+          placeholder="Contraseña" [(ngModel)]="userLogin.password" required (input)="invalidPassword = false">
           <label>Contraseña</label>
+          <div class="invalid-feedback">Contraseña incorrecta</div>
         </div>
       </div>
       <div class="row g-0 my-2 align-items-center">
         <div class="offset-md-3 col-md-6 text-center mt-4">
           <button type="submit" class="btn btn-primary"
-          [disabled]="form.invalid || !usuarioExistente(userLogin.usuario)">Iniciar sesión</button>
+          [disabled]="form.invalid">Iniciar sesión</button>
         </div>
       </div>
     </form>

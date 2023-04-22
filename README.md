@@ -32,7 +32,10 @@ La API generada, con enlace *http://localhost:8080/api*, muestra los siguientes 
 - __datosUsuario__: Datos personales del usuario (nombre, apellido y teléfono). Todos estos datos son de tipo string y el apellido y el teléfono pueden ser nulos
 - __recetas__: Lista de recetas creadas por el usuario
 - __recetas_seguidas__: Lista de recetas que ha seguido el usuario
+### Auth
+Este recurso muestra un token (dato de tipo string) que servirá para el login de la web. Este token solo se generará si se ha introducido el nombre de usuario y la contraseña correctos, y caducará a las 24 horas de ser creado. 
 ## Frontend
+**Para hacer funcionar SweetStoves debes instalar node-modules y jwt-decode**
 Podrás acceder a SweetStoves desde el enlace _http://localhost:4200/_, el cual te redireccionará al menú de inicio.
 Sabrás que estás en SweetStoves ya que la web tiene un icono propio en la pestaña del navegador.
 ### Menú de inicio
@@ -94,10 +97,10 @@ En este menú, lo primero que llama la atención es la ausencia del campo contra
 
 <img src="images/13_login_password.png">
 
-Cuando el usuario haya escrito correctamente su contraseña, el botón “Iniciar sesión” se podrá pulsar. Cuando esto suceda, la web le mandará a su menú de usuario. Si el usuario no está registrado, debajo de este botón está el link que redirecciona al menú de registro.
+Si el usuario pulsa el botón “Iniciar sesión” y la contraseña no está escrita correctamente, saltará un error en ese campo. Solo cuando la contraseña sea correcta, la web le mandará a su menú de usuario. Si el usuario no está registrado, debajo de este botón está el link que redirecciona al menú de registro.
 
 ### Menú de usuario
-Cuando el usuario ha iniciado sesión, en la barra de navegación aparece su nombre de usuario en vez de los menús de login y registro. Estos solo volverán a aparecen si se recarga la página (esto se debe a que no se ha usado Spring Security para implementar el login) o si el usuario pulsa el botón “Cerrar sesión”.
+Cuando el usuario ha iniciado sesión, en la barra de navegación aparece su nombre de usuario en vez de los menús de login y registro. Estos solo volverán a aparecen si se cierra la sesión, ya sea porque el usuario pulsa el botón “Cerrar sesión” o porque han pasado 24 horas desde que la inició.
 
 <img src="images/14_menu_usuario.png">
 

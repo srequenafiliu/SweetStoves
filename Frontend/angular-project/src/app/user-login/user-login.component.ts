@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GlobalService } from '../global.service';
-import { IUser } from '../interfaces/i-user';
 import { UsersService } from '../services/users.service';
+import { AuthService } from '../services/auth.service';
+import jwtDecode from 'jwt-decode';
+import { ILogin } from '../interfaces/i-login';
 
 @Component({
   selector: 'user-login',
@@ -10,49 +11,33 @@ import { UsersService } from '../services/users.service';
   styleUrls: ['./user-login.component.css']
 })
 export class UserLoginComponent implements OnInit {
-  nameUser = '';
-  userLogin!:IUser;
-  passwordLogin = '';
-  users:IUser[] = [];
 
-  constructor(private usersService:UsersService, private router:Router, public globalService:GlobalService) {}
-  ngOnInit(): void {
-    this.initUser();
-    this.usersService.getUsers().subscribe(u=>this.users=u);
+  userLogin:ILogin = {
+    usuario: '',
+    password: ''
   }
+  invalidPassword = false;
+  usernames:string[] = [];
 
-  initUser() {
-    this.userLogin = {
-      id: 0,
-      usuario: '',
-      correo: '',
-      password: '',
-      imagen: '',
-      datosUsuario: {
-        nombre: '',
-        apellido: '',
-        telefono: ''
-      },
-      recetas: []
-    };
+  constructor(private usersService:UsersService, private authService:AuthService, private router:Router) {}
+
+  ngOnInit(): void {
+    this.usersService.getUsers().subscribe(u=>{
+      for (const user of u) this.usernames.push(user.usuario);
+    });
   }
 
   usuarioExistente(usuario:string):boolean {
-    // eslint-disable-next-line prefer-const
-    for(let user of this.users) if (user.usuario == usuario) return true;
-    return false;
-  }
-
-  getUsuario(usuario:string) {
-    // eslint-disable-next-line prefer-const
-    for(let user of this.users) if (user.usuario == usuario) this.userLogin=user;
+    return this.usernames.includes(usuario);
   }
 
   login() {
-    this.globalService.id = this.userLogin.id;
-    this.globalService.usuario = this.userLogin.usuario;
-    this.globalService.user = this.userLogin;
-    this.globalService.logged = true;
-    this.router.navigate(['/perfil_usuario']);
+    this.authService.login(this.userLogin).subscribe({
+      next:user=>{
+        const tokenDecoded:{id:number} = jwtDecode(user.accessToken);
+        this.usersService.getUser(tokenDecoded.id).subscribe(u=>this.authService.setData(user.accessToken, u));
+      },
+      error:()=>this.invalidPassword = true
+    })
   }
 }

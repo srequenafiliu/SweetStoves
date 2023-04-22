@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { GlobalService } from '../global.service';
 import { IRepice } from '../interfaces/i-repice';
 import { IUser } from '../interfaces/i-user';
 import { RepicesService } from '../services/repices.service';
 import { UsersService } from '../services/users.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'user-info',
@@ -17,18 +17,18 @@ export class UserInfoComponent implements OnInit {
     private usersService: UsersService,
     private repicesService: RepicesService,
     private routeDirecto: Router,
-    public globalService: GlobalService
+    private authService:AuthService
   ) {}
   recetas:IRepice[] = [];
   recetas_seguidas:IRepice[] = [];
 
   ngOnInit() {
-    this.user = this.globalService.user;
-    this.globalService.user.recetas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
+    this.user = this.authService.getUser();
+    this.user.recetas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
       next:(u) => (this.recetas.push(u)),
       error:(error) => console.error(error)
     })),
-    this.globalService.user.recetas_seguidas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
+    this.user.recetas_seguidas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
       next:(u) => (this.recetas_seguidas.push(u)),
       error:(error) => console.error(error)
     }))
@@ -79,7 +79,6 @@ export class UserInfoComponent implements OnInit {
   }
 
   logout(){
-    this.globalService.logged = false;
-    this.routeDirecto.navigate(['/inicio'])
+    if (this.authService.logout()) this.routeDirecto.navigate(['/inicio'])
   }
 }

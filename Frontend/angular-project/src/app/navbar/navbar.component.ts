@@ -1,20 +1,22 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { GlobalService } from '../global.service';
+import { Component, DoCheck, Input } from '@angular/core';
 import { IUser } from '../interfaces/i-user';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements DoCheck {
   @Input()title!: string;
   user!:IUser;
   logged!:boolean;
 
-  constructor(public globalService: GlobalService) {}
+  constructor(private authService:AuthService) {}
 
-  ngOnInit() {
-    this.user = this.globalService.user;
+  ngDoCheck() {
+    this.authService.checkToken(this.authService.getToken());
+    this.user = this.authService.getUser();
+    this.logged = this.authService.isLoggedIn();
   }
 }
