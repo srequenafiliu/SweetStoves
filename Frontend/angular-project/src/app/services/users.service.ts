@@ -21,11 +21,6 @@ export class UsersService {
     return this.http.get<IUser>(this.userURL+'/'+idUsuario);
   }
 
-  addUser(newUser:IUser):Observable<IUser> {
-    return this.http.post<{usuario:IUser, mensaje:string, error?:string}>(this.userURL, newUser)
-    .pipe(map(response => response.usuario));
-  }
-
   updateUser(user:IUser):Observable<IUser>{
     return this.http.put<{usuario:IUser, mensaje:string, error?:string}>(this.userURL+'/'+user.id, user).pipe(
       map(response=>response.usuario)

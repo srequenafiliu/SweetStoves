@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IUser } from '../interfaces/i-user';
 import { UsersService } from '../services/users.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'user-add',
@@ -13,7 +14,7 @@ export class UserAddComponent implements OnInit {
   newUser!:IUser;
   users:IUser[] = [];
 
-  constructor(private usersService:UsersService, private routeDirecto: Router) {}
+  constructor(private usersService:UsersService, private authService:AuthService, private routeDirecto: Router) {}
   ngOnInit(): void {
     this.initUser();
     this.usersService.getUsers().subscribe(u=>this.users=u);
@@ -61,7 +62,7 @@ export class UserAddComponent implements OnInit {
   }
 
   addUser(newUser:IUser, fileImage:HTMLInputElement) {
-    this.usersService.addUser(newUser).subscribe({
+    this.authService.addUser(newUser).subscribe({
       next:respu=>{this.users.push(newUser);console.log(respu)},
       error:e=>console.log(e)
     });

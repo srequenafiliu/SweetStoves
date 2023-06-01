@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IUser } from '../interfaces/i-user';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import jwtDecode from 'jwt-decode';
 import { ILogin } from '../interfaces/i-login';
@@ -18,6 +18,11 @@ export class AuthService {
       catchError((resp: HttpErrorResponse) => throwError( () =>
         `Error al iniciar sesión. Código de servidor: ${resp.status}. Mensaje: ${resp.message}`))
     );
+  }
+
+  addUser(newUser:IUser):Observable<IUser> {
+    return this.http.post<{usuario:IUser, mensaje:string, error?:string}>(this.authURL+'/registro', newUser)
+    .pipe(map(response => response.usuario));
   }
 
   setUser(usuario:IUser){

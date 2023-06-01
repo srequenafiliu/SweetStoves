@@ -64,6 +64,7 @@ public class AuthRestController {
 				String ruta = imageUtils.saveImageBase64("usuarios", usuario.getImagen());
 				usuario.setImagen(ruta);
 			}
+			usuario.getDatosUsuario().setUsuario(usuario);
 			usuarioNew = usuarioService.save(usuario);
 			if(usuario.getImagen()!=null)
 				usuarioNew.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + usuarioNew.getImagen());
