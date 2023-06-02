@@ -68,9 +68,9 @@
         </div>
         <div class="form-group offset-md-1 col-md-10 col-lg-6">
           <label for="image">Imagen</label>
-          <input type="file" class="form-control" name="image" #fileImage (change)="changeImage(fileImage)">
+          <input type="file" class="form-control" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
         </div>
-        <img *ngIf="newUser.imagen" [src]="newUser.imagen" alt="" class="bg-info img-thumbnail rounded-circle offset-3 offset-lg-1 col-md-6 col-lg-2" accept="image/png">
+        <img *ngIf="newUser.imagen" [src]="newUser.imagen" alt="" class="bg-info img-thumbnail rounded-circle offset-3 offset-lg-1 col-md-6 col-lg-2">
       </div>
       <div class="row g-0 my-2 align-items-center">
         <div class="text-danger fw-light col offset-md-1">*Campos obligatorios</div>

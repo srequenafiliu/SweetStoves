@@ -131,9 +131,14 @@ public class UsuarioRestController {
 			usuarioActual.setCorreo(usuario.getCorreo());
 			usuarioActual.setPassword(usuario.getPassword());
 			if(usuario.getImagen()!=null && usuario.getImagen()!="") {
-				usuarioActual.setImagen(usuario.getImagen());
-				String ruta = imageUtils.saveImageBase64("usuarios", usuario.getImagen());
-				usuario.setImagen(ruta);
+				if (usuario.getImagen().equals("borrar")) {
+					imageUtils.deleteImage("public", usuarioActual.getImagen());
+					usuarioActual.setImagen(null);
+				}
+				else {
+					String ruta = imageUtils.saveImageBase64("usuarios", usuario.getImagen());
+					usuarioActual.setImagen(ruta);
+				}
 			}
 			usuarioActual.getDatosUsuario().setNombre(usuario.getDatosUsuario().getNombre());
 			usuarioActual.getDatosUsuario().setApellido(usuario.getDatosUsuario().getApellido());
@@ -141,7 +146,7 @@ public class UsuarioRestController {
 			usuarioActual.setRecetas(usuario.getRecetas());
 			usuarioActual.setRecetas_seguidas(usuario.getRecetas_seguidas());
 			usuarioUpdated = usuarioService.save(usuarioActual);
-			if(usuario.getImagen()!=null && usuario.getImagen()!="")
+			if(usuario.getImagen()!=null && usuario.getImagen()!="" && !usuario.getImagen().equals("borrar"))
 				usuarioUpdated.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + usuarioUpdated.getImagen());
 		} catch (DataAccessException e) {  // Error al acceder a la base de datos
 			response.put("mensaje", "Error al conectar con la base de datos");

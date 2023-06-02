@@ -15,6 +15,7 @@ export class UserUpdateComponent implements OnInit {
   newPassword = '';
   userUpdate!:IUser;
   users:IUser[] = [];
+  opcion = 'conservar';
 
   constructor(private usersService:UsersService, private authService:AuthService) {}
   ngOnInit(): void {
@@ -72,24 +73,24 @@ export class UserUpdateComponent implements OnInit {
   @Output() modificarUsuario = new EventEmitter<IUser>();
 
   updateUser(newUser:IUser, fileImage:HTMLInputElement) {
-    if (fileImage.value!='') newUser.imagen = fileImage.value;
+    const valor = fileImage.value;
+    if (this.opcion == 'borrar') newUser.imagen = this.opcion;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.userUpdate.datosUsuario!.apellido = (this.nuevoApellido == '') ? null: this.nuevoApellido;
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     this.userUpdate.datosUsuario!.telefono = (this.nuevoTelefono == '') ? null: this.nuevoTelefono;
     this.usersService.updateUser(newUser).subscribe({
       next:respu=>{
-        newUser.imagen = this.user.imagen;
-        this.modificarUsuario.emit(newUser);
+        newUser.imagen = (valor != '') ? newUser.imagen : this.user.imagen;
         this.user = newUser;
-        this.authService.setUser(newUser);
-        this.reset(newUser, fileImage);
+        this.modificarUsuario.emit((valor == '' && this.opcion != 'borrar') ? newUser : respu);
+        this.authService.setUser((valor == '' && this.opcion != 'borrar') ? newUser : respu);
         console.log(respu)},
       error:e=>console.log(e)
     });
+    this.reset(newUser, fileImage);
   }
   reset(newUser:IUser, fileImage:HTMLInputElement){
-    if (fileImage.value!='') this.userUpdate.imagen = fileImage.value;
     this.initUser(newUser);
     this.newPassword = '';
     fileImage.value = '';
