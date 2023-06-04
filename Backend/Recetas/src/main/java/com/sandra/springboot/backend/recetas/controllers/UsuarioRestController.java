@@ -26,6 +26,8 @@ import com.sandra.springboot.backend.recetas.models.entity.Usuario;
 import com.sandra.springboot.backend.recetas.models.services.IusuarioService;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
 
+import jakarta.validation.Valid;
+
 @CrossOrigin(origins = {"*"})
 @RestController
 @RequestMapping("/usuarios")
@@ -101,7 +103,7 @@ public class UsuarioRestController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@RequestBody Usuario usuario, @PathVariable int id, BindingResult result) throws NoSuchAlgorithmException{
+	public ResponseEntity<?> update(@Valid @RequestBody Usuario usuario, BindingResult result, @PathVariable int id) throws NoSuchAlgorithmException{
 		Usuario usuarioActual = null;
 		Usuario usuarioUpdated = null;
 		Map<String,Object> response = new HashMap<>();
@@ -110,7 +112,7 @@ public class UsuarioRestController {
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			response.put("errors", errors);
+			response.put("errores", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		try {
@@ -124,6 +126,11 @@ public class UsuarioRestController {
 		if(usuarioActual==null) { // No existe en la base de datos
 			response.put("mensaje", "El usuario con ID ".concat(Integer.toString(id)).concat(" no existe en la base de datos"));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
+		}
+		else if (!usuarioService.samePassword(usuarioActual.getPassword(), usuario.getPassword())) {
+			response.put("mensaje", "Error al comprobar la contraseña");
+			response.put("error", "Contraseña incorrecta");
+			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.UNAUTHORIZED);
 		}
 		// Si llegamos aquí es que el usuario que queremos modificar SI existe
 		try {

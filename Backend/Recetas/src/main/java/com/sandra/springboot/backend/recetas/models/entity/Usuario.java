@@ -18,6 +18,9 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,11 +45,14 @@ public class Usuario implements java.io.Serializable {
 	private Integer id;
 	
 	@NonNull
-	@Column(name = "usuario", nullable = false, length = 100)
+	@Column(name = "usuario", unique = true, nullable = false, length = 100)
+	@NotBlank
 	private String usuario;
 	
 	@NonNull
-	@Column(name = "correo", nullable = false, length = 150)
+	@Column(name = "correo", unique = true, nullable = false, length = 150)
+	@NotBlank
+	@Email
 	private String correo;
 	
 	@NonNull
@@ -57,6 +63,7 @@ public class Usuario implements java.io.Serializable {
 	private String imagen;
 	
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.ALL)
+	@Valid
 	private DatosUsuario datosUsuario;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")

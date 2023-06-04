@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.sandra.springboot.backend.recetas.models.dto.UsuarioDto;
 import com.sandra.springboot.backend.recetas.models.entity.Usuario;
 import com.sandra.springboot.backend.recetas.models.repositories.Iusuario;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
@@ -58,6 +59,21 @@ public class UsuarioServiceImpl implements IusuarioService {
 	public Usuario save(Usuario usuarioNew) throws NoSuchAlgorithmException {
 		usuarioNew.setPassword(encodePassword(usuarioNew.getPassword()));
 		return usuario.save(usuarioNew);
+	}
+	
+	@Override
+	public Usuario findByUsuario(UsuarioDto user) throws NoSuchAlgorithmException {
+		return usuario.findByUsuario(user.getUsuario()).orElse(null);
+	}
+
+	@Override
+	public Usuario findByUsuarioAndPassword(UsuarioDto user) throws NoSuchAlgorithmException {
+		return usuario.findByUsuarioAndPassword(user.getUsuario(), encodePassword(user.getPassword())).orElse(null);
+	}
+	
+	@Override
+	public boolean samePassword(String saved_pass, String password) throws NoSuchAlgorithmException {
+		return saved_pass.equals(encodePassword(password));
 	}
 	
 	private String encodePassword(String pass) throws NoSuchAlgorithmException{

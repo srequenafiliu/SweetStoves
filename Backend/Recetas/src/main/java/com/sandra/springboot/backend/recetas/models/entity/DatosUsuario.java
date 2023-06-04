@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -44,6 +45,7 @@ public class DatosUsuario implements java.io.Serializable {
 	
 	@NonNull
 	@Column(name = "nombre", nullable = false, length = 150)
+	@NotBlank
 	private String nombre;
 	
 	@Column(name = "apellido", length = 150)
