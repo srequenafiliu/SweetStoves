@@ -21,6 +21,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,6 +48,7 @@ public class Usuario implements java.io.Serializable {
 	@NonNull
 	@Column(name = "usuario", unique = true, nullable = false, length = 100)
 	@NotBlank
+	@Size(min = 4, message = "debe contener mínimo 4 caracteres")
 	private String usuario;
 	
 	@NonNull

@@ -10,6 +10,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -46,12 +47,15 @@ public class DatosUsuario implements java.io.Serializable {
 	@NonNull
 	@Column(name = "nombre", nullable = false, length = 150)
 	@NotBlank
+	@Pattern(regexp = "^\\D+$", message = "no debe contener números")
 	private String nombre;
 	
 	@Column(name = "apellido", length = 150)
+	@Pattern(regexp = "^\\D+$", message = "no debe contener números")
 	private String apellido;
 	
 	@Column(name = "telefono", length = 15)
+	@Pattern(regexp = "\\d{9}", message = "debe ser un número con 9 dígitos")
 	private String telefono;
 
 	public DatosUsuario(Usuario usuario, String nombre, String apellido, String telefono) {
