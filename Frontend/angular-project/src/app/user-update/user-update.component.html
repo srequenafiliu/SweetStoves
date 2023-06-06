@@ -4,57 +4,46 @@
     <form (ngSubmit)="updateUser(userUpdate, fileImage)" #form="ngForm">
       <div class="row g-0">
         <div class="form-group form-floating my-1 offset-md-1 col-md-4">
-          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!userUpdate.datosUsuario!.nombre.match('^\\D+$') && userUpdate.datosUsuario!.nombre,
-          'is-valid':userUpdate.datosUsuario!.nombre.match('^\\D+$')}" name="nombre" placeholder="Nombre" [(ngModel)]="userUpdate.datosUsuario!.nombre" required pattern="^\D+$">
-          <div class="invalid-feedback">El nombre no es válido</div>
-          <div class="valid-feedback" *ngIf="userUpdate.datosUsuario?.nombre !== user.datosUsuario?.nombre">Nombre válido</div>
+          <input type="text" class="form-control" autocomplete="off" name="nombre" [ngClass]="{'is-invalid': buscarErrores('nombre') !== -1,
+          'is-valid': errores.length && buscarErrores('nombre') === -1}" placeholder="Nombre" [(ngModel)]="userUpdate.datosUsuario!.nombre" required>
+          <div class="invalid-feedback">{{errores[buscarErrores('nombre')]}}</div>
           <label>Nombre<span class="text-danger">*</span></label>
         </div>
         <div class="form-group form-floating my-1 offset-md-2 col-md-4">
-          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!nuevoApellido.match('^\\D+$') && nuevoApellido,
-          'is-valid':nuevoApellido.match('^\\D+$')}" name="apellido" placeholder="Apellido" [(ngModel)]="nuevoApellido" [required]="validarApellido(nuevoApellido)" pattern="^\D+$">
+          <input type="text" class="form-control" autocomplete="off" name="apellido" [ngClass]="{'is-invalid': buscarErrores('apellido') !== -1,
+          'is-valid': errores.length && buscarErrores('apellido') === -1}" placeholder="Apellido" [(ngModel)]="userUpdate.datosUsuario!.apellido">
+          <div class="invalid-feedback">{{errores[buscarErrores('apellido')]}}</div>
           <label>Apellido</label>
         </div>
         <div class="form-group form-floating my-1 offset-md-1 col-md-4">
-          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!nuevoTelefono.match('\\d{9}') && nuevoTelefono,
-          'is-valid':nuevoTelefono.match('\\d{9}')}" name="telefono" placeholder="Teléfono" [(ngModel)]="nuevoTelefono" [required]="validarTelefono(nuevoTelefono)" pattern="\d{9}">
-          <div class="invalid-feedback">El número de teléfono no es válido</div>
-          <div class="valid-feedback" *ngIf="nuevoTelefono !== user.datosUsuario?.telefono">Número de teléfono válido</div>
+          <input type="text" class="form-control" autocomplete="off" name="teléfono" [ngClass]="{'is-invalid': buscarErrores('teléfono') !== -1,
+          'is-valid': errores.length && buscarErrores('teléfono') === -1}" placeholder="Teléfono" [(ngModel)]="userUpdate.datosUsuario!.telefono">
+          <div class="invalid-feedback">{{errores[buscarErrores('teléfono')]}}</div>
           <label>Teléfono</label>
         </div>
         <div class="form-group form-floating my-1 offset-md-2 col-md-4">
-          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!userUpdate.usuario.match('\\S{4,}') && userUpdate.usuario || usuarioExistente(userUpdate.usuario),
-          'is-valid':userUpdate.usuario.match('\\S{4,}') && !usuarioExistente(userUpdate.usuario)}" name="usuario" placeholder="Usuario" [(ngModel)]="userUpdate.usuario" required pattern="\S{4,}">
-          <div class="invalid-feedback" *ngIf="!usuarioExistente(userUpdate.usuario), else usuarioRepetido">La longitud del usuario debe ser de 4 caracteres mínimo</div>
+          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('usuario') !== -1 || usuarioExistente,
+          'is-valid': errores.length && buscarErrores('usuario') === -1 && !usuarioExistente}" name="usuario" placeholder="Usuario" [(ngModel)]="userUpdate.usuario" required>
+          <div class="invalid-feedback" *ngIf="!usuarioExistente, else usuarioRepetido">{{errores[buscarErrores('usuario')]}}</div>
           <ng-template #usuarioRepetido><div class="invalid-feedback">Este usuario ya existe</div></ng-template>
-          <div class="valid-feedback" *ngIf="userUpdate.usuario !== user.usuario">Usuario válido</div>
           <label>Usuario<span class="text-danger">*</span></label>
         </div>
         <div class="form-group form-floating my-1 offset-md-1 col-md-4">
-          <input type="password" class="form-control" [ngClass]="{'is-invalid':!userUpdate.password!.match('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$') && userUpdate.password,
-          'is-valid':userUpdate.password!.match('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$')}" name="password" placeholder="Contraseña" [(ngModel)]="userUpdate.password" required pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$">
-          <div class="invalid-feedback">
-            La longitud de la contraseña debe ser de 8 caracteres mínimo, y debe contener al menos:
-            <ul>
-              <li>Una letra mayúscula</li>
-              <li>Una letra minúscula</li>
-              <li>Un número</li>
-            </ul>
-          </div>
-          <div class="valid-feedback">Contraseña válida</div>
-          <label>Contraseña<span class="text-danger">*</span></label>
+          <input type="email" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('correo') !== -1 || correoExistente,
+          'is-valid': errores.length && buscarErrores('correo') === -1 && !correoExistente}" name="correo" placeholder="Correo electrónico" [(ngModel)]="userUpdate.correo" required>
+          <div class="invalid-feedback" *ngIf="!correoExistente, else correoRepetido">{{errores[buscarErrores('correo')]}}</div>
+          <ng-template #correoRepetido><div class="invalid-feedback">Este correo ya está registrado</div></ng-template>
+          <label>Correo electrónico<span class="text-danger">*</span></label>
         </div>
+
         <div class="form-group form-floating my-1 offset-md-2 col-md-4">
-          <input type="password" class="form-control" [ngClass]="{'is-invalid':userUpdate.password !== newPassword,
-          'is-valid':userUpdate.password === newPassword && newPassword}" name="password2" placeholder="Confirma la contraseña" [(ngModel)]="newPassword" required [pattern]="userUpdate.password!">
-          <div class="invalid-feedback" *ngIf="newPassword, else noPassword">Las contraseñas no coinciden</div>
-          <ng-template #noPassword>
-            <div class="invalid-feedback">Debe confirmar su contraseña para actualizar sus datos</div>
-          </ng-template>
-          <div class="valid-feedback">Las contraseñas coinciden</div>
-          <label>Confirma la contraseña<span class="text-danger">*</span></label>
+          <input type="password" class="form-control" [ngClass]="{'is-invalid': passwordIncorrecto}"
+          name="password" placeholder="Contraseña" [(ngModel)]="password" required>
+          <div class="invalid-feedback">Contraseña incorrecta</div>
+          <label>Contraseña<span class="text-danger">**</span></label>
         </div>
-        <div class="form-group row g-0 offset-md-1 col-md-10">
+
+        <div class="form-group row g-0 mt-3 offset-md-1 col-md-10">
           <h4>Opciones para la foto de perfil:</h4>
           <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
             <input type="radio" class="btn-check" name="btnradio" id="opcionesimg1" value="conservar" [(ngModel)]="opcion" (click)="fileImage.value = '';">
@@ -76,11 +65,14 @@
         <img *ngIf="userUpdate.imagen" [src]="userUpdate.imagen" alt="" class="mt-2 img-thumbnail rounded-circle offset-md-1 col-md-2">
       </div>
       <div class="row g-0 mt-4 mb-2 align-items-center">
-        <div class="text-danger fw-light offset-lg-1 col-lg-3">*Campos obligatorios</div>
-        <div class="col-md-7 d-flex justify-content-end">
+        <div class="text-danger fw-light offset-md-1 mb-3 col-md-10">
+          *Campos obligatorios<br>
+          **Debe introducir su contraseña para aplicar los cambios
+        </div>
+        <div class="col d-flex justify-content-end">
           <button type="button" class="btn btn-secondary" (click)="reset(user, fileImage)">Reestablecer datos</button>
           <div class="mx-3"></div>
-          <button type="submit" class="btn btn-primary" [disabled]="form.invalid || usuarioExistente(userUpdate.usuario)">Actualiza tus datos</button>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Actualiza tus datos</button>
         </div>
       </div>
     </form>

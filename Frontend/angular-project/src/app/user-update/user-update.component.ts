@@ -10,12 +10,14 @@ import { AuthService } from '../services/auth.service';
 })
 export class UserUpdateComponent implements OnInit {
   @Input() user!:IUser;
-  nuevoApellido!:string;
-  nuevoTelefono!:string;
-  newPassword = '';
   userUpdate!:IUser;
   users:IUser[] = [];
   opcion = 'conservar';
+  errores:string[] = [];
+  usuarioExistente = false;
+  correoExistente = false;
+  password = '';
+  passwordIncorrecto = false;
 
   constructor(private usersService:UsersService, private authService:AuthService) {}
   ngOnInit(): void {
@@ -41,24 +43,6 @@ export class UserUpdateComponent implements OnInit {
       recetas: [],
       recetas_seguidas: usuario.recetas_seguidas
     };
-    this.nuevoApellido = (typeof usuario.datosUsuario?.apellido == 'string') ? usuario.datosUsuario.apellido : '';
-    this.nuevoTelefono = (typeof usuario.datosUsuario?.telefono == 'string') ? usuario.datosUsuario.telefono : '';
-  }
-
-  validarApellido(apellido:string):boolean {
-    if (apellido) return apellido.match('^\\D+$') ? true :false;
-    else return false;
-  }
-
-  validarTelefono(telefono:string):boolean {
-    if (telefono) return telefono.match('\\d{9}') ? true :false;
-    else return false;
-  }
-
-  usuarioExistente(usuario:string):boolean {
-    // eslint-disable-next-line prefer-const
-    for(let user of this.users) if (user.usuario == usuario && this.userUpdate.id != user.id) return true;
-    return false;
   }
 
   changeImage(fileInput:HTMLInputElement) {
@@ -75,24 +59,62 @@ export class UserUpdateComponent implements OnInit {
   updateUser(newUser:IUser, fileImage:HTMLInputElement) {
     const valor = fileImage.value;
     if (this.opcion == 'borrar') newUser.imagen = this.opcion;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.userUpdate.datosUsuario!.apellido = (this.nuevoApellido == '') ? null: this.nuevoApellido;
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    this.userUpdate.datosUsuario!.telefono = (this.nuevoTelefono == '') ? null: this.nuevoTelefono;
+    if (newUser.datosUsuario?.apellido == "") newUser.datosUsuario.apellido = null;
+    if (newUser.datosUsuario?.telefono == "") newUser.datosUsuario.telefono = null;
+    newUser.password = this.password;
     this.usersService.updateUser(newUser).subscribe({
       next:respu=>{
         newUser.imagen = (valor != '') ? newUser.imagen : this.user.imagen;
         this.user = newUser;
         this.modificarUsuario.emit((valor == '' && this.opcion != 'borrar') ? newUser : respu);
         this.authService.setUser((valor == '' && this.opcion != 'borrar') ? newUser : respu);
-        console.log(respu)},
-      error:e=>console.log(e)
+        this.reset(newUser, fileImage);
+        this.addAlert();
+        console.log(respu)
+      },
+      error:e=>{
+        this.errores = (e.error.errores != undefined) ? e.error.errores : [];
+        this.usuarioExistente = (e.error.error != undefined) ? e.error.error.includes("usuario_unique") : false;
+        this.correoExistente = (e.error.error != undefined) ? e.error.error.includes("correo_unique") : false;
+        this.passwordIncorrecto = (e.error.error != undefined) ? e.error.error.includes("Contraseña") : false;
+        this.password = '';
+        console.log(e)
+      }
     });
-    this.reset(newUser, fileImage);
   }
+
+  buscarErrores(name:string):number {
+    for (const i in this.errores) {
+      if (this.errores[i].includes("datosUsuario.")) this.errores[i] = this.errores[i].replace("datosUsuario.", "");
+      if (this.errores[i].includes("telefono")) this.errores[i] = this.errores[i].replace("telefono", "teléfono");
+      if (this.errores[i].includes(name)) return +i;
+    }
+    return -1;
+  }
+
   reset(newUser:IUser, fileImage:HTMLInputElement){
     this.initUser(newUser);
-    this.newPassword = '';
+    this.errores = [];
+    this.usuarioExistente = false;
+    this.correoExistente = false;
+    this.passwordIncorrecto = false;
+    this.password = '';
     fileImage.value = '';
+  }
+
+  addAlert(){
+    const div = document.getElementsByTagName("form")[1].lastElementChild;
+    const alert = document.createElement("div");
+    alert.className = "alert alert-dismissible alert-primary offset-md-5 col-md-7 fade show";
+    const icon = document.createElement("i");
+    icon.className = "fa-solid fa-circle-check";
+    const close = document.createElement("button");
+    close.className = "btn-close";
+    close.setAttribute("type", "button");
+    close.setAttribute("data-bs-dismiss", "alert");
+    alert.appendChild(icon);
+    alert.appendChild(close);
+    alert.appendChild(document.createTextNode(" Datos actualizados correctamente"));
+    div?.insertBefore(alert, div.lastChild);
   }
 }
