@@ -27,7 +27,7 @@ public class UsuarioDto implements Serializable {
 	private String password;
 	
 	@NotBlank
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$", message = "no es válido")
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$", message = "no tiene el formato correcto")
 	private String new_password;
 
 }

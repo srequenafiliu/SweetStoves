@@ -16,3 +16,9 @@ export interface IUserinfo {
   apellido:string|null;
   telefono:string|null;
 }
+
+export interface IUserPass {
+  usuario:string;
+  password:string;
+  new_password:string;
+}

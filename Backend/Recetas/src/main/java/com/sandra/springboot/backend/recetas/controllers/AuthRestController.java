@@ -118,7 +118,7 @@ public class AuthRestController {
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(usuarioActual==null) { // No existe en la base de datos
-			response.put("error", "Contraseña incorrecta");
+			response.put("error", "Contraseña actual incorrecta");
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
 		}
 		// Si llegamos aquí es que el usuario que queremos modificar SI existe

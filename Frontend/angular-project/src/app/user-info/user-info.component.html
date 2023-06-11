@@ -33,14 +33,16 @@
                 {{user.usuario}}, tus aportes siempre son bienvenidos. Elige cualquiera de las opciones que se muestran a continuación:
               </div>
               <div class="row">
-                <button type="button" class="btn btn-outline-secondary offset-md-1 col-md-6 my-2" [ngClass]="{'active':lista}" placement="right"
-                ngbTooltip="Comprueba las recetas que has creado y seguido" (click)="mostrarLista()">Tu lista de recetas</button>
-                <button type="button" class="btn btn-outline-success offset-md-1 col-md-6 my-2" [ngClass]="{'active':recetaNueva}" placement="right"
-                ngbTooltip="Crea una nueva receta que se vinculará a tu cuenta" (click)="mostrarAdd()">Nueva receta</button>
-                <button type="button" class="btn btn-outline-warning offset-md-1 col-md-6 my-2" [ngClass]="{'active':actualizarDatos}" placement="right"
-                ngbTooltip="Cambia cualquiera de tus datos" (click)="mostrarUpdate()">Actualiza tu cuenta</button>
-                <button type="button" class="btn btn-outline-danger offset-md-1 col-md-6 my-2" [ngClass]="{'active':borrarUsuario}" placement="right"
-                ngbTooltip="Puedes borrar tu cuenta sin compromiso, pero te echaremos de menos" (click)="mostrarBorrado()">Borra tu cuenta</button>
+                <button type="button" class="btn btn-outline-secondary offset-md-1 col-md-6 my-2" [ngClass]="{'active': mostrar === 'lista'}" placement="right"
+                ngbTooltip="Comprueba las recetas que has creado y seguido" (click)="mostrar = 'lista'">Tu lista de recetas</button>
+                <button type="button" class="btn btn-outline-success offset-md-1 col-md-6 my-2" [ngClass]="{'active': mostrar === 'add'}" placement="right"
+                ngbTooltip="Crea una nueva receta que se vinculará a tu cuenta" (click)="mostrar = 'add'">Nueva receta</button>
+                <button type="button" class="btn btn-outline-warning offset-md-1 col-md-6 my-2" [ngClass]="{'active': mostrar === 'update'}" placement="right"
+                ngbTooltip="Actualiza los datos de tu cuenta excepto tu contraseña" (click)="mostrar = 'update'">Actualiza tu cuenta</button>
+                <button type="button" class="btn btn-outline-dark offset-md-1 col-md-6 my-2" [ngClass]="{'active': mostrar === 'password'}" placement="right"
+                ngbTooltip="Cambia tu contraseña para hacer tu cuenta más segura" (click)="mostrar = 'password'">Cambia tu contraseña</button>
+                <button type="button" class="btn btn-outline-danger offset-md-1 col-md-6 my-2" [ngClass]="{'active': mostrar === 'borrar'}" placement="right"
+                ngbTooltip="Puedes borrar tu cuenta sin compromiso, pero te echaremos de menos" (click)="mostrar = 'borrar'">Borra tu cuenta</button>
               </div>
             </div>
           </div>
@@ -49,7 +51,7 @@
           <button class="btn btn-warning" type="button" (click)="logout()">Cierra sesión</button>
         </div>
       </div>
-      <div class="col row g-0" [ngClass]="{'d-none': !borrarUsuario}">
+      <div class="col row g-0" [ngClass]="{'d-none': mostrar !== 'borrar'}">
         <h1 class="col-12 display-5 text-danger text-center fw-bold mt-5">Borrar cuenta</h1>
         <div class="col-12 row g-0 h5 text-center">
           <div class="col-12">¿Estás seguro de que quieres borrar tu cuenta?</div>
@@ -61,17 +63,19 @@
     </div>
   </div>
 
-  <div class="row g-0" [ngClass]="{'d-none': !lista}" *ngIf="recetas_seguidas && recetas_seguidas.length; else noRepices">
+  <div class="row g-0" [ngClass]="{'d-none': mostrar !== 'lista'}" *ngIf="recetas_seguidas && recetas_seguidas.length; else noRepices">
     <h1 class="display-5 text-secondary text-center fw-bold mt-5">Lista de tus recetas</h1>
     <repice-item class="col-12 col-lg-4 mt-4" [ngClass]="{'offset-lg-2':!isEven, 'offset-lg-1':isEven}"
     (deleteRepice)="borrarReceta($event)" [repice]="repice" *ngFor="let repice of recetas_seguidas, even as isEven">
     </repice-item>
   </div>
-  <ng-template #noRepices><div class="h3 offset-md-3 col-md-6 text-center pb-5" [ngClass]="{'d-none': !lista}">
+  <ng-template #noRepices><div class="h3 offset-md-3 col-md-6 text-center pb-5" [ngClass]="{'d-none': mostrar !== 'lista'}">
     No has guardado ninguna receta todavía
   </div></ng-template>
 
-  <repice-add [ngClass]="{'d-none': !recetaNueva}" [user]="user" (addNewRepice)="addNewRepice($event)"></repice-add>
+  <repice-add [ngClass]="{'d-none': mostrar !== 'add'}" [user]="user" (addNewRepice)="addNewRepice($event)"></repice-add>
 
-  <user-update [ngClass]="{'d-none': !actualizarDatos}" [user]="user" (modificarUsuario)="modificarUsuario($event)"></user-update>
+  <user-update [ngClass]="{'d-none': mostrar !== 'update'}" [user]="user" (modificarUsuario)="modificarUsuario($event)"></user-update>
+
+  <user-password [ngClass]="{'d-none': mostrar !== 'password'}" [user]="user" (modificarUsuario)="modificarUsuario($event)"></user-password>
 </div>

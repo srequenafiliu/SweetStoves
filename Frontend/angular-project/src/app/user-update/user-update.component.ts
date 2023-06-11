@@ -11,7 +11,6 @@ import { AuthService } from '../services/auth.service';
 export class UserUpdateComponent implements OnInit {
   @Input() user!:IUser;
   userUpdate!:IUser;
-  users:IUser[] = [];
   opcion = 'conservar';
   errores:string[] = [];
   usuarioExistente = false;
@@ -22,7 +21,6 @@ export class UserUpdateComponent implements OnInit {
   constructor(private usersService:UsersService, private authService:AuthService) {}
   ngOnInit(): void {
     this.initUser(this.user);
-    this.usersService.getUsers().subscribe(u=>this.users=u);
   }
 
   initUser(usuario:IUser) {
@@ -64,6 +62,7 @@ export class UserUpdateComponent implements OnInit {
     newUser.password = this.password;
     this.usersService.updateUser(newUser).subscribe({
       next:respu=>{
+        newUser.password = respu.password;
         newUser.imagen = (valor != '') ? newUser.imagen : this.user.imagen;
         this.user = newUser;
         this.modificarUsuario.emit((valor == '' && this.opcion != 'borrar') ? newUser : respu);
@@ -103,7 +102,7 @@ export class UserUpdateComponent implements OnInit {
   }
 
   addAlert(){
-    const div = document.getElementsByTagName("form")[1].lastElementChild;
+    const div = document.getElementById("alertUpdate");
     const alert = document.createElement("div");
     alert.className = "alert alert-dismissible alert-primary offset-md-5 col-md-7 fade show";
     const icon = document.createElement("i");

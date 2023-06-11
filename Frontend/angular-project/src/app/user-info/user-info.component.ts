@@ -21,6 +21,7 @@ export class UserInfoComponent implements OnInit {
   ) {}
   recetas:IRepice[] = [];
   recetas_seguidas:IRepice[] = [];
+  mostrar = "";
 
   ngOnInit() {
     this.user = this.authService.getUser();
@@ -32,35 +33,6 @@ export class UserInfoComponent implements OnInit {
       next:(u) => (this.recetas_seguidas.push(u)),
       error:(error) => console.error(error)
     }))
-  }
-
-  lista = false;
-  recetaNueva = false;
-  actualizarDatos= false;
-  borrarUsuario=false;
-  mostrarLista(){
-    this.lista = true;
-    this.recetaNueva = false;
-    this.actualizarDatos= false;
-    this.borrarUsuario=false;
-  }
-  mostrarAdd(){
-    this.lista = false;
-    this.recetaNueva = true;
-    this.actualizarDatos= false;
-    this.borrarUsuario=false;
-  }
-  mostrarUpdate(){
-    this.lista = false;
-    this.recetaNueva = false;
-    this.actualizarDatos= true;
-    this.borrarUsuario=false;
-  }
-  mostrarBorrado(){
-    this.lista = false;
-    this.recetaNueva = false;
-    this.actualizarDatos= false;
-    this.borrarUsuario=true;
   }
   addNewRepice(recetaNueva:IRepice){
     this.recetas.push(recetaNueva);
