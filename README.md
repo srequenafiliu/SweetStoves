@@ -32,10 +32,8 @@ La API generada, con enlace *http://localhost:8080/api*, muestra los siguientes 
 - __datosUsuario__: Datos personales del usuario (nombre, apellido y teléfono). Todos estos datos son de tipo string y el apellido y el teléfono pueden ser nulos
 - __recetas__: Lista de recetas creadas por el usuario
 - __recetas_seguidas__: Lista de recetas que ha seguido el usuario
-### Auth
-Este recurso muestra un token (dato de tipo string) que servirá para el login de la web. Este token solo se generará si se ha introducido el nombre de usuario y la contraseña correctos, y caducará a las 24 horas de ser creado. 
 ## Frontend
-**Para hacer funcionar SweetStoves debes instalar node-modules y jwt-decode**
+**Para hacer funcionar SweetStoves debes instalar node-modules y jwt-decode.**
 Podrás acceder a SweetStoves desde el enlace _http://localhost:4200/_, el cual te redireccionará al menú de inicio.
 Sabrás que estás en SweetStoves ya que la web tiene un icono propio en la pestaña del navegador.
 ### Menú de inicio
@@ -79,14 +77,15 @@ Se puede acceder a este menú desde la barra de navegación y desde el enlace qu
 
 <img src="images/09_registro.png">
 
-La persona que quiera registrarse en SweetStoves debe rellenar al menos los campos obligatorios. Si los rellena mal, saltarán varios errores. Cuando el formulario se haya rellenado correctamente, se habilitará el botón de registro.
+La persona que quiera registrarse en SweetStoves debe rellenar al menos los campos obligatorios. Si los rellena mal, saltarán los errores que haya cometido cuando intente registrarse. Asimismo, no se permitirá el registro de un usuario y/o correo electrónico duplicado. El futuro usuario de la web puede retocar los datos erróneos o borrar los datos del formulario con el botón _Borrar datos_.
 
 <p align="center">
     <img src="images/10_registro_mal.png" height="450">
-    <img src="images/11_registro_bien.png" height="450">
+    <img src="images/11_registro_duplicado.png" height="450">
 </p>
 
-Si la persona se ha equivocado en rellenar los datos, puede borrarlos pulsando el botón _Borrar datos_. Cuando se envía el formulario, la web vuelve al menú de inicio. Además, si el usuario ya tiene cuenta en SweetStoves, debajo de los botones anteriormente mencionados se encuentra el link llamado _Prefiero iniciar sesión_ que le redirecciona al menú de login.
+Cuando se envía el formulario correctamente, se redirecciona al usuario al menú de login.\
+Si el usuario ya tiene cuenta en SweetStoves, también se puede acceder a este menú con el link llamado _Prefiero iniciar sesión_, el cual se encuentra debajo de los botones anteriormente mencionados.
 
 ### Login
 Aparte del enlace que se encontraba en el menú anterior, también se puede acceder al menú de login desde la barra de navegación.
@@ -100,15 +99,15 @@ En este menú, lo primero que llama la atención es la ausencia del campo contra
 Si el usuario pulsa el botón “Iniciar sesión” y la contraseña no está escrita correctamente, saltará un error en ese campo. Solo cuando la contraseña sea correcta, la web le mandará a su menú de usuario. Si el usuario no está registrado, debajo de este botón está el link que redirecciona al menú de registro.
 
 ### Menú de usuario
-Cuando el usuario ha iniciado sesión, en la barra de navegación aparece su nombre de usuario en vez de los menús de login y registro. Estos solo volverán a aparecen si se cierra la sesión, ya sea porque el usuario pulsa el botón “Cerrar sesión” o porque han pasado 24 horas desde que la inició.
+Cuando el usuario ha iniciado sesión, en la barra de navegación aparece su nombre de usuario en vez de los menús de login y registro. Estos solo volverán a aparecen si se cierra la sesión, ya sea porque el usuario pulsa el botón _Cerrar sesión_ o porque han pasado 24 horas desde que la inició.
 
 <img src="images/14_menu_usuario.png">
 
-En este menú, el usuario puede hacer varias tareas que puede elegir en el menú lateral que aparece cuando se pulsa el botón “¿Quieres hacer algo hoy?”
+En este menú, el usuario puede hacer varias tareas que puede elegir en el menú lateral que aparece cuando se pulsa el botón _¿Quieres hacer algo hoy?_
 
 <img src="images/15_menu_usuario_opciones.png">
 
-Cuando se mantiene el cursor en uno de los botones, aparece una ventana con una pequeña explicación de la opción y, si se pulsa, debajo de los botones “¿Quieres hacer algo hoy?” y “Cerrar sesión” aparece el componente seleccionado:
+Cuando se mantiene el cursor en uno de los botones, aparece una ventana con una pequeña explicación de la opción y, si se pulsa, debajo de los botones _¿Quieres hacer algo hoy?_ y _Cerrar sesión_ aparece el componente seleccionado:
 - Lista de recetas: Esta lista de recetas se diferencia a la lista general en dos detalles:
     1. Solo aparecen las recetas que ha guardado el usuario en cuestión.
     2. Aparece el botón “Borrar receta” en las recetas que ha creado el usuario. Si se borra la receta, desaparecerá del blog.
@@ -119,33 +118,37 @@ Cuando se mantiene el cursor en uno de los botones, aparece una ventana con una 
 
 <img src="images/17_menu_usuario_receta_nueva.png">
 
-- Actualiza tu cuenta: En este formulario aparecen ya los campos rellenados con los datos actuales del usuario. Funciona de la misma manera que el formulario de registro en cuanto a errores se refiere. Nada más enviarlo, los cambios se verán reflejados en el menú de usuario.
+- Actualiza tu cuenta: En este formulario aparecen ya los campos rellenados con los datos actuales del usuario excepto el de la contraseña. Funciona de la misma manera que el formulario de registro en cuanto a errores se refiere. Además, se debe insertar la contraseña actual para poder actualizar los datos correctamente. Nada más enviarlo, los cambios se verán reflejados en el menú de usuario y aparecerá una alerta confirmando que la acción se ha realizado.
 
 <img src="images/18_menu_usuario_update.png">
 
+- Cambia tu contraseña: Este formulario es específico para actualizar la contraseña. Solo se actualizará cuando la contraseña actual sea la correcta, la nueva contraseña se ajuste al formato y las contraseñas coincidan. Cuando se cumplimente adecuadamente, aparecerá una alerta confirmando que la actualización se ha realizado.
+
+<img src="images/19_menu_usuario_password.png">
+
 - Borra tu cuenta: En esta última opción el usuario puede borrar su cuenta, aunque también borrará las recetas que ha creado en SweetStoves.
 
-<img src="images/19_menu_usuario_borrar.png">
+<img src="images/20_menu_usuario_borrar.png">
 
 ### Otros dispositivos
 La experiencia de SweetStoves también se puede vivir en Tablet y en móvil. En este apartado se pueden ver algunos menús en formato Tablet (768x886) y móvil (320x886):
 - Menú de inicio:
     <p align="center">
-    <img src="images/20_inicio_movil.png" height="450">
-    <img src="images/21_inicio_tablet.png" height="450">
+    <img src="images/21_inicio_movil.png" height="450">
+    <img src="images/22_inicio_tablet.png" height="450">
     </p>
 - Lista de recetas:
     <p align="center">
-    <img src="images/22_recetas_tablet.png" height="450">
-    <img src="images/23_recetas_movil.png" height="450">
+    <img src="images/23_recetas_tablet.png" height="450">
+    <img src="images/24_recetas_movil.png" height="450">
     </p>
 - Lista de usuarios:
     <p align="center">
-    <img src="images/24_usuarios_movil.png" height="450">
-    <img src="images/25_usuarios_tablet.png" height="450">
+    <img src="images/25_usuarios_movil.png" height="450">
+    <img src="images/26_usuarios_tablet.png" height="450">
     </p>
 - Registro:
     <p align="center">
-    <img src="images/26_registro_tablet.png" height="450">
-    <img src="images/27_registro_movil.png" height="450">
+    <img src="images/27_registro_tablet.png" height="450">
+    <img src="images/28_registro_movil.png" height="450">
     </p>
