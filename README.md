@@ -85,7 +85,7 @@ La persona que quiera registrarse en SweetStoves debe rellenar al menos los camp
 </p>
 
 Cuando se envía el formulario correctamente, se redirecciona al usuario al perfil del nuevo usuario.\
-Si el usuario ya tiene cuenta en SweetStoves, también se puede acceder a este menú con el link llamado _Prefiero iniciar sesión_, el cual se encuentra debajo de los botones anteriormente mencionados.
+Si el usuario ya tiene cuenta en SweetStoves, puede acceder al menú de login con el link llamado _Prefiero iniciar sesión_, el cual se encuentra debajo de los botones anteriormente mencionados.
 
 ### Login
 Aparte del enlace que se encontraba en el menú anterior, también se puede acceder al menú de login desde la barra de navegación.
