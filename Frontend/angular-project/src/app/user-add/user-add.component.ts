@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { IUser } from '../interfaces/i-user';
 import { UsersService } from '../services/users.service';
 import { AuthService } from '../services/auth.service';
+import { ILogin } from '../interfaces/i-login';
+import jwtDecode from 'jwt-decode';
 
 @Component({
   selector: 'user-add',
@@ -12,15 +13,13 @@ import { AuthService } from '../services/auth.service';
 export class UserAddComponent implements OnInit {
   newPassword = '';
   newUser!:IUser;
-  users:IUser[] = [];
   errores:string[] = [];
   usuarioExistente = false;
   correoExistente = false;
 
-  constructor(private usersService:UsersService, private authService:AuthService, private routeDirecto: Router) {}
+  constructor(private usersService:UsersService, private authService:AuthService) {}
   ngOnInit(): void {
     this.initUser();
-    this.usersService.getUsers().subscribe(u=>this.users=u);
   }
 
   initUser() {
@@ -53,8 +52,17 @@ export class UserAddComponent implements OnInit {
     if (newUser.datosUsuario?.telefono == "") newUser.datosUsuario.telefono = null;
     this.authService.addUser(newUser).subscribe({
       next:respu=>{
-        this.users.push(newUser);
-        this.goBack();
+        const userLogin:ILogin = {
+          usuario: newUser.usuario,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          password: newUser.password!
+        };
+        this.authService.login(userLogin).subscribe({
+          next:user=>{
+            const tokenDecoded:{id:number} = jwtDecode(user.accessToken);
+            this.usersService.getUser(tokenDecoded.id).subscribe(u=>this.authService.setData(user.accessToken, u));
+          }
+        })
         console.log(respu);
       },
       error:e=>{
@@ -75,7 +83,6 @@ export class UserAddComponent implements OnInit {
     return -1;
   }
 
-
   reset(fileImage:HTMLInputElement){
     this.initUser();
     this.errores = [];
@@ -83,8 +90,5 @@ export class UserAddComponent implements OnInit {
     this.correoExistente = false;
     this.newPassword = '';
     fileImage.value = '';
-  }
-  goBack(){
-    this.routeDirecto.navigate(['/login']);
   }
 }

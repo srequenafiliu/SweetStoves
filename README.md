@@ -84,7 +84,7 @@ La persona que quiera registrarse en SweetStoves debe rellenar al menos los camp
     <img src="images/11_registro_duplicado.png" height="450">
 </p>
 
-Cuando se envía el formulario correctamente, se redirecciona al usuario al menú de login.\
+Cuando se envía el formulario correctamente, se redirecciona al usuario al perfil del nuevo usuario.\
 Si el usuario ya tiene cuenta en SweetStoves, también se puede acceder a este menú con el link llamado _Prefiero iniciar sesión_, el cual se encuentra debajo de los botones anteriormente mencionados.
 
 ### Login
