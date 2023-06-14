@@ -90,13 +90,13 @@ Si el usuario ya tiene cuenta en SweetStoves, puede acceder al menú de login co
 ### Login
 Aparte del enlace que se encontraba en el menú anterior, también se puede acceder al menú de login desde la barra de navegación.
 
-<img src="images/12_login.png">
+<img src="images/12_menu_login.png">
 
-En este menú, lo primero que llama la atención es la ausencia del campo contraseña. Este solamente aparecerá cuando se rellene el campo usuario con un usuario que ya se haya registrado en la web.
+Si el usuario pulsa el botón _Iniciar sesión_ y al menos uno de los datos no es correcto, aparecerá una alerta.
 
-<img src="images/13_login_password.png">
+<img src="images/13_login_alerta.png">
 
-Si el usuario pulsa el botón “Iniciar sesión” y la contraseña no está escrita correctamente, saltará un error en ese campo. Solo cuando la contraseña sea correcta, la web le mandará a su menú de usuario. Si el usuario no está registrado, debajo de este botón está el link que redirecciona al menú de registro.
+ Solo cuando los datos sean válidos, la web le mandará a su menú de usuario. Si el usuario no está registrado, debajo de este botón está el link que redirecciona al menú de registro.
 
 ### Menú de usuario
 Cuando el usuario ha iniciado sesión, en la barra de navegación aparece su nombre de usuario en vez de los menús de login y registro. Estos solo volverán a aparecen si se cierra la sesión, ya sea porque el usuario pulsa el botón _Cerrar sesión_ o porque han pasado 24 horas desde que la inició.

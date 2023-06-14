@@ -46,6 +46,10 @@ public class AuthRestController {
     public ResponseEntity<Map<String, Object>> login(@RequestBody Usuario usuario) throws NoSuchAlgorithmException {
 		Map<String,Object> response = new HashMap<>();
         Usuario u = usuarioService.login(usuario);
+		if(u==null) {
+			response.put("error", "Usuario y/o contraseña no válidos");
+			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.UNAUTHORIZED);
+		}
 		response.put("accessToken", getToken(u));
 		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
     }

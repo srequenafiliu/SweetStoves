@@ -7,10 +7,8 @@ import java.util.Base64;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.sandra.springboot.backend.recetas.models.dto.UsuarioDto;
 import com.sandra.springboot.backend.recetas.models.entity.Usuario;
@@ -39,8 +37,7 @@ public class UsuarioServiceImpl implements IusuarioService {
 	
 	@Override
 	public Usuario login(Usuario user) throws NoSuchAlgorithmException {
-		return usuario.findByUsuarioAndPassword(user.getUsuario(), encodePassword(user.getPassword()))
-				.orElseThrow(()->new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Usuario y/o contraseña no válidos"));
+		return usuario.findByUsuarioAndPassword(user.getUsuario(), encodePassword(user.getPassword())).orElse(null);
 	}
 
 	@Override

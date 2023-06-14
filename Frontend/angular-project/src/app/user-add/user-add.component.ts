@@ -58,9 +58,9 @@ export class UserAddComponent implements OnInit {
           password: newUser.password!
         };
         this.authService.login(userLogin).subscribe({
-          next:user=>{
-            const tokenDecoded:{id:number} = jwtDecode(user.accessToken);
-            this.usersService.getUser(tokenDecoded.id).subscribe(u=>this.authService.setData(user.accessToken, u));
+          next:token=>{
+            const tokenDecoded:{id:number} = jwtDecode(token);
+            this.usersService.getUser(tokenDecoded.id).subscribe(u=>this.authService.setData(token, u));
           }
         })
         console.log(respu);
