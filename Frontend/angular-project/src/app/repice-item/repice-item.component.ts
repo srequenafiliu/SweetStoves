@@ -18,8 +18,7 @@ export class RepiceItemComponent {
   @Output() deleteRepice = new EventEmitter<IRepice>();
   borrarReceta(){
     this.repicesService.deleteRepice(this.repice.id).subscribe({
-      next:respu=>{this.deleteRepice.emit(this.repice);console.log(respu)},
-      error:e=>console.log(e)
+      next:()=>this.deleteRepice.emit(this.repice)
     })
   }
 }

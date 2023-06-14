@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.sandra.springboot.backend.recetas.models.entity.Receta;
-import com.sandra.springboot.backend.recetas.models.services.IrecetaService;
+import com.sandra.springboot.backend.recetas.models.services.RecetaService;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
 
 @CrossOrigin(origins = {"*"})
@@ -34,7 +34,7 @@ public class RecetaRestController {
 	private final ImageUtils imageUtils = new ImageUtils();
 	
 	@Autowired
-	private IrecetaService recetaService;
+	private RecetaService recetaService;
 	
 	@GetMapping("")
 	public ResponseEntity<?> index() {

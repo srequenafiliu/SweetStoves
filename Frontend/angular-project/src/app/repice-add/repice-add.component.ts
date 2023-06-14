@@ -66,8 +66,7 @@ export class RepiceAddComponent implements OnInit {
     this.newRepice.elaboracion = this.elaboracionString.split('\n');
     this.newRepice.creacion = new Date(Date.now());
     this.repicesService.addRepice(receta).subscribe({
-      next:respu=>{this.addNewRepice.emit(receta);console.log(respu)},
-      error:e=>console.log(e)
+      next:()=>this.addNewRepice.emit(receta)
     });
   }
 }

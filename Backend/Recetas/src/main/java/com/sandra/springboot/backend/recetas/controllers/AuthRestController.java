@@ -21,7 +21,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.sandra.springboot.backend.recetas.models.dto.UsuarioDto;
 import com.sandra.springboot.backend.recetas.models.entity.Usuario;
-import com.sandra.springboot.backend.recetas.models.services.IusuarioService;
+import com.sandra.springboot.backend.recetas.models.services.UsuarioService;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
 
 import jakarta.validation.Valid;
@@ -40,12 +40,12 @@ public class AuthRestController {
 	private final ImageUtils imageUtils = new ImageUtils();
 
 	@Autowired
-	private IusuarioService usuarioService;
+	private UsuarioService usuarioService;
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Usuario usuario) throws NoSuchAlgorithmException {
 		Map<String,Object> response = new HashMap<>();
-        Usuario u = usuarioService.login(usuario);
+        Usuario u = usuarioService.findByUsuarioAndPassword(usuario.getUsuario(), usuario.getPassword());
 		if(u==null) {
 			response.put("error", "Usuario y/o contraseña no válidos");
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.UNAUTHORIZED);
@@ -113,7 +113,7 @@ public class AuthRestController {
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		try {
-			usuarioActual = usuarioService.findByUsuarioAndPassword(usuario);
+			usuarioActual = usuarioService.findByUsuarioAndPassword(usuario.getUsuario(), usuario.getPassword());
 			// Comprueba si la contraseña coincide con la guardada en la base de datos
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al conectar con la base de datos");

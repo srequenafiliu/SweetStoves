@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.sandra.springboot.backend.recetas.models.entity.Usuario;
-import com.sandra.springboot.backend.recetas.models.services.IusuarioService;
+import com.sandra.springboot.backend.recetas.models.services.UsuarioService;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
 
 import jakarta.validation.Valid;
@@ -36,7 +36,7 @@ public class UsuarioRestController {
 	private final ImageUtils imageUtils = new ImageUtils();
 	
 	@Autowired
-	private IusuarioService usuarioService;
+	private UsuarioService usuarioService;
 	
 	@GetMapping("")
 	public ResponseEntity<?> index() {

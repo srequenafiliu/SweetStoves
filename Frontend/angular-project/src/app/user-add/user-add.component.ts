@@ -51,7 +51,7 @@ export class UserAddComponent implements OnInit {
     if (newUser.datosUsuario?.apellido == "") newUser.datosUsuario.apellido = null;
     if (newUser.datosUsuario?.telefono == "") newUser.datosUsuario.telefono = null;
     this.authService.addUser(newUser).subscribe({
-      next:respu=>{
+      next:()=>{
         const userLogin:ILogin = {
           usuario: newUser.usuario,
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -63,13 +63,11 @@ export class UserAddComponent implements OnInit {
             this.usersService.getUser(tokenDecoded.id).subscribe(u=>this.authService.setData(token, u));
           }
         })
-        console.log(respu);
       },
       error:e=>{
         this.errores = (e.error.errores != undefined) ? e.error.errores : [];
         this.usuarioExistente = (e.error.error != undefined) ? e.error.error.includes("usuario_unique") : false;
         this.correoExistente = (e.error.error != undefined) ? e.error.error.includes("correo_unique") : false;
-        console.log(e);
       }
     });
   }

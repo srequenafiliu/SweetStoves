@@ -69,7 +69,6 @@ export class UserUpdateComponent implements OnInit {
         this.authService.setUser((valor == '' && this.opcion != 'borrar') ? newUser : respu);
         this.reset(newUser, fileImage);
         this.addAlert();
-        console.log(respu)
       },
       error:e=>{
         this.errores = (e.error.errores != undefined) ? e.error.errores : [];
@@ -77,7 +76,6 @@ export class UserUpdateComponent implements OnInit {
         this.correoExistente = (e.error.error != undefined) ? e.error.error.includes("correo_unique") : false;
         this.passwordIncorrecto = (e.error.error != undefined) ? e.error.error.includes("Contraseña") : false;
         this.password = '';
-        console.log(e)
       }
     });
   }

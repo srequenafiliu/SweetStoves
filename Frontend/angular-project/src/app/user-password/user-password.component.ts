@@ -29,11 +29,7 @@ export class UserPasswordComponent implements OnInit {
   }
 
   changePassword() {
-    if (this.new_pass != this.userPass.new_password) {
-      this.addAlert(false, "Las contraseñas no coinciden");
-      console.log(this.new_pass);
-      console.log(this.userPass.new_password);
-    }
+    if (this.new_pass != this.userPass.new_password) this.addAlert(false, "Las contraseñas no coinciden");
     else {
       this.authService.changePassword(this.userPass).subscribe({
         next:respu=>{
@@ -42,13 +38,11 @@ export class UserPasswordComponent implements OnInit {
           this.authService.setUser(this.user);
           this.reset();
           this.addAlert(true, "Contraseña cambiada correctamente");
-          console.log(respu)
         },
         error:e=>{
           if (e.error.error != undefined) this.addAlert(false, e.error.error);
           if (e.error.errors != undefined) this.addAlert(false, "La nueva contraseña no tiene el formato correcto");
           this.new_pass = "";
-          console.log(e);
         }
       });
     }
@@ -58,6 +52,7 @@ export class UserPasswordComponent implements OnInit {
     this.initUser(this.user);
     this.new_pass = '';
   }
+  
   addAlert(correcto:boolean, texto:string){
     const div = document.getElementById("alertPass");
     const alert = document.createElement("div");

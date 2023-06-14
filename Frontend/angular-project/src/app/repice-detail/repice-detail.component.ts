@@ -18,12 +18,9 @@ export class RepiceDetailComponent implements OnInit {
 
   ngOnInit() {
     const id = +this.route.snapshot.params['id'];
-    // Recibimos parámetro
     this.repicesService.getRepice(id).subscribe({
-      next:(p) => (this.repice = p),
-      error:(error) => console.error(error)
-    }
-    );
+      next:p => this.repice = p
+    });
   }
 
   numeroPaso(paso:string){

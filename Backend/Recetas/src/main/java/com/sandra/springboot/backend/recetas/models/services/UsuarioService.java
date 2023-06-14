@@ -16,31 +16,23 @@ import com.sandra.springboot.backend.recetas.models.repositories.Iusuario;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
 
 @Service
-public class UsuarioServiceImpl implements IusuarioService {
+public class UsuarioService {
 	
 	@Autowired
 	private Iusuario usuario;
 	
 	private final ImageUtils imageUtils = new ImageUtils();
 	
-	@Override
 	@Transactional(readOnly = true)
 	public List<Usuario> findAll() {
 		return (List<Usuario>) usuario.findAll();
 	}
 
-	@Override
 	@Transactional(readOnly = true)
 	public Usuario findById(int id) {
 		return usuario.findById(id).orElse(null);
 	}
-	
-	@Override
-	public Usuario login(Usuario user) throws NoSuchAlgorithmException {
-		return usuario.findByUsuarioAndPassword(user.getUsuario(), encodePassword(user.getPassword())).orElse(null);
-	}
 
-	@Override
 	public void delete(int id) {
 		Usuario usuarioActual = usuario.findById(id).orElse(null);
 		if(usuarioActual!=null) {
@@ -52,23 +44,19 @@ public class UsuarioServiceImpl implements IusuarioService {
 		}
 	}
 
-	@Override
 	public Usuario save(Usuario usuarioNew) throws NoSuchAlgorithmException {
 		usuarioNew.setPassword(encodePassword(usuarioNew.getPassword()));
 		return usuario.save(usuarioNew);
 	}
 	
-	@Override
 	public Usuario findByUsuario(UsuarioDto user) throws NoSuchAlgorithmException {
 		return usuario.findByUsuario(user.getUsuario()).orElse(null);
 	}
 
-	@Override
-	public Usuario findByUsuarioAndPassword(UsuarioDto user) throws NoSuchAlgorithmException {
-		return usuario.findByUsuarioAndPassword(user.getUsuario(), encodePassword(user.getPassword())).orElse(null);
+	public Usuario findByUsuarioAndPassword(String user, String password) throws NoSuchAlgorithmException {
+		return usuario.findByUsuarioAndPassword(user, encodePassword(password)).orElse(null);
 	}
 	
-	@Override
 	public boolean samePassword(String saved_pass, String password) throws NoSuchAlgorithmException {
 		return saved_pass.equals(encodePassword(password));
 	}

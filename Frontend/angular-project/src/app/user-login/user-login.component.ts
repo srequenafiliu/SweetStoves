@@ -15,7 +15,6 @@ export class UserLoginComponent {
     usuario: '',
     password: ''
   }
-  invalidPassword = false;
 
   constructor(private usersService:UsersService, private authService:AuthService) {}
 

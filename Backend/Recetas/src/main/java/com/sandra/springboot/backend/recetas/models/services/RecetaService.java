@@ -11,26 +11,23 @@ import com.sandra.springboot.backend.recetas.models.repositories.Ireceta;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
 
 @Service
-public class RecetaServiceImpl implements IrecetaService {
+public class RecetaService {
 	
 	@Autowired
 	private Ireceta receta;
 
 	private final ImageUtils imageUtils = new ImageUtils();
 	
-	@Override
 	@Transactional(readOnly = true)
 	public List<Receta> findAll() {
 		return (List<Receta>) receta.findAll();
 	}
 
-	@Override
 	@Transactional(readOnly = true)
 	public Receta findById(int id) {
 		return receta.findById(id).orElse(null);
 	}
 
-	@Override
 	public void delete(int id) {
 		Receta recetaActual = receta.findById(id).orElse(null);
 		if(recetaActual!=null) {
@@ -42,7 +39,6 @@ public class RecetaServiceImpl implements IrecetaService {
 		}
 	}
 
-	@Override
 	public Receta save(Receta recetaNew) {
 		return receta.save(recetaNew);
 	}

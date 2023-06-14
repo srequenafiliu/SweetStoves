@@ -26,12 +26,10 @@ export class UserInfoComponent implements OnInit {
   ngOnInit() {
     this.user = this.authService.getUser();
     this.user.recetas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
-      next:(u) => (this.recetas.push(u)),
-      error:(error) => console.error(error)
+      next:u => this.recetas.push(u)
     })),
     this.user.recetas_seguidas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
-      next:(u) => (this.recetas_seguidas.push(u)),
-      error:(error) => console.error(error)
+      next:u => this.recetas_seguidas.push(u)
     }))
   }
   addNewRepice(recetaNueva:IRepice){
@@ -42,8 +40,7 @@ export class UserInfoComponent implements OnInit {
   }
   deleteUsuario(){
     this.usersService.deleteUser(this.user.id).subscribe({
-      next:respu=>{this.routeDirecto.navigate(['/usuarios']);console.log(respu)},
-      error:e=>console.log(e)
+      next:()=>this.routeDirecto.navigate(['/usuarios'])
     })
   }
   borrarReceta(receta:IRepice){

@@ -1,23 +1,23 @@
 <form class="form">
   <fieldset class="row g-0 d-flex align-items-center">
     <legend class="mt-4 offset-1 col-10 col-lg-3">Ordenar recetas:</legend>
-    <div class="btn-group dropdown offset-1 col-10 offset-lg-0" [ngClass]="{'col-lg-3': difA || difD, 'col-lg-2 offset-lg-1': !difA && !difD}">
+    <div class="btn-group dropdown offset-1 col-10 offset-lg-0" [ngClass]="{'col-lg-3': orden.includes('dif'), 'col-lg-2 offset-lg-1': !orden.includes('dif')}">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        Por dificultad <span *ngIf="difA">(Ascendente)</span> <span *ngIf="difD">(Descendente)</span>
+        Por dificultad <span *ngIf="orden === 'difA'">(Ascendente)</span> <span *ngIf="orden === 'difD'">(Descendente)</span>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
-        <button class="dropdown-item" [ngClass]="{'active':difA}" type="button" (click)="orderDificultadA()">Ascendente</button>
-        <button class="dropdown-item" [ngClass]="{'active':difD}" type="button" (click)="orderDificultadD()">Descendente</button>
+        <button class="dropdown-item" [ngClass]="{'active':orden === 'difA'}" type="button" (click)="ordenar('difA')">Ascendente</button>
+        <button class="dropdown-item" [ngClass]="{'active':orden === 'difD'}" type="button" (click)="ordenar('difD')">Descendente</button>
       </ul>
     </div>
-    <div class="btn-group dropdown offset-1 col-10 offset-lg-0" [ngClass]="{'col-lg-4': fechaA || fechaD, 'col-lg-3': !fechaA && !fechaD}">
+    <div class="btn-group dropdown offset-1 col-10 offset-lg-0" [ngClass]="{'col-lg-4': orden.includes('fecha'), 'col-lg-3': !orden.includes('fecha')}">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-        Por fecha de publicación <span *ngIf="fechaA"><br class="d-sm-none">(Ascendente)</span>
-        <span *ngIf="fechaD"><br class="d-sm-none">(Descendente)</span>
+        Por fecha de publicación <span *ngIf="orden === 'fechaA'"><br class="d-sm-none">(Ascendente)</span>
+        <span *ngIf="orden === 'fechaD'"><br class="d-sm-none">(Descendente)</span>
       </button>
       <ul class="dropdown-menu">
-        <button class="dropdown-item" [ngClass]="{'active':fechaA}" type="button" (click)="orderFechaA()">Ascendente</button>
-        <button class="dropdown-item" [ngClass]="{'active':fechaD}" type="button" (click)="orderFechaD()">Descendente</button>
+        <button class="dropdown-item" [ngClass]="{'active':orden === 'fechaA'}" type="button" (click)="ordenar('fechaA')">Ascendente</button>
+        <button class="dropdown-item" [ngClass]="{'active':orden === 'fechaD'}" type="button" (click)="ordenar('fechaD')">Descendente</button>
       </ul>
     </div>
   </fieldset>
@@ -57,7 +57,7 @@
       <label class="form-label">Dificultad:&nbsp;</label><br>
       <span *ngFor="let star of [1, 2, 3, 4 , 5]" class="fa-star"
       [ngClass]="{'fas':star<=level, 'far':star>level}"
-      (click)="changeLevel(star)"></span>
+      (click)="level = star"></span>
     </div>
     <div class="h1 offset-1 col-4 col-lg-4 my-2 text-primary">{{title}}:</div>
     <button type="reset" class="btn btn-secondary btn-icon-split float-right offset-2 col-4 offset-lg-4 col-lg-2" (click)="reset()">

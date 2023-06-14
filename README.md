@@ -124,7 +124,7 @@ Cuando se mantiene el cursor en uno de los botones, aparece una ventana con una 
 
 - Cambia tu contraseña: Este formulario es específico para actualizar la contraseña. Solo se actualizará cuando la contraseña actual sea la correcta, la nueva contraseña se ajuste al formato y las contraseñas coincidan. Cuando se cumplimente adecuadamente, aparecerá una alerta confirmando que la actualización se ha realizado.
 
-<img src="images/19_menu_usuario_password.png">
+<img src="images/19_menu_usuario_pass.png">
 
 - Borra tu cuenta: En esta última opción el usuario puede borrar su cuenta, aunque también borrará las recetas que ha creado en SweetStoves.
 
