@@ -13,22 +13,14 @@ export class AuthService {
   private authURL="auth";
   constructor(private http:HttpClient, private router:Router) { }
 
-  login(userLogin:ILogin):Observable<string> {
-    return this.http.post<{accessToken:string, error?:string}>(this.authURL+'/login', userLogin).pipe(
-      map(response=>response.accessToken)
-    );
-  }
+  login = (userLogin:ILogin):Observable<string> => this.http
+  .post<{accessToken:string, error?:string}>(this.authURL+'/login', userLogin).pipe(map(response=>response.accessToken));
 
-  changePassword(userPass:IUserPass):Observable<string> {
-    return this.http.put<{password:string,mensaje:string, error:string}>(this.authURL+'/change_password', userPass).pipe(
-      map(response=>response.password)
-    );
-  }
+  changePassword = (userPass:IUserPass):Observable<string> => this.http
+  .put<{password:string,mensaje:string, error:string}>(this.authURL+'/change_password', userPass).pipe(map(response=>response.password));
 
-  addUser(newUser:IUser):Observable<IUser> {
-    return this.http.post<{usuario:IUser, mensaje:string, error?:string}>(this.authURL+'/registro', newUser)
-    .pipe(map(response => response.usuario));
-  }
+  addUser = (newUser:IUser):Observable<IUser> => this.http
+  .post<{usuario:IUser, mensaje:string, error?:string}>(this.authURL+'/registro', newUser).pipe(map(response => response.usuario));
 
   setUser(usuario:IUser){
     localStorage.setItem('usuario', JSON.stringify(usuario));
@@ -40,18 +32,11 @@ export class AuthService {
     this.router.navigate(['/perfil_usuario']);
   }
 
-  getToken(){
-    return localStorage.getItem('token');
-  }
+  getToken = () => localStorage.getItem('token');
 
   getUser(){
     const usuarioStr = localStorage.getItem('usuario');
     return (usuarioStr != null) ? JSON.parse(usuarioStr) : null;
-  }
-
-  isLoggedIn(){
-    const tokenStr = localStorage.getItem('token');
-    return !(tokenStr == undefined || tokenStr == '' || tokenStr == null)
   }
   checkToken(token:string|null) {
     if (token) {

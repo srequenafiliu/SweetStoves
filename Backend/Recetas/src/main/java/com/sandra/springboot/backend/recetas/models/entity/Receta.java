@@ -20,6 +20,11 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,9 +56,11 @@ public class Receta implements java.io.Serializable {
 	
 	@NonNull
 	@Column(name = "nombre", nullable = false)
+	@NotBlank
 	private String nombre;
 	
 	@NonNull
+	@NotBlank
 	@Column(name = "tipo", nullable = false)
 	private String tipo;
 	
@@ -61,18 +68,23 @@ public class Receta implements java.io.Serializable {
 	private List<String> necesidades;
 	
 	@NonNull
+	@NotNull
+	@NotEmpty
 	@Column(name = "ingredientes", nullable = false, length = 1000)
 	private List<String> ingredientes;
 	
 	@NonNull
+	@NotNull
+	@NotEmpty
 	@Column(name = "elaboracion", nullable = false, length = 1000)
 	private List<String> elaboracion;
 	
 	@NonNull
+	@Min(value = 1, message = "debe estar entre 1 y 5")
+	@Max(value = 5, message = "debe estar entre 1 y 5")
 	@Column(name = "dificultad", nullable = false)
 	private Integer dificultad;
 	
-	@NonNull
 	@Column(name = "imagen", nullable = false)
 	private String imagen;
 	

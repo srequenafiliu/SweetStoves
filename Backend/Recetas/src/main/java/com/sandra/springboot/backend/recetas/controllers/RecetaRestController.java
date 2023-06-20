@@ -1,9 +1,11 @@
 package com.sandra.springboot.backend.recetas.controllers;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.sandra.springboot.backend.recetas.models.entity.Receta;
+import com.sandra.springboot.backend.recetas.models.entity.Usuario;
 import com.sandra.springboot.backend.recetas.models.services.RecetaService;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
+
+import jakarta.validation.Valid;
 
 @CrossOrigin(origins = {"*"})
 @RestController
@@ -101,15 +106,17 @@ public class RecetaRestController {
 	}
 	
 	@PostMapping("")
-	public ResponseEntity<?> create(@RequestBody Receta receta, BindingResult result){
+	public ResponseEntity<?> create(@Valid @RequestBody Receta receta, BindingResult result){
 		Receta recetaNew = null;
 		Map<String,Object> response = new HashMap<>();
-		if(result.hasErrors()) {
+		if(result.hasErrors() || !receta.getTipo().equals("Dulce") && !receta.getTipo().equals("Salado")) {
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			response.put("errors", errors);
+			if (!receta.getTipo().equals("Dulce") && !receta.getTipo().equals("Salado"))
+				errors.add("El campo 'tipo' solo puede ser 'Dulce' o 'Salado'");
+			response.put("errores", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		try {
@@ -117,6 +124,10 @@ public class RecetaRestController {
 				String ruta = imageUtils.saveImageBase64("recetas", receta.getImagen());
 				receta.setImagen(ruta);
 			}
+			Set<Usuario> usuarios = receta.getUsuarios();
+			usuarios.add(receta.getUsuario());
+			receta.setUsuarios(usuarios);
+			receta.setCreacion(new Date());
 			recetaNew = recetaService.save(receta);
 			if(receta.getImagen()!=null)
 				recetaNew.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + recetaNew.getImagen());
@@ -132,16 +143,18 @@ public class RecetaRestController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> update(@RequestBody Receta receta, @PathVariable int id, BindingResult result){
+	public ResponseEntity<?> update(@Valid @RequestBody Receta receta, @PathVariable int id, BindingResult result){
 		Receta recetaActual = null;
 		Receta recetaUpdated = null;
 		Map<String,Object> response = new HashMap<>();
-		if(result.hasErrors()) {
+		if(result.hasErrors() || !receta.getTipo().equals("Dulce") && !receta.getTipo().equals("Salado")) {
 			List<String> errors = result.getFieldErrors()
 					.stream()
 					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
 					.collect(Collectors.toList());
-			response.put("errors", errors);
+			if (!receta.getTipo().equals("Dulce") && !receta.getTipo().equals("Salado"))
+				errors.add("El campo 'tipo' solo puede ser 'Dulce' o 'Salado'");
+			response.put("errores", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		try {
@@ -164,10 +177,11 @@ public class RecetaRestController {
 			recetaActual.setIngredientes(receta.getIngredientes());
 			recetaActual.setElaboracion(receta.getElaboracion());
 			recetaActual.setDificultad(receta.getDificultad());
+			recetaActual.setUsuarios(receta.getUsuarios());
 			if(receta.getImagen()!=null) {
-				recetaActual.setImagen(receta.getImagen());
+				imageUtils.deleteImage("public", recetaActual.getImagen());
 				String ruta = imageUtils.saveImageBase64("recetas", receta.getImagen());
-				receta.setImagen(ruta);
+				recetaActual.setImagen(ruta);
 			}
 			recetaUpdated = recetaService.save(recetaActual);
 			if(receta.getImagen()!=null)

@@ -13,40 +13,32 @@ import { AuthService } from '../services/auth.service';
 })
 export class UserInfoComponent implements OnInit {
   user!:IUser;
-  constructor(
-    private usersService: UsersService,
-    private repicesService: RepicesService,
-    private routeDirecto: Router,
-    private authService:AuthService
-  ) {}
-  recetas:IRepice[] = [];
   recetas_seguidas:IRepice[] = [];
-  mostrar = "";
+  mostrar = "lista";
+
+  constructor(private routeDirecto: Router, private usersService: UsersService,
+    private repicesService: RepicesService, private authService:AuthService) {}
 
   ngOnInit() {
     this.user = this.authService.getUser();
-    this.user.recetas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
-      next:u => this.recetas.push(u)
-    })),
     this.user.recetas_seguidas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
       next:u => this.recetas_seguidas.push(u)
     }))
   }
   addNewRepice(recetaNueva:IRepice){
-    this.recetas.push(recetaNueva);
+    this.recetas_seguidas.push(recetaNueva);
   }
   modificarUsuario(updateUser:IUser){
     this.user = updateUser;
   }
   deleteUsuario(){
     this.usersService.deleteUser(this.user.id).subscribe({
-      next:()=>this.routeDirecto.navigate(['/usuarios'])
+      next:()=>this.logout()
     })
   }
   borrarReceta(receta:IRepice){
-    this.recetas = this.recetas.filter(r=>r!=receta)
+    this.recetas_seguidas = this.recetas_seguidas.filter(r=>r!=receta)
   }
-
   logout(){
     if (this.authService.logout()) this.routeDirecto.navigate(['/inicio'])
   }

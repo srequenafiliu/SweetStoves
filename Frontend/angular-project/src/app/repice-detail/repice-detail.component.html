@@ -47,8 +47,25 @@
       </h2>
       <div id="collapseFinal" class="accordion-collapse collapse" aria-labelledby="headingFinal" data-bs-parent="#accordionRepice">
         <div class="accordion-body">
-          Enhorabuena, has finalizado la receta. Pulsa el botón para volver al menú de recetas
-          <div class="my-2"><button type="button" class="btn" [ngClass]="{'btn-danger':repice.tipo === 'Dulce', 'btn-info':repice.tipo !== 'Dulce'}" (click)="goBack()">Volver</button></div>
+          Enhorabuena<span *ngIf="user"> {{user.usuario}}</span>, has finalizado la receta.
+          <div *ngIf="user, else noLogged">
+            <span *ngIf="receta_creada, else guardar" class="fw-light text-danger">No puedes eliminar una receta tuya de tu lista personal</span>
+            <ng-template #guardar>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault" value="guardado" [(ngModel)]="guardado" (change)="updateRecetas_seguidas()">
+                <label class="form-check-label" for="flexSwitchCheckDefault">Añadir esta receta a tu lista personal</label>
+              </div>
+            </ng-template>
+          </div>
+          <ng-template #noLogged>
+            <div class="fw-light">
+              <a [routerLink]="['/registro']" class="fw-bold">Regístrate</a> o
+              <a [routerLink]="['/login']" class="fw-bold">inicia sesión</a> para añadir esta receta a tu lista personal de recetas.
+            </div>
+          </ng-template>
+          <div class="my-2">
+            <button type="button" class="btn btn-primary" (click)="goBack()">Volver a la lista de recetas</button>
+          </div>
         </div>
       </div>
     </div>

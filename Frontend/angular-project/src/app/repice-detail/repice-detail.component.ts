@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { IRepice } from '../interfaces/i-repice';
 import { RepicesService } from '../services/repices.service';
+import { Location } from '@angular/common';
+import { IUser } from '../interfaces/i-user';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'repice-detail',
@@ -10,28 +13,39 @@ import { RepicesService } from '../services/repices.service';
 })
 export class RepiceDetailComponent implements OnInit {
   repice!: IRepice;
-  constructor(
-    private route: ActivatedRoute,
-    private repicesService: RepicesService,
-    private routeDirecto: Router
-  ) {}
+  user!: IUser;
+  receta_creada?: boolean;
+  guardado?:boolean;
+
+  constructor(private location: Location, private repicesService: RepicesService,
+    private authService:AuthService, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    const id = +this.route.snapshot.params['id'];
-    this.repicesService.getRepice(id).subscribe({
-      next:p => this.repice = p
+    this.repicesService.getRepice(+this.route.snapshot.params['id']).subscribe({
+      next:p => {
+        this.repice = p;
+        this.user = this.authService.getUser();
+        this.receta_creada = this.user.recetas?.map(rec => rec.id).includes(p.id);
+        this.guardado = this.user.recetas_seguidas?.map(rec => rec.id).includes(p.id);
+      }
     });
   }
 
-  numeroPaso(paso:string){
-    return this.repice.elaboracion.indexOf(paso)+1;
+  updateRecetas_seguidas() {
+    (this.guardado) ? this.repice.usuarios.push(this.user) : this.repice.usuarios = this.repice.usuarios.filter(u=>u.id != this.user.id);
+    const copia_receta = Object.assign({}, this.repice)
+    copia_receta.imagen = null;
+    this.repicesService.updateRepice(copia_receta).subscribe({
+      next: r => {
+        (this.guardado) ? this.user.recetas_seguidas?.push(r) : this.user.recetas_seguidas = this.user.recetas_seguidas?.filter(rec=>rec.id != r.id);
+        this.authService.setUser(this.user);
+      }
+    })
   }
 
-  primerPaso(paso:string){
-    return this.repice.elaboracion.indexOf(paso)+1 == 1;
-  }
+  numeroPaso = (paso:string) => this.repice.elaboracion.indexOf(paso)+1;
 
-  goBack(){
-    this.routeDirecto.navigate(['/recetas']);
-  }
+  primerPaso = (paso:string) => this.numeroPaso(paso) == 1;
+
+  goBack = () => this.location.back();
 }

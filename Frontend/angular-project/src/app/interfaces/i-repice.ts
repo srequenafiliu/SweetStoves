@@ -9,6 +9,7 @@ export interface IRepice {
   ingredientes:string[];
   elaboracion:string[];
   dificultad:number;
-  imagen:string;
+  imagen:string|null;
   creacion:Date;
+  usuarios:IUser[];
 }

@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IRepice } from '../interfaces/i-repice';
 import { IUser } from '../interfaces/i-user';
 import { RepicesService } from '../services/repices.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'repice-add',
@@ -10,11 +11,12 @@ import { RepicesService } from '../services/repices.service';
 })
 export class RepiceAddComponent implements OnInit {
   @Input() user!:IUser;
+  @Output() addNewRepice = new EventEmitter<IRepice>();
   newRepice!:IRepice;
   ingredientesString = '';
   elaboracionString = '';
 
-  constructor(private repicesService:RepicesService) {}
+  constructor(private repicesService:RepicesService, private authService:AuthService) {}
 
   ngOnInit(): void {
     this.initRepice();
@@ -35,7 +37,8 @@ export class RepiceAddComponent implements OnInit {
       elaboracion: [],
       dificultad: 0,
       imagen: '',
-      creacion: new Date('')
+      creacion: new Date(''),
+      usuarios: []
     };
   }
   saveNeeds(input:HTMLInputElement){
@@ -60,13 +63,17 @@ export class RepiceAddComponent implements OnInit {
     input3.checked = false;
     img.value = '';
   }
-  @Output() addNewRepice = new EventEmitter<IRepice>();
+
   addRepice(receta:IRepice){
     this.newRepice.ingredientes = this.ingredientesString.split('\n');
     this.newRepice.elaboracion = this.elaboracionString.split('\n');
     this.newRepice.creacion = new Date(Date.now());
     this.repicesService.addRepice(receta).subscribe({
-      next:()=>this.addNewRepice.emit(receta)
-    });
+      next:respu=>{
+        this.addNewRepice.emit(respu);
+        this.user.recetas?.push(respu);
+        this.user.recetas_seguidas?.push(respu);
+        this.authService.setUser(this.user);
+      }});
   }
 }

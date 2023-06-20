@@ -16,7 +16,7 @@
           <a class="nav-link" [routerLink]="['/usuarios']" [routerLinkActive]="['active']">Usuarios</a>
         </li>
       </ul>
-      <ul class="navbar-nav" *ngIf="!logged, else cuentaUser">
+      <ul class="navbar-nav" *ngIf="!user, else cuentaUser">
         <li class="nav-item">
           <a class="nav-link"  [routerLink]="['/login']" [routerLinkActive]="['active']">Login</a>
         </li>

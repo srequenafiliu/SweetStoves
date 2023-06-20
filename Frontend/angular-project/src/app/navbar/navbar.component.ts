@@ -10,13 +10,11 @@ import { AuthService } from '../services/auth.service';
 export class NavbarComponent implements DoCheck {
   @Input()title!: string;
   user!:IUser;
-  logged!:boolean;
 
   constructor(private authService:AuthService) {}
 
   ngDoCheck() {
     this.authService.checkToken(this.authService.getToken());
     this.user = this.authService.getUser();
-    this.logged = this.authService.isLoggedIn();
   }
 }

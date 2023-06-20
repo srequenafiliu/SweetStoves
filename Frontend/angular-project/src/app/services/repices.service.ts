@@ -26,6 +26,12 @@ export class RepicesService {
     .pipe(map(response => response.receta));
   }
 
+  updateRepice(repice:IRepice):Observable<IRepice>{
+    return this.http.put<{receta:IRepice, mensaje:string, error?:string}>(this.repiceURL+'/'+repice.id, repice).pipe(
+      map(response=>response.receta)
+    )
+  }
+
   deleteRepice(idReceta:number):Observable<string> {
     return this.http.delete<{mensaje:string}>(this.repiceURL+"/"+idReceta).pipe(map(response =>response.mensaje));
   }

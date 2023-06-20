@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { IRepice } from '../interfaces/i-repice';
 import { RepicesService } from '../services/repices.service';
 import { AuthService } from '../services/auth.service';
+import { IUser } from '../interfaces/i-user';
 
 @Component({
   selector: 'repice-item',
@@ -11,14 +12,19 @@ import { AuthService } from '../services/auth.service';
 })
 export class RepiceItemComponent {
   @Input() repice!:IRepice;
-  constructor(private repicesService:RepicesService, private router : Router, private authService:AuthService) {}
-  cuentaUsuario():boolean{
-    return this.router.url !== '/recetas' && this.authService.getUser().usuario === this.repice.usuario.usuario;
-  }
   @Output() deleteRepice = new EventEmitter<IRepice>();
+  constructor(private repicesService:RepicesService, private router : Router, private authService:AuthService) {}
+
+  cuentaUsuario = ():boolean => this.router.url !== '/recetas' && this.authService.getUser().usuario === this.repice.usuario.usuario;
+
   borrarReceta(){
     this.repicesService.deleteRepice(this.repice.id).subscribe({
-      next:()=>this.deleteRepice.emit(this.repice)
-    })
+      next:()=>{
+        this.deleteRepice.emit(this.repice);
+        const usuario:IUser = this.authService.getUser();
+        usuario.recetas = usuario.recetas?.filter(r=>r.id!=this.repice.id);
+        usuario.recetas_seguidas = usuario.recetas_seguidas?.filter(r=>r.id!=this.repice.id);
+        this.authService.setUser(usuario);
+      }})
   }
 }
