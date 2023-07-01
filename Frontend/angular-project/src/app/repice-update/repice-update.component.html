@@ -1,0 +1,74 @@
+<div class="row g-0">
+  <div class="offset-md-3 col-md-6" id="centrar">
+    <h1 class="display-5 text-info text-center fw-bold mt-5">Actualiza tus recetas</h1>
+    <select class="form-select form-select-lg my-3" [(ngModel)]="id" (change)="getReceta()">
+      <option value="0" hidden>Selecciona una de tus recetas para actualizar sus datos</option>
+      <option *ngFor="let receta of recetas" [value]="receta.id">{{receta.nombre}}</option>
+    </select>
+    <form (ngSubmit)="updateReceta(receta, fileImage)" #form="ngForm" *ngIf="receta">
+      <div class="row g-0">
+        <div class="form-group form-floating my-1 col-lg-6">
+          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('nombre') !== -1,
+          'is-valid': errores.length && buscarErrores('nombre') === -1}" name="nombre" placeholder="Nombre" [(ngModel)]="receta.nombre" required>
+          <div class="invalid-feedback">{{errores[buscarErrores('nombre')]}}</div>
+          <label>Nombre<span class="text-danger">*</span></label>
+        </div>
+        <div class="form-group d-lg-flex align-items-center justify-content-evenly col-lg-6 my-1">
+          <label class="form-label">Tipo<span class="text-danger">*</span>:&nbsp;</label>
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="updatetype" id="updatetypeD" value="Dulce" [(ngModel)]="receta.tipo" required>
+            <label class="btn btn-outline-danger" for="updatetypeD">Dulce</label>
+            <input type="radio" class="btn-check" name="updatetype" id="updatetypeS" value="Salado" [(ngModel)]="receta.tipo">
+            <label class="btn btn-outline-info" for="updatetypeS">Salado</label>
+          </div>
+        </div>
+        <div class="form-group d-lg-flex justify-content-between col-lg-12 my-1">
+          <label class="form-label">Necesidades especiales:&nbsp;</label>
+          <div class="form-check form-switch" *ngFor="let item of checklist">
+            <input class="form-check-input" type="checkbox" [name]="item.id" [value]="item.value" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}">
+            <label class="form-check-label" [for]="item.id">{{item.value}}</label>
+          </div>
+        </div>
+        <div class="form-group d-flex col-lg-6 star-container my-1">
+          <label class="form-label">Dificultad<span class="text-danger">*</span>:&nbsp;</label>
+          <span *ngFor="let star of [1, 2, 3, 4 , 5]" class="fa-star"
+          [ngClass]="{'fas':star<=receta.dificultad, 'far':star>receta.dificultad}"
+          (click)="setLevel(star)"></span>
+        </div>
+        <div class="form-group" *ngFor="let item of textareas">
+          <label for="exampleTextarea" class="form-label my-2">{{item.title}}<span class="text-danger">**:</span></label>
+          <textarea class="form-control" [name]="item.name" rows="3" [(ngModel)]="item.value" (input)="getArray(item.name, item.value)"
+          [ngClass]="{'is-invalid': buscarErrores(item.name) !==-1 , 'is-valid': errores.length && buscarErrores(item.name) === -1}"></textarea>
+          <div class="invalid-feedback">{{errores[buscarErrores(item.name)]}}</div>
+        </div>
+        <div class="form-group row g-0 mt-3 col-12">
+          <h4>Opciones para la foto de la receta:</h4>
+          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+            <input type="radio" class="btn-check" name="btnradio" id="repiceimg1" value="conservar" [(ngModel)]="opcion" (click)="fileImage.value = ''">
+            <label class="btn btn-outline-success" for="repiceimg1">Conservar</label>
+            <input type="radio" class="btn-check" name="btnradio" id="repiceimg2" value="cambiar" [(ngModel)]="opcion">
+            <label class="btn btn-outline-warning" for="repiceimg2">Cambiar</label>
+          </div>
+          <div class="col-lg-7 mt-5" [ngClass]="{'d-none': opcion !== 'cambiar'}">
+            <label for="image">Imagen:</label>
+            <input type="file" class="form-control mt-2" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
+          </div>
+          <img *ngIf="receta.imagen" [src]="receta.imagen" alt="" class="bg-info img-thumbnail mt-2"
+          [ngClass]="{'offset-lg-2 col-lg-8': opcion === 'conservar', ' col-lg-5': opcion === 'cambiar'}">
+        </div>
+      </div>
+
+      <div class="row g-0 my-2 align-items-center" id="alertUpdate">
+        <div class="text-danger fw-light col-md-6">
+          <div>*Campos obligatorios</div>
+          <div>**Estos datos serán separados según los párrafos que se escriban</div>
+        </div>
+        <div class="col col-md-6 d-flex justify-content-end">
+          <button type="button" class="btn btn-secondary" (click)="reset(fileImage)">Reestablecer datos</button>
+          <div class="mx-3"></div>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Actualizar receta</button>
+        </div>
+      </div>
+    </form>
+    </div>
+</div>

@@ -29,7 +29,7 @@ export class UserPasswordComponent implements OnInit {
   }
 
   changePassword() {
-    if (this.new_pass != this.userPass.new_password) this.addAlert(false, "Las contraseñas no coinciden");
+    if (this.new_pass != this.userPass.new_password) this.authService.addAlert("alertPass", false, "Las contraseñas no coinciden", false);
     else {
       this.authService.changePassword(this.userPass).subscribe({
         next:respu=>{
@@ -37,11 +37,11 @@ export class UserPasswordComponent implements OnInit {
           this.modificarUsuario.emit(this.user);
           this.authService.setUser(this.user);
           this.reset();
-          this.addAlert(true, "Contraseña cambiada correctamente");
+          this.authService.addAlert("alertPass", true, "Contraseña cambiada correctamente", false);
         },
         error:e=>{
-          if (e.error.error != undefined) this.addAlert(false, e.error.error);
-          if (e.error.errors != undefined) this.addAlert(false, "La nueva contraseña no tiene el formato correcto");
+          if (e.error.error != undefined) this.authService.addAlert("alertPass", false, e.error.error, false);
+          if (e.error.errors != undefined) this.authService.addAlert("alertPass", false, "La nueva contraseña no tiene el formato correcto", false);
           this.new_pass = "";
         }
       });
@@ -51,21 +51,5 @@ export class UserPasswordComponent implements OnInit {
   reset() {
     this.initUser(this.user);
     this.new_pass = '';
-  }
-  
-  addAlert(correcto:boolean, texto:string){
-    const div = document.getElementById("alertPass");
-    const alert = document.createElement("div");
-    alert.className = "alert alert-dismissible "+((correcto)?"alert-primary":"alert-danger")+" offset-md-5 col-md-7 fade show";
-    const icon = document.createElement("i");
-    icon.className = "fa-solid fa-circle-"+((correcto)?"check":"xmark");
-    const close = document.createElement("button");
-    close.className = "btn-close";
-    close.setAttribute("type", "button");
-    close.setAttribute("data-bs-dismiss", "alert");
-    alert.appendChild(icon);
-    alert.appendChild(close);
-    alert.appendChild(document.createTextNode(" "+texto));
-    div?.insertBefore(alert, div.lastChild);
   }
 }

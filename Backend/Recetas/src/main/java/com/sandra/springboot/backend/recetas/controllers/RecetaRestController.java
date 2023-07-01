@@ -184,7 +184,7 @@ public class RecetaRestController {
 				recetaActual.setImagen(ruta);
 			}
 			recetaUpdated = recetaService.save(recetaActual);
-			if(receta.getImagen()!=null)
+			if(recetaUpdated.getImagen()!=null)
 				recetaUpdated.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + recetaUpdated.getImagen());
 		} catch (DataAccessException e) {  // Error al acceder a la base de datos
 			response.put("mensaje", "Error al conectar con la base de datos");

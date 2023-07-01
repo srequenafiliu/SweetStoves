@@ -38,7 +38,7 @@ export class UserUpdateComponent implements OnInit {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         telefono: usuario.datosUsuario!.telefono
       },
-      recetas: [],
+      recetas: usuario.recetas,
       recetas_seguidas: usuario.recetas_seguidas
     };
   }
@@ -55,20 +55,17 @@ export class UserUpdateComponent implements OnInit {
   @Output() modificarUsuario = new EventEmitter<IUser>();
 
   updateUser(newUser:IUser, fileImage:HTMLInputElement) {
-    const valor = fileImage.value;
     if (this.opcion == 'borrar') newUser.imagen = this.opcion;
     if (newUser.datosUsuario?.apellido == "") newUser.datosUsuario.apellido = null;
     if (newUser.datosUsuario?.telefono == "") newUser.datosUsuario.telefono = null;
     newUser.password = this.password;
     this.usersService.updateUser(newUser).subscribe({
       next:respu=>{
-        newUser.password = respu.password;
-        newUser.imagen = (valor != '') ? newUser.imagen : this.user.imagen;
-        this.user = newUser;
-        this.modificarUsuario.emit((valor == '' && this.opcion != 'borrar') ? newUser : respu);
-        this.authService.setUser((valor == '' && this.opcion != 'borrar') ? newUser : respu);
+        this.user = respu;
+        this.modificarUsuario.emit(respu);
+        this.authService.setUser(respu);
         this.reset(newUser, fileImage);
-        this.addAlert();
+        this.authService.addAlert("alertUpdate", true, "Datos actualizados correctamente", false);
       },
       error:e=>{
         this.errores = (e.error.errores != undefined) ? e.error.errores : [];
@@ -97,21 +94,5 @@ export class UserUpdateComponent implements OnInit {
     this.passwordIncorrecto = false;
     this.password = '';
     fileImage.value = '';
-  }
-
-  addAlert(){
-    const div = document.getElementById("alertUpdate");
-    const alert = document.createElement("div");
-    alert.className = "alert alert-dismissible alert-primary offset-md-5 col-md-7 fade show";
-    const icon = document.createElement("i");
-    icon.className = "fa-solid fa-circle-check";
-    const close = document.createElement("button");
-    close.className = "btn-close";
-    close.setAttribute("type", "button");
-    close.setAttribute("data-bs-dismiss", "alert");
-    alert.appendChild(icon);
-    alert.appendChild(close);
-    alert.appendChild(document.createTextNode(" Datos actualizados correctamente"));
-    div?.insertBefore(alert, div.lastChild);
   }
 }

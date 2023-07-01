@@ -1,13 +1,9 @@
-img.position-relative {
-  width: calc(100% + 24px);
-  right: 12px;
+#logo {
+  background-image: url(../../assets/back_logo.jpg);
+  background-size: cover;
+  background-position: center;
+  padding:2.75% 0;
 }
-
-.position-absolute {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: calc(100% + 24px);
-  font-family: 'Times New Roman', Times, serif;
-  text-shadow: 5px 5px 10px;
+#logo>img {
+  width: 50%;
 }

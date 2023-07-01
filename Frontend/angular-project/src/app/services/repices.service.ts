@@ -12,8 +12,7 @@ export class RepicesService {
 
   getRepices():Observable<IRepice[]> {
     return this.http.get<IRepice[]>(this.repiceURL).pipe(
-      catchError((resp: HttpErrorResponse) => throwError( () =>
-        `Error obteniendo recetas. Código de servidor: ${resp.status}. Mensaje: ${resp.message}`))
+      catchError((resp: HttpErrorResponse) => throwError( () => 'Error '+resp.status+': '+resp.statusText))
     );
   }
 

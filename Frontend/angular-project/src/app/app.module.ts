@@ -26,6 +26,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { RepiceAddComponent } from './repice-add/repice-add.component';
 import { UserUpdateComponent } from './user-update/user-update.component';
 import { UserPasswordComponent } from './user-password/user-password.component';
+import { RepiceUpdateComponent } from './repice-update/repice-update.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { UserPasswordComponent } from './user-password/user-password.component';
     NavbarComponent,
     RepiceAddComponent,
     UserUpdateComponent,
-    UserPasswordComponent
+    UserPasswordComponent,
+    RepiceUpdateComponent
   ],
   imports: [
     BrowserModule,

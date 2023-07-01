@@ -29,13 +29,13 @@
     </div>
   </div>
   <div class="accordion offset-1 col-10 offset-lg-2 col-lg-4 my-4" id="accordionRepice">
-    <div class="accordion-item" *ngFor="let paso of repice.elaboracion">
-      <h2 class="accordion-header" [id]="'heading'+numeroPaso(paso)">
-        <button class="accordion-button" [ngClass]="{'collapsed':!primerPaso(paso)}" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse'+numeroPaso(paso)" [attr.aria-expanded]="primerPaso(paso)" [attr.aria-controls]="'collapse'+numeroPaso(paso)">
-          Paso nº{{numeroPaso(paso)}}
+    <div class="accordion-item" *ngFor="let paso of repice.elaboracion, let i=index">
+      <h2 class="accordion-header" [id]="'heading'+(i+1)">
+        <button class="accordion-button" [ngClass]="{'collapsed':i !== 0}" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse'+(i+1)" [attr.aria-expanded]="i === 0" [attr.aria-controls]="'collapse'+(i+1)">
+          Paso nº{{(i+1)}}
         </button>
       </h2>
-      <div [id]="'collapse'+numeroPaso(paso)" class="accordion-collapse collapse" [ngClass]="{'show':primerPaso(paso)}" [attr.aria-labelledby]="'heading'+numeroPaso(paso)" data-bs-parent="#accordionRepice">
+      <div [id]="'collapse'+(i+1)" class="accordion-collapse collapse" [ngClass]="{'show':i === 0}" [attr.aria-labelledby]="'heading'+(i+1)" data-bs-parent="#accordionRepice">
         <div class="accordion-body">{{paso}}</div>
       </div>
     </div>

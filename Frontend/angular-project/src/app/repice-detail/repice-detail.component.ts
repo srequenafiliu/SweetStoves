@@ -43,9 +43,5 @@ export class RepiceDetailComponent implements OnInit {
     })
   }
 
-  numeroPaso = (paso:string) => this.repice.elaboracion.indexOf(paso)+1;
-
-  primerPaso = (paso:string) => this.numeroPaso(paso) == 1;
-
   goBack = () => this.location.back();
 }

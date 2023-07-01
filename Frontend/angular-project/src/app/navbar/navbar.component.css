@@ -1,0 +1,4 @@
+img {
+  filter: brightness(0%) invert();
+  height: 50px;
+}

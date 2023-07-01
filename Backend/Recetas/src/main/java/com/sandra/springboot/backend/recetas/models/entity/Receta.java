@@ -25,6 +25,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,6 +58,7 @@ public class Receta implements java.io.Serializable {
 	@NonNull
 	@Column(name = "nombre", nullable = false)
 	@NotBlank
+	@Size(min = 4, message = "debe contener mínimo 4 caracteres")
 	private String nombre;
 	
 	@NonNull
@@ -70,12 +72,14 @@ public class Receta implements java.io.Serializable {
 	@NonNull
 	@NotNull
 	@NotEmpty
+	@Size(min = 2, message = "debe contener al menos 2 ingredientes")
 	@Column(name = "ingredientes", nullable = false, length = 1000)
 	private List<String> ingredientes;
 	
 	@NonNull
 	@NotNull
 	@NotEmpty
+	@Size(min = 2, message = "debe constar de al menos 2 pasos")
 	@Column(name = "elaboracion", nullable = false, length = 1000)
 	private List<String> elaboracion;
 	

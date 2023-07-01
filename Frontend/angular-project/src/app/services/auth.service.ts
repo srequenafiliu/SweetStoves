@@ -51,4 +51,20 @@ export class AuthService {
     localStorage.removeItem('usuario');
     return true;
   }
+
+  addAlert(id:string, correcto:boolean, texto:string, first:boolean){
+    const div = document.getElementById(id);
+    const alert = document.createElement("div");
+    alert.className = "alert alert-dismissible "+((correcto)?"alert-primary":"alert-danger")+" offset-md-5 col-md-7 fade show";
+    const icon = document.createElement("i");
+    icon.className = "fa-solid fa-circle-"+((correcto)?"check":"xmark");
+    const close = document.createElement("button");
+    close.className = "btn-close";
+    close.setAttribute("type", "button");
+    close.setAttribute("data-bs-dismiss", "alert");
+    alert.appendChild(icon);
+    alert.appendChild(close);
+    alert.appendChild(document.createTextNode(" "+texto));
+    div?.insertBefore(alert, (first) ? div.firstChild : div.lastChild);
+  }
 }

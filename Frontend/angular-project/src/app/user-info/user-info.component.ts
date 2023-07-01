@@ -25,20 +25,22 @@ export class UserInfoComponent implements OnInit {
       next:u => this.recetas_seguidas.push(u)
     }))
   }
-  addNewRepice(recetaNueva:IRepice){
-    this.recetas_seguidas.push(recetaNueva);
+  addNewRepice = (recetaNueva:IRepice) => this.recetas_seguidas.push(recetaNueva);
+
+  updateRepice(recetaAct:IRepice){
+    for (const i in this.recetas_seguidas) if(this.recetas_seguidas[i].id == recetaAct.id) this.recetas_seguidas.splice(+i, 1, recetaAct);
   }
-  modificarUsuario(updateUser:IUser){
-    this.user = updateUser;
-  }
+
+  modificarUsuario = (updateUser:IUser) => this.user = updateUser;
+
   deleteUsuario(){
     this.usersService.deleteUser(this.user.id).subscribe({
       next:()=>this.logout()
     })
   }
-  borrarReceta(receta:IRepice){
-    this.recetas_seguidas = this.recetas_seguidas.filter(r=>r!=receta)
-  }
+
+  borrarReceta = (receta:IRepice) => this.recetas_seguidas = this.recetas_seguidas.filter(r=>r!=receta)
+
   logout(){
     if (this.authService.logout()) this.routeDirecto.navigate(['/inicio'])
   }

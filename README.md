@@ -131,7 +131,7 @@ Cuando se mantiene el cursor en uno de los botones, aparece una ventana con una 
 <img src="images/20_menu_usuario_borrar.png">
 
 ### Otros dispositivos
-La experiencia de SweetStoves también se puede vivir en Tablet y en móvil. En este apartado se pueden ver algunos menús en formato Tablet (768x886) y móvil (320x886):
+La experiencia de SweetStoves también se puede vivir en Tablet y en móvil. En este apartado se pueden ver algunos menús en formato Tablet (768x886) y móvil (425x886):
 - Menú de inicio:
     <p align="center">
     <img src="images/21_inicio_movil.png" height="450">

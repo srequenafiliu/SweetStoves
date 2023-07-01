@@ -139,9 +139,7 @@ public class UsuarioRestController {
 			usuarioActual.setPassword(usuario.getPassword());
 			if(usuario.getImagen()!=null) {
 				if (usuarioActual.getImagen()!=null) imageUtils.deleteImage("public", usuarioActual.getImagen());
-				if (usuario.getImagen().equals("borrar")) {
-					usuarioActual.setImagen(null);
-				}
+				if (usuario.getImagen().equals("borrar")) usuarioActual.setImagen(null);
 				else {
 					String ruta = imageUtils.saveImageBase64("usuarios", usuario.getImagen());
 					usuarioActual.setImagen(ruta);
@@ -153,7 +151,7 @@ public class UsuarioRestController {
 			usuarioActual.setRecetas(usuario.getRecetas());
 			usuarioActual.setRecetas_seguidas(usuario.getRecetas_seguidas());
 			usuarioUpdated = usuarioService.save(usuarioActual);
-			if(usuario.getImagen()!=null && !usuario.getImagen().equals("borrar"))
+			if(usuarioUpdated.getImagen()!=null)
 				usuarioUpdated.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + usuarioUpdated.getImagen());
 		} catch (DataAccessException e) {  // Error al acceder a la base de datos
 			response.put("mensaje", "Error al conectar con la base de datos");

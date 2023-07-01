@@ -20,7 +20,7 @@
           <ng-template #sinTelefono>Sin teléfono</ng-template>
         </div>
         <div class="offset-2 col offset-md-0 col-7 col-md-6 mb-4">
-          <button class="btn btn-info" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+          <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
             ¿Quieres hacer algo hoy?
           </button>
           <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -37,6 +37,8 @@
                 ngbTooltip="Comprueba las recetas que has creado y seguido" (click)="mostrar = 'lista'">Tu lista de recetas</button>
                 <button type="button" class="btn btn-outline-success offset-md-1 col-md-6 my-2" [ngClass]="{'active': mostrar === 'add'}" placement="right"
                 ngbTooltip="Crea una nueva receta que se vinculará a tu cuenta" (click)="mostrar = 'add'">Nueva receta</button>
+                <button type="button" class="btn btn-outline-info offset-md-1 col-md-6 my-2" [ngClass]="{'active': mostrar === 'receta'}" placement="right"
+                ngbTooltip="Actualiza cualquiera de tus recetas" (click)="mostrar = 'receta'">Actualiza tus recetas</button>
                 <button type="button" class="btn btn-outline-warning offset-md-1 col-md-6 my-2" [ngClass]="{'active': mostrar === 'update'}" placement="right"
                 ngbTooltip="Actualiza los datos de tu cuenta excepto tu contraseña" (click)="mostrar = 'update'">Actualiza tu cuenta</button>
                 <button type="button" class="btn btn-outline-dark offset-md-1 col-md-6 my-2" [ngClass]="{'active': mostrar === 'password'}" placement="right"
@@ -74,6 +76,8 @@
   </div></ng-template>
 
   <repice-add [ngClass]="{'d-none': mostrar !== 'add'}" [user]="user" (addNewRepice)="addNewRepice($event)"></repice-add>
+
+  <repice-update [ngClass]="{'d-none': mostrar !== 'receta'}" [user]="user" (updateRepice)="updateRepice($event)"></repice-update>
 
   <user-update [ngClass]="{'d-none': mostrar !== 'update'}" [user]="user" (modificarUsuario)="modificarUsuario($event)"></user-update>
 

@@ -1,37 +1,28 @@
 <div class="row g-0">
   <div class="offset-lg-3 col-lg-6">
     <h1 class="display-5 text-success text-center fw-bold mt-5">Nueva receta</h1>
-    <form (ngSubmit)="addRepice(newRepice);reset(sinGluten, sinLactosa, vegana, fileImage)" #form="ngForm">
+    <form (ngSubmit)="addRepice(newRepice, fileImage)" #form="ngForm">
       <div class="row g-0">
         <div class="form-group form-floating my-1 col-lg-6">
-          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid':!newRepice.nombre.match('^\\D+$')
-          && newRepice.nombre, 'is-valid':newRepice.nombre.match('^\\D+$')}"  name="nombre" placeholder="Nombre"
-          [(ngModel)]="newRepice.nombre"required pattern="^\D+$">
-          <div class="invalid-feedback">El nombre no puede contener números</div>
+          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('nombre') !== -1,
+          'is-valid': errores.length && buscarErrores('nombre') === -1}" name="nombre" placeholder="Nombre" [(ngModel)]="newRepice.nombre" required>
+          <div class="invalid-feedback">{{errores[buscarErrores('nombre')]}}</div>
           <label>Nombre<span class="text-danger">*</span></label>
         </div>
         <div class="form-group d-lg-flex align-items-center justify-content-evenly col-lg-6 my-1">
           <label class="form-label">Tipo<span class="text-danger">*</span>:&nbsp;</label>
           <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" value="Dulce" [(ngModel)]="newRepice.tipo" required>
-            <label class="btn btn-outline-danger" for="btnradio1">Dulce</label>
-            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" value="Salado" [(ngModel)]="newRepice.tipo">
-            <label class="btn btn-outline-info" for="btnradio2">Salado</label>
+            <input type="radio" class="btn-check" name="addtype" id="addtypeD" value="Dulce" [(ngModel)]="newRepice.tipo" required>
+            <label class="btn btn-outline-danger" for="addtypeD">Dulce</label>
+            <input type="radio" class="btn-check" name="addtype" id="addtypeS" value="Salado" [(ngModel)]="newRepice.tipo">
+            <label class="btn btn-outline-info" for="addtypeS">Salado</label>
           </div>
         </div>
         <div class="form-group d-lg-flex justify-content-between col-lg-12 my-1">
           <label class="form-label">Necesidades especiales:&nbsp;</label>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault" value="Sin gluten" #sinGluten (input)="saveNeeds(sinGluten)">
-            <label class="form-check-label" for="flexSwitchCheckDefault">Sin gluten</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault" value="Sin lactosa" #sinLactosa (input)="saveNeeds(sinLactosa)">
-            <label class="form-check-label" for="flexSwitchCheckDefault">Sin lactosa</label>
-          </div>
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault" value="Vegana" #vegana (input)="saveNeeds(vegana)">
-            <label class="form-check-label" for="flexSwitchCheckDefault">Veganas</label>
+          <div class="form-check form-switch" *ngFor="let item of checklist">
+            <input class="form-check-input" type="checkbox" [name]="item.id" [value]="item.value" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}">
+            <label class="form-check-label" [for]="item.id">{{item.value}}</label>
           </div>
         </div>
         <div class="form-group d-flex col-lg-6 star-container my-1">
@@ -40,29 +31,27 @@
           [ngClass]="{'fas':star<=newRepice.dificultad, 'far':star>newRepice.dificultad}"
           (click)="setLevel(star)"></span>
         </div>
-        <div class="form-group">
-          <label for="exampleTextarea" class="form-label mt-4">Ingredientes<span class="text-danger">**</span></label>
-          <textarea class="form-control" name="ingredientes" rows="3" [(ngModel)]="ingredientesString" required></textarea>
+        <div class="form-group" *ngFor="let item of textareas">
+          <label for="exampleTextarea" class="form-label my-2">{{item.title}}<span class="text-danger">**:</span></label>
+          <textarea class="form-control" [name]="item.name" rows="3" [(ngModel)]="item.value" [placeholder]="item.ej" (input)="getArray(item.name, item.value)"
+          [ngClass]="{'is-invalid': buscarErrores(item.name) !==-1 , 'is-valid': errores.length && buscarErrores(item.name) === -1}"></textarea>
+          <div class="invalid-feedback">{{errores[buscarErrores(item.name)]}}</div>
         </div>
-        <div class="form-group">
-          <label for="exampleTextarea" class="form-label mt-4">Elaboración<span class="text-danger">**</span></label>
-          <textarea class="form-control" name="elaboracion" rows="3" [(ngModel)]="elaboracionString" required></textarea>
-        </div>
-        <div class="form-group col-lg-7">
+        <div class="form-group col-lg-7 mt-2">
           <label for="image">Imagen<span class="text-danger">*</span>:</label>
-          <input type="file" class="form-control" name="image" #fileImage required (change)="changeImage(fileImage)" accept="image/png">
+          <input type="file" class="form-control" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
         </div>
-        <img *ngIf="newRepice.imagen" [src]="newRepice.imagen" alt="" class="bg-info img-thumbnail col-lg-5">
+        <img *ngIf="newRepice.imagen" [src]="newRepice.imagen" alt="" class="bg-info img-thumbnail col-lg-5 mt-2">
       </div>
-      <div class="row g-0 my-2 align-items-center">
+      <div class="row g-0 my-2 align-items-center" id="alertAdd">
         <div class="text-danger fw-light col-md-6">
           <div>*Campos obligatorios</div>
           <div>**Estos datos serán separados según los párrafos que se escriban</div>
         </div>
         <div class="col col-md-6 d-flex justify-content-end">
-          <button type="button" class="btn btn-secondary" (click)="reset(sinGluten, sinLactosa, vegana, fileImage)">Borrar datos</button>
+          <button type="button" class="btn btn-secondary" (click)="reset(fileImage)">Borrar datos</button>
           <div class="mx-3"></div>
-          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Registrar receta</button>
+          <button type="submit" class="btn btn-primary" [disabled]="form.invalid || fileImage.value === ''">Registrar receta</button>
         </div>
       </div>
     </form>

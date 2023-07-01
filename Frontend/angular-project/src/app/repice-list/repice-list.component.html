@@ -59,7 +59,7 @@
       [ngClass]="{'fas':star<=level, 'far':star>level}"
       (click)="level = star"></span>
     </div>
-    <div class="h1 offset-1 col-4 col-lg-4 my-2 text-primary">{{title}}:</div>
+    <div class="h1 offset-1 col-4 col-lg-4 my-2 text-primary">Lista de recetas:</div>
     <button type="reset" class="btn btn-secondary btn-icon-split float-right offset-2 col-4 offset-lg-4 col-lg-2" (click)="reset()">
       <span class="icon text-white-50"><i class="fas fa-trash"></i></span>
       <span class="text"> Borrar<span class="d-none d-lg-inline"> todos los</span> filtros</span>
@@ -67,9 +67,27 @@
   </fieldset>
 </form>
 
+<!-- No tocar de momento -->
 <div class="row g-0" *ngIf="repices && repices.length; else noRepices">
   <repice-item class="offset-1 col-10 col-lg-4 mt-4" [ngClass]="{'offset-lg-2':!isEven, 'offset-lg-1':isEven}" [repice]="repice" *ngFor="let repice of repices | repiceFilter:search | typeFilter:tipo
   | needsFilter:glutenFree:'Sin gluten' | needsFilter:lactosaFree:'Sin lactosa' | needsFilter:vegan:'Vegana' | levelFilter:level, even as isEven">
   </repice-item>
 </div>
-<ng-template #noRepices><div class="h3 offset-1 col my-2 pb-4 text-muted">No hay recetas disponibles</div></ng-template>
+<ng-template #noRepices>
+  <div class="offset-1 col-10 my-4 pb-5 text-muted d-flex flex-row align-items-center">
+    <img class="flex-fill" src="../../assets/no_repices.png" alt="Sin recetas">
+    <div class="flex-fill text-center">
+      <h3>¡Uy! No se han encontrado recetas</h3>
+      <div class="fs-5" *ngIf="!repices; else noSaved">
+        Estamos experimentando fallos en nuestro servidor. Sentimos las molestias.
+        <div class="text-danger fw-bold mt-4" id="server_error"></div>
+      </div>
+      <ng-template #noSaved>
+        <div class="fs-5">
+          Nuestros usuarios todavía no guardaron ninguna receta. <a [routerLink]="['/registro']">Regístrate</a> o
+          <a [routerLink]="['/login']">inicia sesión</a> para guardar la primera receta.
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</ng-template>

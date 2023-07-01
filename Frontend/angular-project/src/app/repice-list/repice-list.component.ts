@@ -8,9 +8,7 @@ import { RepicesService } from '../services/repices.service';
   styleUrls: ['./repice-list.component.css']
 })
 export class RepiceListComponent implements OnInit{
-  title = 'Lista de recetas'
-  headers = {nombre: 'Nombre de la receta', tipo: 'Datos de la receta', dificultad: 'Dificultad', creadoEn: 'Fecha de creación'};
-  repices:IRepice[] = [];
+  repices!:IRepice[];
   search = "";
   tipo = "";
   glutenFree = false;
@@ -18,10 +16,14 @@ export class RepiceListComponent implements OnInit{
   vegan = false;
   level = 0;
   orden = "";
+  pruebaSelect = "";
 
   constructor(private repicesService:RepicesService) {}
   ngOnInit(): void {
-      this.repicesService.getRepices().subscribe(r=>this.repices=r);
+      this.repicesService.getRepices().subscribe({
+        next: r=>this.repices=r,
+        error: e=>document.getElementById("server_error")?.appendChild(document.createTextNode(e)),
+      });
   }
 
   reset(){
@@ -42,5 +44,8 @@ export class RepiceListComponent implements OnInit{
       case "fechaA": this.repices.sort((a, b) => (a.creacion > b.creacion) ? 1 : -1); break;
       case "fechaD": this.repices.sort((a, b) => (a.creacion < b.creacion) ? 1 : -1); break;
     }
+  }
+  prueba() {
+    console.log(this.pruebaSelect);
   }
 }
