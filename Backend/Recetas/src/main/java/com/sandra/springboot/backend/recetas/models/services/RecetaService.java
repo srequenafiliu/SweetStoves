@@ -3,6 +3,10 @@ package com.sandra.springboot.backend.recetas.models.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,8 +23,13 @@ public class RecetaService {
 	private final ImageUtils imageUtils = new ImageUtils();
 	
 	@Transactional(readOnly = true)
-	public List<Receta> findAll() {
-		return (List<Receta>) receta.findAll();
+	public Page<Receta> findAll(int pag, int size, String sortField, String sortDir) {
+		return receta.findAll(PageRequest.of(pag, size, sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending()));
+	}
+	
+	@Transactional(readOnly = true)
+	public Page<Receta> findAllByFilters(String nombre, String tipo, String needs, List<Integer> dificultad, Pageable pageable) {
+		return receta.findAllByNombreContainsIgnoreCaseAndTipoContainsIgnoreCaseAndNeedsContainsAndDificultadIn(nombre, tipo, needs, dificultad, pageable);
 	}
 
 	@Transactional(readOnly = true)

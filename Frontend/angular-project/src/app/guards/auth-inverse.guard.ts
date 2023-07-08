@@ -14,7 +14,7 @@ export class AuthInverseGuard {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (!this.authService.getToken()) return true;
-    this.router.navigate(['/perfil_usuario']);
+    this.router.navigate(['/usuario']);
     return false;
   }
 

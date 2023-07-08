@@ -15,7 +15,7 @@ export class RepiceItemComponent {
   @Output() deleteRepice = new EventEmitter<IRepice>();
   constructor(private repicesService:RepicesService, private router : Router, private authService:AuthService) {}
 
-  cuentaUsuario = ():boolean => this.router.url !== '/recetas' && this.authService.getUser().usuario === this.repice.usuario.usuario;
+  cuentaUsuario = ():boolean => !this.router.url.includes('/recetas') &&  this.authService.getUser().usuario === this.repice.usuario.usuario;
 
   borrarReceta(){
     this.repicesService.deleteRepice(this.repice.id).subscribe({

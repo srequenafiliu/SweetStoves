@@ -11,11 +11,11 @@ export const APP_ROUTES:Route[]=[
   { path: 'inicio', component: WelcomeComponent },
   { path: 'recetas', component: RepiceListComponent },
   // :id es un parámetro (id de la receta)
-  { path: 'recetas/:id', component: RepiceDetailComponent },
+  { path: 'receta/:id', component: RepiceDetailComponent },
   { path: 'usuarios', component: UserListComponent },
   { path: 'login', component: UserLoginComponent },
   { path: 'registro', component: UserAddComponent },
-  { path: 'perfil_usuario', component: UserInfoComponent },
+  { path: 'perfil-usuario', component: UserInfoComponent },
   // Ruta por defecto (vacía) -> Redirigir a /inicio
   { path: '', redirectTo: '/inicio', pathMatch: 'full' },
   // Ruta que no coincide con ninguna de las anteriores

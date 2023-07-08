@@ -67,7 +67,7 @@
 
   <div class="row g-0" [ngClass]="{'d-none': mostrar !== 'lista'}" *ngIf="recetas_seguidas && recetas_seguidas.length; else noRepices">
     <h1 class="display-5 text-secondary text-center fw-bold mt-5">Lista de tus recetas</h1>
-    <repice-item class="col-12 col-lg-4 mt-4" [ngClass]="{'offset-lg-2':!isEven, 'offset-lg-1':isEven}"
+    <repice-item class="col-12 col-md-4 mt-4" [ngClass]="{'offset-md-2':!isEven, 'offset-md-1':isEven}"
     (deleteRepice)="borrarReceta($event)" [repice]="repice" *ngFor="let repice of recetas_seguidas, even as isEven">
     </repice-item>
   </div>

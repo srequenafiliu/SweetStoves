@@ -1,20 +1,22 @@
-<div class="card text-white" [ngClass]="{'bg-danger':repice.tipo === 'Dulce', 'bg-info':repice.tipo !== 'Dulce'}">
+<div class="card h-100 text-white" [ngClass]="{'bg-danger':repice.tipo === 'Dulce', 'bg-info':repice.tipo !== 'Dulce'}">
   <img [src]="repice.imagen" [alt]="repice.nombre" [title]="repice.nombre" class="card-img-top">
-  <div class="card-body">
+  <div class="card-body d-flex flex-column justify-content-between">
     <div class="card-title h3">
-      <a class="text-decoration-none link-light" [routerLink]="['/recetas', repice.id]">{{repice.nombre}}</a>
+      <a class="text-decoration-none link-light" [routerLink]="['/receta', repice.id]">{{repice.nombre}}</a>
     </div>
-    <div class="card-text fw-bold">{{repice.necesidades.join(', ')}}</div>
-    <span class="card-text row g-0">
-      <span class="fw-bold col-lg-3">Dificultad:&nbsp;</span>
-      <difficulty-level class="col-lg-3" [level]="repice.dificultad"></difficulty-level>
-      <span class="col-lg-6 text-end" *ngIf="cuentaUsuario()">
-        <button type="button" class="btn btn-light" placement="left" (click)="borrarReceta()"
-        ngbTooltip="Se borrará la receta para todos. Si estás seguro de borrarla, pulsa el botón">Borrar receta</button></span>
-    </span>
+    <div class="card-text row g-0">
+      <div class="fw-bold" *ngIf="repice.necesidades.length, else noNeeds">{{repice.necesidades.join(', ')}}</div>
+      <ng-template #noNeeds>
+        <div class="fw-bold">Ver <a [routerLink]="['necesidades-especiales']" class="link-dark">necesidades especiales</a> </div>
+      </ng-template>
+      <span class="fw-bold">
+        Dificultad: <difficulty-level [level]="repice.dificultad"></difficulty-level>
+      </span>
+      <button *ngIf="cuentaUsuario()" type="button" class="btn btn-light col-12 text-center mt-2" placement="left" (click)="borrarReceta()"
+      ngbTooltip="Se borrará la receta para todos. Si estás seguro de borrarla, pulsa el botón">Borrar receta</button>
+    </div>
   </div>
-  <div class="row g-0 card-footer text-white">
-    <div class="col-6"><b>Publicado por:</b> {{repice.usuario.usuario}}</div>
-    <div class="col-6 text-end"><b>Fecha:</b> {{repice.creacion| date:'dd/MM/y'}}</div>
+  <div class="card-footer text-white">
+    <b>Fecha de publicación:</b> {{repice.creacion| date:'dd/MM/y'}}
   </div>
 </div>

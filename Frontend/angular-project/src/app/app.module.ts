@@ -5,12 +5,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { RepiceListComponent } from './repice-list/repice-list.component';
-import { RepiceFilterPipe } from './pipes/repice-filter.pipe';
 import { RepiceItemComponent } from './repice-item/repice-item.component';
 import { DifficultyLevelComponent } from './difficulty-level/difficulty-level.component';
-import { LevelFilterPipe } from './pipes/level-filter.pipe';
-import { TypeFilterPipe } from './pipes/type-filter.pipe';
-import { NeedsFilterPipe } from './pipes/needs-filter.pipe';
 import { RepiceDetailComponent } from './repice-detail/repice-detail.component';
 import { RouterModule } from '@angular/router';
 import { APP_ROUTES } from './app.routes';
@@ -32,12 +28,8 @@ import { RepiceUpdateComponent } from './repice-update/repice-update.component';
   declarations: [
     AppComponent,
     RepiceListComponent,
-    RepiceFilterPipe,
     RepiceItemComponent,
     DifficultyLevelComponent,
-    LevelFilterPipe,
-    TypeFilterPipe,
-    NeedsFilterPipe,
     WelcomeComponent,
     RepiceDetailComponent,
     UserListComponent,

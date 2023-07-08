@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { IRepice } from '../interfaces/i-repice';
@@ -10,8 +10,12 @@ export class RepicesService {
   private repiceURL="recetas";
   constructor(private http:HttpClient) { }
 
-  getRepices():Observable<IRepice[]> {
-    return this.http.get<IRepice[]>(this.repiceURL).pipe(
+  getRepices(pag:number, size:number, sortField:string, sortDir:string, nombre:string, tipo:string, necesidades:string, dificultad:number):Observable<{count:number, result:IRepice[]}> {
+    let params:HttpParams = new HttpParams().set("pag", pag).set("size", size).set("sortField", sortField)
+    .set("sortDir", sortDir).set("nombre", nombre).set("tipo", tipo).set("necesidades", necesidades);
+    params = (dificultad != 0) ? params.set("dificultad", dificultad) : params;
+    return this.http.get<{count:number, result:IRepice[]}>
+    (this.repiceURL, {params}).pipe(
       catchError((resp: HttpErrorResponse) => throwError( () => 'Error '+resp.status+': '+resp.statusText))
     );
   }

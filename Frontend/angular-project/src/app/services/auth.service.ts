@@ -29,7 +29,7 @@ export class AuthService {
   setData(token:string, usuario:IUser) {
     localStorage.setItem('token', token);
     localStorage.setItem('usuario', JSON.stringify(usuario));
-    this.router.navigate(['/perfil_usuario']);
+    this.router.navigate(['/perfil-usuario']);
   }
 
   getToken = () => localStorage.getItem('token');

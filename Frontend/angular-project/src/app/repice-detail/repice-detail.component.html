@@ -15,7 +15,7 @@
             <li *ngFor="let need of repice.necesidades">{{need}}</li>
           </ul>
         </div>
-        <div class="card-text d-flex align-items-center">
+        <div class="card-text">
           <span class="fw-bold">Dificultad:&nbsp;</span>
           <difficulty-level class="my-1" [ngClass]="{'text-danger':repice.tipo === 'Dulce', 'text-info':repice.tipo !== 'Dulce'}" [level]="repice.dificultad"></difficulty-level>
         </div>

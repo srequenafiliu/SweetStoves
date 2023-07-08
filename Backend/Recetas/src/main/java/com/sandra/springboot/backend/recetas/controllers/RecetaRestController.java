@@ -1,15 +1,21 @@
 package com.sandra.springboot.backend.recetas.controllers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -21,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -42,26 +49,39 @@ public class RecetaRestController {
 	private RecetaService recetaService;
 	
 	@GetMapping("")
-	public ResponseEntity<?> index() {
-		List<Receta> listaRecetas = new ArrayList<>();
-		Map<String,Object> response = new HashMap<>();
+	public ResponseEntity<?> index(@RequestParam(name="pag", defaultValue = "1") Integer pag,
+			@RequestParam(name="size", defaultValue = "2") Integer size,
+			@RequestParam(name="sortField", defaultValue = "id") String sortField,
+			@RequestParam(name="sortDir", defaultValue = "asc") String sortDir,
+			@RequestParam(name="nombre", defaultValue="") String name,
+			@RequestParam(name="tipo", defaultValue = "") String tipo,
+			@RequestParam(name="necesidades", defaultValue = "") String needs,
+			@RequestParam(name="dificultad", required=false) Integer dificultad) {
+		Map<String,Object> response = new TreeMap<String, Object>();
 		try {
-			listaRecetas = recetaService.findAll()
+			List<Integer> range = new ArrayList<>((dificultad==null) ? Arrays.asList(1,2,3,4,5) : Arrays.asList(dificultad));
+			Pageable pageable = PageRequest.of(pag-1, size, sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending());
+			Page<Receta> page = recetaService.findAllByFilters(name, tipo, needs, range, pageable);
+			response.put("previous", (page.isFirst()) ? null : ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("pag", pag-1).toUriString());
+			response.put("next", (page.isLast()) ? null : ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("pag", pag+1).toUriString());
+			response.put("count", page.getTotalElements());
+			List<Receta> listaRecetas = page.getContent()
 					.stream()
-					.map(e -> {
-						Receta receta = new Receta(e);
+					.map(r -> {
+						Receta receta = new Receta(r);
 						if(receta.getImagen()!=null)
 							receta.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + receta.getImagen());
 						return receta;
 					})
 					.collect(Collectors.toList());
-		} catch (DataAccessException e) {  // Error al acceder a la base de datos
+			response.put("result", listaRecetas);
+		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al conectar con la base de datos");
 			response.put("error", e.getMessage().concat(":")
 					.concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<List<Receta>>(listaRecetas,HttpStatus.OK);
+		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
@@ -120,6 +140,7 @@ public class RecetaRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		try {
+			receta.setNeeds("");
 			if(receta.getImagen()!=null) {
 				String ruta = imageUtils.saveImageBase64("recetas", receta.getImagen());
 				receta.setImagen(ruta);
@@ -171,9 +192,11 @@ public class RecetaRestController {
 		}
 		// Si llegamos aquí es que el evento que queremos modificar SI existe
 		try {
+			receta.setNeeds("");
 			recetaActual.setNombre(receta.getNombre());
 			recetaActual.setTipo(receta.getTipo());
 			recetaActual.setNecesidades(receta.getNecesidades());
+			recetaActual.setNeeds("");
 			recetaActual.setIngredientes(receta.getIngredientes());
 			recetaActual.setElaboracion(receta.getElaboracion());
 			recetaActual.setDificultad(receta.getDificultad());
