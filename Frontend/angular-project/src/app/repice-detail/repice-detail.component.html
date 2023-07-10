@@ -1,34 +1,29 @@
-<h1 class="display-1 text-center fw-bold text-primary"> {{repice.nombre}} </h1>
-<div class="row g-0">
-  <div class="offset-1 col-10 offset-lg-1 col-lg-4 my-4">
-    <div class="card">
-      <div class="card-header text-white h3 text-center" [ngClass]="{'bg-danger':repice.tipo === 'Dulce', 'bg-info':repice.tipo !== 'Dulce'}"> Datos de la receta </div>
-      <div class="d-none d-lg-block col-lg-12"><img [src]="repice.imagen" alt="" style="width: 100%;"></div>
-      <div class="card-block p-3 row g-0">
-        <div class="card-text col-md-6"><span class="fw-bold h5">Ingredientes</span>
-          <ul>
-            <li *ngFor="let ing of repice.ingredientes">{{ing}}</li>
-          </ul>
-        </div>
-        <div class="card-text col-md-6"><span class="fw-bold h5">Necesidades especiales</span>
-          <ul>
-            <li *ngFor="let need of repice.necesidades">{{need}}</li>
-          </ul>
-        </div>
-        <div class="card-text">
-          <span class="fw-bold">Dificultad:&nbsp;</span>
-          <difficulty-level class="my-1" [ngClass]="{'text-danger':repice.tipo === 'Dulce', 'text-info':repice.tipo !== 'Dulce'}" [level]="repice.dificultad"></difficulty-level>
-        </div>
-        <div class="card-text col-md-6">
-          <span class="fw-bold">Publicado por: </span>{{ repice.usuario.usuario }}
-        </div>
-        <div class="card-text col-md-6 text-end">
-          <span class="fw-bold">Fecha: </span>{{ repice.creacion | date:'dd/MM/y' }}
-        </div>
-      </div>
+<div class="row g-0 text-center bg-opacity-25 rounded-bottom" [ngClass]="{'bg-danger':repice.tipo === 'Dulce', 'bg-info':repice.tipo !== 'Dulce'}" id="logo">
+  <img class="col-lg-6 rounded-end" [src]="repice.imagen" [alt]="repice.nombre" [title]="repice.nombre">
+  <div class="col-lg-6 d-flex flex-column justify-content-evenly">
+    <h1 class="fw-bold my-3 px-3" [ngClass]="{'text-danger':repice.tipo === 'Dulce', 'text-info':repice.tipo !== 'Dulce'}">{{repice.nombre}}</h1>
+    <difficulty-level class="h1" [ngClass]="{'text-danger':repice.tipo === 'Dulce', 'text-info':repice.tipo !== 'Dulce'}" [level]="repice.dificultad"></difficulty-level>
+    <div class="d-flex justify-content-evenly" *ngIf="repice.necesidades.length, else noNeeds">
+      <span class="h5 bg-warning shadow-sm p-3 rounded" *ngFor="let need of repice.necesidades">{{need}}</span>
     </div>
+    <ng-template #noNeeds>
+      <div class="text-dark px-5 my-3">
+        Puedes ver algunos de nuestros consejos para adecuar esta receta a tus necesidades en el apartado
+        <a class="fw-bold" [ngClass]="{'link-danger':repice.tipo === 'Dulce', 'link-info':repice.tipo !== 'Dulce'}" [routerLink]="['/necesidades-especiales']">Necesidades especiales</a>
+      </div>
+    </ng-template>
+    <span class="mb-3">Receta publicada por {{repice.usuario.usuario}} el {{repice.creacion | date:'longDate'}}</span>
   </div>
-  <div class="accordion offset-1 col-10 offset-lg-2 col-lg-4 my-4" id="accordionRepice">
+</div>
+<div class="row g-0">
+  <div class="offset-1 col-10 offset-lg-1 col-lg-3 my-4">
+    <h1 class="text-primary text-center text-decoration-underline mb-4">Ingredientes</h1>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item bg-opacity-25 border-0" [ngClass]="{'bg-primary': !isEven, 'bg-transparent':isEven}" *ngFor="let ing of repice.ingredientes, even as isEven">{{ing}}</li>
+    </ul>
+  </div>
+  <div class="accordion offset-1 col-10 col-lg-6 my-4" id="accordionRepice">
+    <h1 class="text-primary text-center text-decoration-underline mb-4">Elaboración</h1>
     <div class="accordion-item" *ngFor="let paso of repice.elaboracion, let i=index">
       <h2 class="accordion-header" [id]="'heading'+(i+1)">
         <button class="accordion-button" [ngClass]="{'collapsed':i !== 0}" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapse'+(i+1)" [attr.aria-expanded]="i === 0" [attr.aria-controls]="'collapse'+(i+1)">
@@ -41,7 +36,7 @@
     </div>
     <div class="accordion-item">
       <h2 class="accordion-header" id="headingFinal">
-        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"data-bs-target="#collapseFinal" aria-expanded="false" aria-controls="collapseFinal">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFinal" aria-expanded="false" aria-controls="collapseFinal">
           Fin de la receta
         </button>
       </h2>

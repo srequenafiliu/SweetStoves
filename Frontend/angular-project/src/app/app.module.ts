@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -23,6 +23,10 @@ import { RepiceAddComponent } from './repice-add/repice-add.component';
 import { UserUpdateComponent } from './user-update/user-update.component';
 import { UserPasswordComponent } from './user-password/user-password.component';
 import { RepiceUpdateComponent } from './repice-update/repice-update.component';
+
+import localeEs from '@angular/common/locales/es';
+import {registerLocaleData} from '@angular/common';
+registerLocaleData(localeEs, 'es');
 
 @NgModule({
   declarations: [
@@ -56,7 +60,8 @@ import { RepiceUpdateComponent } from './repice-update/repice-update.component';
       provide: HTTP_INTERCEPTORS,
       useClass: BaseUrlInterceptor,
       multi: true,
-    }
+    },
+    {provide: LOCALE_ID, useValue: "es"},
   ],
   bootstrap: [AppComponent]
 })
