@@ -9,8 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./repice-list.component.css']
 })
 export class RepiceListComponent {
-  pageNum!:number;
-  pageSize!:number;
+  pag!:number;
+  size!:number;
   innerWidth!:number;
   sortField!:string;
   sortDir!:string;
@@ -29,9 +29,9 @@ export class RepiceListComponent {
 
   constructor(private repicesService:RepicesService, private route:ActivatedRoute, private router:Router) {
     this.innerWidth = window.innerWidth;
-    this.pageSize = (window.innerWidth>540) ? 4 : 2;
+    this.size = (window.innerWidth>540) ? 4 : 2;
     this.route.queryParams.subscribe(params => {
-      this.pageNum = (+params["pag"]) ? +params["pag"] : 1;
+      this.pag = (+params["pag"]) ? +params["pag"] : 1;
       this.sortField = (params["sortField"]) ? params["sortField"] : 'id';
       this.sortDir = (params["sortDir"]) ? params["sortDir"] : 'asc';
       this.nombre = (params["nombre"]) ? params["nombre"] : '';
@@ -44,14 +44,14 @@ export class RepiceListComponent {
   }
 
   getRecetas() {
-    this.repicesService.getRepices(this.pageNum, this.pageSize, this.sortField, this.sortDir, this.nombre, this.tipo, this.necesidades, this.dificultad).subscribe({
+    this.repicesService.getRepices(this.pag, this.size, this.sortField, this.sortDir, this.nombre, this.tipo, this.necesidades, this.dificultad).subscribe({
       next: r=>{
         this.count = r.count;
         this.repices=r.result;
-        const length = Math.ceil(r.count/this.pageSize);
-        this.pages = (length>7) ? this.getPages(this.pageNum, length) : Array(length).fill(1).map((_x, i)=>i+1);
+        const length = Math.ceil(r.count/this.size);
+        this.pages = (length>7) ? this.getPages(this.pag, length) : Array(length).fill(1).map((_x, i)=>i+1);
       },
-      error: e=>document.getElementById("server_error")?.appendChild(document.createTextNode(e)),
+      error: e=>document.getElementById("server_error_r")?.appendChild(document.createTextNode(e)),
     });
   }
 

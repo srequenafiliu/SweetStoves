@@ -1,14 +1,18 @@
 package com.sandra.springboot.backend.recetas.controllers;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -39,26 +44,32 @@ public class UsuarioRestController {
 	private UsuarioService usuarioService;
 	
 	@GetMapping("")
-	public ResponseEntity<?> index() {
-		List<Usuario> listaUsuarios = new ArrayList<>();
-		Map<String,Object> response = new HashMap<>();
+	public ResponseEntity<?> index(@RequestParam(name="pag", defaultValue = "1") Integer pag,
+			@RequestParam(name="size", defaultValue = "6") Integer size) {
+		Map<String,Object> response = new TreeMap<>();
 		try {
-			listaUsuarios = usuarioService.findAll()
+			Pageable pageable = PageRequest.of(pag-1, size, Sort.by("id").ascending());
+			Page<Usuario> page = usuarioService.findAll(pageable);
+			response.put("previous", (page.isFirst()) ? null : ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("pag", pag-1).toUriString());
+			response.put("next", (page.isLast()) ? null : ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("pag", pag+1).toUriString());
+			response.put("count", page.getTotalElements());
+			List<Usuario> listaUsuarios = page.getContent()
 					.stream()
-					.map(e -> {
-						Usuario usuario = new Usuario(e);
+					.map(u -> {
+						Usuario usuario = new Usuario(u);
 						if(usuario.getImagen()!=null)
 							usuario.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + usuario.getImagen());
 						return usuario;
 					})
 					.collect(Collectors.toList());
+			response.put("result", listaUsuarios);
 		} catch (DataAccessException e) {  // Error al acceder a la base de datos
 			response.put("mensaje", "Error al conectar con la base de datos");
 			response.put("error", e.getMessage().concat(":")
 					.concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<List<Usuario>>(listaUsuarios,HttpStatus.OK);
+		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")

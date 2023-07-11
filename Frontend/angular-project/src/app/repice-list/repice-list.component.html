@@ -53,9 +53,9 @@
   <div class="row g-0 col col-lg-8" *ngIf="repices && repices.length; else noRepices">
     <repice-item class="offset-1 col-10 col-md-5 mt-4" *ngFor="let repice of repices, even as isEven"
     [repice]="repice" [ngClass]="{'me-lg-1':isEven, 'offset-md-0 ms-lg-1': !isEven}"></repice-item>
-    <div class="form-group offset-md-4 col-md-7 offset-lg-7 col-lg-4 d-flex flex-row mt-4 align-items-center justify-content-center justify-content-md-end">
+    <div class="offset-md-4 col-md-7 offset-lg-7 col-lg-4 d-flex flex-row mt-4 align-items-center justify-content-center justify-content-md-end">
       <span>Mostrar&nbsp;</span>
-      <select class="form-select w-25" id="size" [(ngModel)]="pageSize" (change)="getRecetas()">
+      <select class="form-select w-25" id="size" [(ngModel)]="size" (change)="getRecetas()">
         <option class="d-sm-none" value="2">2</option>
         <option value="4">4</option>
         <option value="8">8</option>
@@ -65,13 +65,13 @@
     </div>
   </div>
   <ng-template #noRepices>
-    <div class=" row g-0 col col-md-7 col-lg-8 my-4 pb-5 text-muted align-items-center">
-      <img class="offset-1 col-10 offset-lg-0 col-lg-5" src="../../assets/no_repices.png" alt="Sin recetas">
+    <div class=" row g-0 col col-lg-8 my-4 pb-5 text-muted align-items-center">
+      <img class="offset-1 col-10 offset-lg-0 col-lg-5" src="../../assets/error.png" alt="Sin recetas">
       <div class="offset-1 col-10 offset-lg-0 col-lg-6 text-center">
         <h3>¡Uy! No se han encontrado recetas</h3>
         <div class="fs-5" *ngIf="!repices; else notFound">
           Estamos experimentando fallos en nuestro servidor. Sentimos las molestias.
-          <div class="text-danger fw-bold mt-4" id="server_error"></div>
+          <div class="text-danger fw-bold mt-4" id="server_error_r"></div>
         </div>
         <ng-template #notFound>
           <div class="fs-5">
@@ -85,15 +85,15 @@
   </ng-template>
 </div>
 <div class="d-flex justify-content-center mt-3" *ngIf="repices && repices.length">
-  <ul class="pagination" [ngClass]="{'pagination-lg':innerWidth>540}">
-    <li class="page-item" [ngClass]="{'disabled': pageNum === 1}">
-      <a class="page-link" [routerLink]="['.']" [queryParams]="getQueryParams(pageNum-1, sortField, sortDir, nombre, tipo, necesidades, dificultad)">&laquo;</a>
+  <ul class="pagination" [ngClass]="{'pagination-lg':innerWidth>=576}">
+    <li class="page-item" [ngClass]="{'disabled': pag === 1}">
+      <a class="page-link" [routerLink]="['.']" [queryParams]="getQueryParams(pag-1, sortField, sortDir, nombre, tipo, necesidades, dificultad)">&laquo;</a>
     </li>
-    <li class="page-item" [ngClass]="{'active': pageNum === P}" *ngFor="let P of pages, let i=index">
+    <li class="page-item" [ngClass]="{'active': pag === P}" *ngFor="let P of pages, let i=index">
       <a class="page-link" [ngClass]="{'opacity-75': P === '...'}" [routerLink]="['.']" [queryParams]="getQueryParams(P!=='...' ? +P : +pages[i-1]+1, sortField, sortDir, nombre, tipo, necesidades, dificultad)">{{P}}</a>
     </li>
-    <li class="page-item" [ngClass]="{'disabled': pages[pages.length-1] === pageNum}">
-      <a class="page-link" [routerLink]="['.']" [queryParams]="getQueryParams(pageNum+1, sortField, sortDir, nombre, tipo, necesidades, dificultad)">&raquo;</a>
+    <li class="page-item" [ngClass]="{'disabled': pages[pages.length-1] === pag}">
+      <a class="page-link" [routerLink]="['.']" [queryParams]="getQueryParams(pag+1, sortField, sortDir, nombre, tipo, necesidades, dificultad)">&raquo;</a>
     </li>
   </ul>
 </div>

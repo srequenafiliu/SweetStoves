@@ -50,7 +50,7 @@ public class RecetaRestController {
 	
 	@GetMapping("")
 	public ResponseEntity<?> index(@RequestParam(name="pag", defaultValue = "1") Integer pag,
-			@RequestParam(name="size", defaultValue = "2") Integer size,
+			@RequestParam(name="size", defaultValue = "4") Integer size,
 			@RequestParam(name="sortField", defaultValue = "id") String sortField,
 			@RequestParam(name="sortDir", defaultValue = "asc") String sortDir,
 			@RequestParam(name="nombre", defaultValue="") String name,

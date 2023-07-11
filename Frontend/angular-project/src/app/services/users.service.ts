@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, throwError } from 'rxjs';
 import { IUser } from '../interfaces/i-user';
@@ -10,10 +10,10 @@ export class UsersService {
   private userURL="usuarios";
   constructor(private http:HttpClient) { }
 
-  getUsers():Observable<IUser[]> {
-    return this.http.get<IUser[]>(this.userURL).pipe(
-      catchError((resp: HttpErrorResponse) => throwError( () =>
-        `Error obteniendo usuarios. Código de servidor: ${resp.status}. Mensaje: ${resp.message}`))
+  getUsers(pag:number, size:number):Observable<{count:number, result:IUser[]}> {
+    const params:HttpParams = new HttpParams().set("pag", pag).set("size", size);
+    return this.http.get<{count:number, result:IUser[]}>(this.userURL, {params}).pipe(
+      catchError((resp: HttpErrorResponse) => throwError( () => 'Error '+resp.status+': '+resp.statusText))
     );
   }
 

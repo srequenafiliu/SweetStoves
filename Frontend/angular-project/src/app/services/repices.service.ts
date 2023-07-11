@@ -14,8 +14,7 @@ export class RepicesService {
     let params:HttpParams = new HttpParams().set("pag", pag).set("size", size).set("sortField", sortField)
     .set("sortDir", sortDir).set("nombre", nombre).set("tipo", tipo).set("necesidades", necesidades);
     params = (dificultad != 0) ? params.set("dificultad", dificultad) : params;
-    return this.http.get<{count:number, result:IRepice[]}>
-    (this.repiceURL, {params}).pipe(
+    return this.http.get<{count:number, result:IRepice[]}>(this.repiceURL, {params}).pipe(
       catchError((resp: HttpErrorResponse) => throwError( () => 'Error '+resp.status+': '+resp.statusText))
     );
   }

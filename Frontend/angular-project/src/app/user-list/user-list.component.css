@@ -1,9 +1,5 @@
-img{
-  border-radius: 100%;
-  width: 75px;
-  height: 75px;
+.rounded-circle{
+  width: 175px;
+  height: 175px;
   object-fit: cover;
-}
-.fondo-negro{
-  background-color: rgba(0, 0, 0, 0.5);
 }
