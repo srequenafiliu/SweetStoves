@@ -1,0 +1,101 @@
+<div class="row g-0 offset-1 col-10 pt-4">
+  <div class="h1 my-2 text-primary text-center">Necesidades especiales</div>
+  <div class="row g-0 my-3">
+    <div class="col-12 col-lg-8 order-lg-2 my-auto text-center">
+      Puede ser que hayas querido seguir una receta pero no hayas podido porque no se ajusta a tus necesidades especiales.
+      Desde SweetStoves hemos creado este apartado para ayudar a nuestros usuarios a cambiar los ingredientes de las
+      recetas que les impiden disfrutarlas al máximo.
+    </div>
+    <div class="offset-md-3 col-md-6 offset-lg-0 col-lg-4 border rounded bg-white mt-3 mt-lg-0 pt-3 ps-3">
+      <div class="h5">Contenido</div>
+      <ol>
+        <li *ngFor="let item of needs"><a [routerLink]="['.']" [fragment]="item.fragment">Para {{item.titulo}}...</a></li>
+      </ol>
+    </div>
+  </div>
+  <section class="row g-0 my-3" id="gluten">
+    <h2 class="my-2 text-primary">Para celiac@s...</h2>
+    <img class="col-lg-5 order-lg-2 text-center p-3 m-auto object-fit-cover" src="../../assets/gluten.png">
+    <div class="col-lg-7 order-lg-1">
+      <figure class="my-3">
+        <blockquote class="blockquote">
+          El <span class="fw-bold">gluten</span> es una proteína que se encuentra en la semilla de muchos
+          cereales como son el trigo, cebada, centeno, espelta, algunas variedades de avena, así como sus
+          híbridos y derivados.
+        </blockquote>
+        <figcaption class="blockquote-footer text-end">
+          <abbr title="Federación de Asociaciones de Celíacos de España">FACE</abbr>:
+          <cite><a href="https://celiacos.org/enfermedad-celiaca/que-es-el-gluten/">¿Qué es el gluten?</a></cite>
+        </figcaption>
+      </figure>
+      <div class="my-3">
+        Obviamente, los productos elaborados con estos cereales o con derivados contienen gluten. Por tanto, se deben
+        buscar alternativas sin gluten de productos como el pan, las harinas, las pastas y el chocolate (a veces se
+        elabora con harina de trigo). Además, algunos productos pueden contener trazas de gluten. Esto significa que
+        pueden estar afectados por la contaminación cruzada, por lo que es mejor evitarlos.
+      </div>
+      <div class="my-3">
+        Desde SweetStoves recomendamos utilizar harinas de otros cereales que no contengan gluten (como la harina
+        de maíz o la harina de yuca) y mirar el etiquetado de los alimentos para confirmar que los productos que
+        se vayan a utilizar no contengan gluten, ya sea por los ingredientes o por la presencia de trazas.
+      </div>
+    </div>
+  </section>
+  <section id="lactosa" class="row g-0 my-3 text-end">
+    <h2 class="my-2 text-primary">Para intolerantes a la lactosa...</h2>
+    <img class="col-lg-5 text-center p-3 m-auto object-fit-cover" src="../../assets/lactosa.png">
+    <div class="col-lg-7">
+      <figure class="my-3">
+        <blockquote class="blockquote">
+            La <span class="fw-bold">lactosa</span> es un disacárido natural compuesto de glucosa y galactosa
+            que está presente en todas las leches de los mamíferos: vaca, cabra, oveja y en la humana.
+        </blockquote>
+        <figcaption class="blockquote-footer text-start">
+          <abbr title="Asociación de Intolerantes a la lactosa España">adilac</abbr>:
+          <cite><a href="https://lactosa.org/la-intolerancia/primeras-preguntas/">Primeras preguntas</a></cite>
+        </figcaption>
+      </figure>
+      <div class="my-3">
+        Dicho esto, se deben buscar alternativas sin lactosa tanto de la leche como de sus derivados como la nata, los
+        quesos y la mantequilla. Hoy en día, se pueden encontrar muchos de estos productos en el mercado debido a los
+        métodos tecnológicos utilizados por la industria alimentaria para eliminar la lactosa de los productos lácteos.
+      </div>
+      <div class="my-3">
+        Otra opción para sustituir los ingredientes que contienen lactosa son los productos de origen vegetal. Este puede
+        ser el caso de la mantequilla, la cual se puede cambiar por margarina, o por la propia leche, que se puede
+        reemplazar con cualquier bebida vegetal como puede ser la "leche" de almendras o la "leche" de soja.
+      </div>
+    </div>
+  </section>
+  <section class="row g-0 my-3" id="vegano">
+    <h2 class="my-2 text-primary">Para vegan@s...</h2>
+    <img class="col-lg-5 order-lg-2 text-center p-3 m-auto object-fit-cover" src="../../assets/vegano.png">
+    <div class="col-lg-7 order-lg-1">
+      <div class="my-3">
+        En este caso, se deben sustituir todos los ingredientes de origen animal, como son las carnes, pescados,
+        huevos y productos lácteos. Aquí puedes consultar algunos consejos para sustituir estos ingredientes:
+      </div>
+      <ul class="my-3">
+        <li>
+          Se pueden encontrar en las tiendas variantes veganas de algunas materias primas, como las bebidas vegetales
+          mencionadas en el apartado anterior o la carne vegetal.
+        </li>
+        <li>
+          Algunos ingredientes preparados con productos de origen animal tienen una opción vegana. Por ejemplo, puedes
+          encontrar chocolate o pan vegano. Si no los encuentras, siempre puedes recurrir a prepararlos tú mism@.
+        </li>
+        <li>
+          Otros ingredientes, como el huevo, no tienen una alternativa vegana. En estos casos, se debe buscar la función
+          del ingrediente a sustituir para elegir otro que pueda cumplirla. Usando el ejemplo previo, un huevo se puede
+          reemplazar por 65g de puré de manzana (puede usarse otro tipo de fruta) si se va a usar en repostería o por
+          una mezcla de harina y agua si se va a utilizar en rebozados o empanados.
+        </li>
+      </ul>
+      <div class="my-3">
+        Desde SweetStoves aconsejamos buscar recetas veganas en vez de adaptar nuestras
+        recetas para que lo sean ya que algunos cambios pueden ser muy significativos (os invitamos a compartir este
+        tipo de recetas con el resto de usuarios).
+      </div>
+    </div>
+  </section>
+</div>

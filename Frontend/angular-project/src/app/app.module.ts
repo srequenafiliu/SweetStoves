@@ -26,6 +26,7 @@ import { RepiceUpdateComponent } from './repice-update/repice-update.component';
 
 import localeEs from '@angular/common/locales/es';
 import {registerLocaleData} from '@angular/common';
+import { NeedsComponent } from './needs/needs.component';
 registerLocaleData(localeEs, 'es');
 
 @NgModule({
@@ -44,7 +45,8 @@ registerLocaleData(localeEs, 'es');
     RepiceAddComponent,
     UserUpdateComponent,
     UserPasswordComponent,
-    RepiceUpdateComponent
+    RepiceUpdateComponent,
+    NeedsComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,9 @@ registerLocaleData(localeEs, 'es');
     FormsModule,
     HttpClientModule,
     RouterModule,
-    RouterModule.forRoot(APP_ROUTES)
+    RouterModule.forRoot(APP_ROUTES, {
+      anchorScrolling: 'enabled'
+    })
   ],
   providers: [
     RepicesService,

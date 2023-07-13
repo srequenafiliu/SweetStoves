@@ -6,6 +6,7 @@ import { UserInfoComponent } from "./user-info/user-info.component";
 import { UserListComponent } from "./user-list/user-list.component";
 import { UserLoginComponent } from "./user-login/user-login.component";
 import { WelcomeComponent } from "./welcome/welcome.component";
+import { NeedsComponent } from "./needs/needs.component";
 
 export const APP_ROUTES:Route[]=[
   { path: 'inicio', component: WelcomeComponent },
@@ -13,11 +14,8 @@ export const APP_ROUTES:Route[]=[
   // :id es un parámetro (id de la receta)
   { path: 'receta/:id', component: RepiceDetailComponent },
   { path: 'usuarios', component: UserListComponent },
+  { path: 'necesidades-especiales', component: NeedsComponent },
   { path: 'login', component: UserLoginComponent },
   { path: 'registro', component: UserAddComponent },
-  { path: 'perfil-usuario', component: UserInfoComponent },
-  // Ruta por defecto (vacía) -> Redirigir a /inicio
-  { path: '', redirectTo: '/inicio', pathMatch: 'full' },
-  // Ruta que no coincide con ninguna de las anteriores
-  { path: '**', redirectTo: '/inicio', pathMatch: 'full' }
+  { path: 'perfil-usuario', component: UserInfoComponent }
 ];
