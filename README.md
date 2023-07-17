@@ -91,7 +91,7 @@ Se puede acceder a este menú desde la barra de navegación y desde el enlace qu
 La persona que quiera registrarse en SweetStoves debe rellenar al menos los campos obligatorios. Si los rellena mal, saltarán los errores que haya cometido cuando intente registrarse. Asimismo, no se permitirá el registro de un usuario y/o correo electrónico duplicado. El futuro usuario de la web puede retocar los datos erróneos o borrar los datos del formulario con el botón _Borrar datos_.
 
 <p align="center">
-    <img src="images/13_registro_mal.png" height="450">
+    <img src="images/13_registro_errores.png" height="450">
 </p>
 
 Cuando se envía el formulario correctamente, se redirecciona al usuario al perfil del nuevo usuario.\
