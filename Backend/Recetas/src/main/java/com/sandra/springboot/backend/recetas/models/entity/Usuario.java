@@ -54,7 +54,7 @@ public class Usuario implements java.io.Serializable {
 	@NonNull
 	@Column(name = "correo", unique = true, nullable = false, length = 150)
 	@NotBlank
-	@Email
+	@Email(message = "no contiene un correo electónico válido")
 	private String correo;
 	
 	@NonNull

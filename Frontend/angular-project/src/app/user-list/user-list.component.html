@@ -2,7 +2,9 @@
   <div class="h1 offset-1 col-10 my-2 text-primary">Lista de usuarios:</div>
   <div class="row g-0 offset-1 col-10" *ngIf="users && users.length; else noUsers">
     <div class="col-md-6 col-lg-4 text-center py-3" *ngFor="let user of users">
-      <div *ngIf="user.imagen; else sinFoto"><img class="profile-photo rounded-circle" [src]="user.imagen" [alt]="user.imagen"></div>
+      <div *ngIf="user.imagen; else sinFoto">
+        <img class="profile-photo rounded-circle object-fit-cover" [src]="user.imagen" [alt]="user.imagen">
+      </div>
       <ng-template #sinFoto>
         <span class="fa-4x d-flex mx-auto rounded-circle" [ngStyle]="{'background-color':'rgb(120,194,173)'}">
           <i class="fas fa-bell-concierge fa-lg fa-inverse m-auto"></i>

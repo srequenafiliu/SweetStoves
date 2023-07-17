@@ -92,7 +92,6 @@ La persona que quiera registrarse en SweetStoves debe rellenar al menos los camp
 
 <p align="center">
     <img src="images/13_registro_mal.png" height="450">
-    <img src="images/14_registro_duplicado.png" height="450">
 </p>
 
 Cuando se envía el formulario correctamente, se redirecciona al usuario al perfil del nuevo usuario.\
@@ -101,11 +100,11 @@ Si el usuario ya tiene cuenta en SweetStoves, puede acceder al menú de login co
 ### Login
 Aparte del enlace que se encontraba en el menú anterior, también se puede acceder al menú de login desde la barra de navegación.
 
-<img src="images/15_menu_login.png">
+<img src="images/14_menu_login.png">
 
 Si el usuario pulsa el botón _Iniciar sesión_ y al menos uno de los datos no es correcto, aparecerá una alerta.
 
-<img src="images/16_login_alerta.png">
+<img src="images/15_login_alerta.png">
 
  Solo cuando los datos sean válidos, la web le mandará a su menú de usuario. Si el usuario no está registrado, debajo de este botón está el link que redirecciona al menú de registro.
 
@@ -113,50 +112,50 @@ Si el usuario pulsa el botón _Iniciar sesión_ y al menos uno de los datos no e
 Cuando el usuario ha iniciado sesión, en la barra de navegación aparece su nombre de usuario en vez de los menús de login y registro. Estos solo volverán a aparecen si se cierra la sesión, ya sea porque el usuario pulsa el botón _Cerrar sesión_ o porque han pasado 24 horas desde que la inició.\
 En este menú, el usuario puede hacer varias tareas que puede elegir en el menú lateral que aparece cuando se pulsa el botón _¿Quieres hacer algo hoy?_
 
-<img src="images/17_menu_usuario_opciones.png">
+<img src="images/16_menu_usuario_opciones.png">
 
 Cuando se mantiene el cursor en uno de los botones, aparece una ventana con una pequeña explicación de la opción y, si se pulsa, debajo de los botones _¿Quieres hacer algo hoy?_ y _Cerrar sesión_ aparece el componente seleccionado:
 - Lista de recetas: Esta lista de recetas se diferencia a la lista general en dos detalles:
     1. Solo aparecen las recetas que ha guardado el usuario en cuestión.
     2. Aparece el botón “Borrar receta” en las recetas que ha creado el usuario. Si se borra la receta, desaparecerá del blog.
 
-<img src="images/18_menu_usuario_recetas.png">
+<img src="images/17_menu_usuario_recetas.png">
 
 - Nueva receta: Este formulario solo está disponible para los usuarios de SweetStoves, ya que la receta debe estar vinculada a un usuario. Al igual que los otros formularios, el botón para enviar los datos estará disponible cuando todos los campos obligatorios se rellenen correctamente.
 
-<img src="images/19_menu_usuario_receta_nueva.png">
+<img src="images/18_menu_usuario_receta_nueva.png">
 
 - Actualiza tu cuenta: En este formulario aparecen ya los campos rellenados con los datos actuales del usuario excepto el de la contraseña. Funciona de la misma manera que el formulario de registro en cuanto a errores se refiere. Además, se debe insertar la contraseña actual para poder actualizar los datos correctamente. Nada más enviarlo, los cambios se verán reflejados en el menú de usuario y aparecerá una alerta confirmando que la acción se ha realizado.
 
-<img src="images/20_menu_usuario_update.png">
+<img src="images/19_menu_usuario_update.png">
 
 - Cambia tu contraseña: Este formulario es específico para actualizar la contraseña. Solo se actualizará cuando la contraseña actual sea la correcta, la nueva contraseña se ajuste al formato y las contraseñas coincidan. Cuando se cumplimente adecuadamente, aparecerá una alerta confirmando que la actualización se ha realizado.
 
-<img src="images/21_menu_usuario_pass.png">
+<img src="images/20_menu_usuario_pass.png">
 
 - Borra tu cuenta: En esta última opción el usuario puede borrar su cuenta, aunque también borrará las recetas que ha creado en SweetStoves.
 
-<img src="images/22_menu_usuario_borrar.png">
+<img src="images/21_menu_usuario_borrar.png">
 
 ### Otros dispositivos
 La experiencia de SweetStoves también se puede vivir en Tablet y en móvil. En este apartado se pueden ver algunos menús en formato Tablet (768x886) y móvil (425x886):
 - Menú de inicio:
     <p align="center">
-    <img src="images/23_inicio_movil.png" height="450">
-    <img src="images/24_inicio_tablet.png" height="450">
+    <img src="images/22_inicio_movil.png" height="450">
+    <img src="images/23_inicio_tablet.png" height="450">
     </p>
 - Lista de recetas:
     <p align="center">
-    <img src="images/25_recetas_tablet.png" height="900">
-    <img src="images/26_recetas_movil.png" height="900">
+    <img src="images/24_recetas_tablet.png" height="900">
+    <img src="images/25_recetas_movil.png" height="900">
     </p>
 - Lista de usuarios:
     <p align="center">
-    <img src="images/27_usuarios_movil.png" height="900">
-    <img src="images/28_usuarios_tablet.png" height="900">
+    <img src="images/26_usuarios_movil.png" height="900">
+    <img src="images/27_usuarios_tablet.png" height="900">
     </p>
 - Registro:
     <p align="center">
-    <img src="images/29_registro_tablet.png" height="450">
-    <img src="images/30_registro_movil.png" height="450">
+    <img src="images/28_registro_tablet.png" height="450">
+    <img src="images/29_registro_movil.png" height="450">
     </p>

@@ -1,25 +1,25 @@
 <div class="row g-0">
-  <div class="d-none d-md-block col-md-6 p-0" id="imagen">
-    <img src="../../assets/sanji.png" alt="Registro" class="img-fluid">
+  <div class="d-none d-md-block col-md-4 col-lg-6 p-0">
+    <img src="../../assets/sanji.png" alt="Registro" class="object-fit-cover w-100" [ngStyle]="{'height':'calc(100vh - 76px)'}">
   </div>
-  <div class="col-md-6" id="centrar">
-    <div class="h1 text-primary fw-bold text-center">Crea tu cuenta</div>
+  <div class="offset-1 col-10 col-md-6 col-lg-4 my-auto">
+    <div class="h1 text-primary fw-bold text-center mt-3">Crea tu cuenta</div>
     <form (ngSubmit)="addUser(newUser)" #form="ngForm">
       <div class="row g-0">
         <div class="h3 text-info text-center text-decoration-underline mb-3">Datos personales</div>
-        <div class="form-group form-floating my-1 offset-md-1 col-md-4">
+        <div class="form-group form-floating my-1 col-md-6">
           <input type="text" class="form-control" autocomplete="off" name="nombre" [ngClass]="{'is-invalid': buscarErrores('nombre') !== -1,
           'is-valid': errores.length && buscarErrores('nombre') === -1}" placeholder="Nombre" [(ngModel)]="newUser.datosUsuario!.nombre" required>
           <div class="invalid-feedback">{{errores[buscarErrores('nombre')]}}</div>
           <label>Nombre<span class="text-danger">*</span></label>
         </div>
-        <div class="form-group form-floating my-1 offset-md-2 col-md-4">
+        <div class="form-group form-floating my-1 col-md-6">
           <input type="text" class="form-control" autocomplete="off" name="apellido" [ngClass]="{'is-invalid': buscarErrores('apellido') !== -1,
           'is-valid': errores.length && buscarErrores('apellido') === -1}" placeholder="Apellido" [(ngModel)]="newUser.datosUsuario!.apellido">
           <div class="invalid-feedback">{{errores[buscarErrores('apellido')]}}</div>
           <label>Apellido</label>
         </div>
-        <div class="form-group form-floating my-1 offset-md-4 col-md-4">
+        <div class="form-group form-floating my-1 offset-md-3 col-md-6">
           <input type="text" class="form-control" autocomplete="off" name="teléfono" [ngClass]="{'is-invalid': buscarErrores('teléfono') !== -1,
           'is-valid': errores.length && buscarErrores('teléfono') === -1}" placeholder="Teléfono" [(ngModel)]="newUser.datosUsuario!.telefono">
           <div class="invalid-feedback">{{errores[buscarErrores('teléfono')]}}</div>
@@ -27,51 +27,49 @@
         </div>
 
         <div class="h3 text-info text-center text-decoration-underline mt-2 mb-3">Datos de la cuenta</div>
-        <div class="form-group form-floating my-1 offset-md-1 col-md-4">
+        <div class="form-group form-floating my-1 col-md-6">
           <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('usuario') !== -1 || usuarioExistente,
           'is-valid': errores.length && buscarErrores('usuario') === -1 && !usuarioExistente}" name="usuario" placeholder="Usuario" [(ngModel)]="newUser.usuario" required>
           <div class="invalid-feedback" *ngIf="!usuarioExistente, else usuarioRepetido">{{errores[buscarErrores('usuario')]}}</div>
           <ng-template #usuarioRepetido><div class="invalid-feedback">Este usuario ya existe</div></ng-template>
           <label>Usuario<span class="text-danger">*</span></label>
         </div>
-        <div class="form-group form-floating my-1 offset-md-2 col-md-4">
+        <div class="form-group form-floating my-1 col-md-6">
           <input type="email" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('correo') !== -1 || correoExistente,
           'is-valid': errores.length && buscarErrores('correo') === -1 && !correoExistente}" name="correo" placeholder="Correo electrónico" [(ngModel)]="newUser.correo" required>
           <div class="invalid-feedback" *ngIf="!correoExistente, else correoRepetido">{{errores[buscarErrores('correo')]}}</div>
           <ng-template #correoRepetido><div class="invalid-feedback">Este correo ya está registrado</div></ng-template>
           <label>Correo electrónico<span class="text-danger">*</span></label>
         </div>
-        <div class="form-group form-floating my-1 offset-md-1 col-md-4">
+        <div class="form-group form-floating my-1 col-md-6">
           <input type="password" class="form-control" [ngClass]="{'is-invalid': buscarErrores('password') !== -1,
           'is-valid': errores.length && buscarErrores('password') === -1}" name="password" placeholder="Contraseña" [(ngModel)]="newPassword" required>
           <div class="invalid-feedback"> {{errores[buscarErrores('password')]}}</div>
           <label>Contraseña<span class="text-danger">**</span></label>
         </div>
-        <div class="form-group form-floating my-1 offset-md-2 col-md-4">
+        <div class="form-group form-floating my-1 col-md-6">
           <input type="password" class="form-control" [ngClass]="{'is-invalid':newUser.password !== newPassword || buscarErrores('password') !== -1,
           'is-valid':newUser.password === newPassword && newPassword}" name="password2" placeholder="Confirma la contraseña" [(ngModel)]="newUser.password" required [pattern]="newPassword">
           <div class="invalid-feedback" *ngIf="newUser.password !== newPassword">Las contraseñas no coinciden</div>
           <label>Confirma la contraseña<span class="text-danger">**</span></label>
         </div>
-        <div class="form-group my-3 offset-md-1 col-md-10 col-lg-6">
+        <div class="form-group my-3" [ngClass]="{'col-md-6':newUser.imagen}">
           <label for="image">Imagen</label>
           <input type="file" class="form-control" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
         </div>
-        <img *ngIf="newUser.imagen" [src]="newUser.imagen" alt="" class="bg-info img-thumbnail rounded-circle offset-3 offset-lg-1 col-md-6 col-lg-2">
-      </div>
-      <div class="row g-0 my-2 align-items-center">
-        <div class="text-danger fw-light mb-3 col offset-md-1 col-md-8">
+        <img *ngIf="newUser.imagen" [src]="newUser.imagen" class="object-fit-cover rounded-circle offset-md-1 col-md-5 mx-auto">
+        <div class="text-danger fw-light my-2">
           *Campos obligatorios<br>
           **La contraseña debe tener al menos 8 caracteres, entre ellos mínimo una letra mayúscula, una letra minúscula y un número
         </div>
-        <div class="col-md-10 d-flex justify-content-end">
+        <div class="my-3 d-flex justify-content-center">
           <button type="button" class="btn btn-secondary" (click)="reset(fileImage)">Borrar datos</button>
           <div class="mx-3"></div>
           <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Registrarse</button>
         </div>
       </div>
     </form>
-    <div class="text-center mt-3">
+    <div class="text-center my-2">
       <a [routerLink]="['/login']">Prefiero iniciar sesión</a>
     </div>
   </div>

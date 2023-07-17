@@ -1,5 +1,5 @@
 <div class="card h-100 text-white" [ngClass]="{'bg-danger':repice.tipo === 'Dulce', 'bg-info':repice.tipo !== 'Dulce'}">
-  <img [src]="repice.imagen" [alt]="repice.nombre" [title]="repice.nombre" class="card-img-top">
+  <img [src]="repice.imagen" [alt]="repice.nombre" [title]="repice.nombre" class="card-img-top object-fit-cover">
   <div class="card-body d-flex flex-column justify-content-between">
     <div class="card-title h3">
       <a class="text-decoration-none link-light" [routerLink]="['/receta', repice.id]">{{repice.nombre}}</a>
@@ -10,7 +10,8 @@
         <div class="fw-bold">Ver <a [routerLink]="['necesidades-especiales']" class="link-dark">necesidades especiales</a> </div>
       </ng-template>
       <span class="fw-bold">
-        Dificultad: <difficulty-level [level]="repice.dificultad"></difficulty-level>
+        Dificultad: <span *ngFor="let star of [1, 2, 3, 4 , 5]" class="fa-star"
+        [ngClass]="{'fas':star<=repice.dificultad, 'far':star>repice.dificultad}"></span>
       </span>
       <button *ngIf="cuentaUsuario()" type="button" class="btn btn-light col-12 text-center mt-2" placement="left" (click)="borrarReceta()"
       ngbTooltip="Se borrará la receta para todos. Si estás seguro de borrarla, pulsa el botón">Borrar receta</button>

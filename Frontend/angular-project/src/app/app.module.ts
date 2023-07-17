@@ -6,7 +6,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { RepiceListComponent } from './repice-list/repice-list.component';
 import { RepiceItemComponent } from './repice-item/repice-item.component';
-import { DifficultyLevelComponent } from './difficulty-level/difficulty-level.component';
 import { RepiceDetailComponent } from './repice-detail/repice-detail.component';
 import { RouterModule } from '@angular/router';
 import { APP_ROUTES } from './app.routes';
@@ -34,7 +33,6 @@ registerLocaleData(localeEs, 'es');
     AppComponent,
     RepiceListComponent,
     RepiceItemComponent,
-    DifficultyLevelComponent,
     WelcomeComponent,
     RepiceDetailComponent,
     UserListComponent,

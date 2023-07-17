@@ -20,10 +20,7 @@ export class UserLoginComponent {
 
   login() {
     this.authService.login(this.userLogin).subscribe({
-      next:token=>{
-        const tokenDecoded:{id:number} = jwtDecode(token);
-        this.usersService.getUser(tokenDecoded.id).subscribe(u=>this.authService.setData(token, u));
-      },
+      next:token=>this.usersService.getUser(jwtDecode<{id:number}>(token).id).subscribe(u=>this.authService.setData(token, u)),
       error:e=>this.authService.addAlert("alertLogin", false, e.error.error, false)
     })
   }

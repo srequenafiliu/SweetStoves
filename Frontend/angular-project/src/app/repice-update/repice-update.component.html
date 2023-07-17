@@ -7,7 +7,7 @@
     </select>
     <form (ngSubmit)="updateReceta(receta, fileImage)" #form="ngForm" *ngIf="receta">
       <div class="row g-0">
-        <div class="form-group form-floating my-1 col-lg-6">
+        <div class="form-group form-floating w-100 my-1 col-lg-6">
           <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('nombre') !== -1,
           'is-valid': errores.length && buscarErrores('nombre') === -1}" name="nombre" placeholder="Nombre" [(ngModel)]="receta.nombre" required>
           <div class="invalid-feedback">{{errores[buscarErrores('nombre')]}}</div>
@@ -53,7 +53,7 @@
             <label for="image">Imagen:</label>
             <input type="file" class="form-control mt-2" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
           </div>
-          <img *ngIf="receta.imagen" [src]="receta.imagen" alt="" class="bg-info img-thumbnail mt-2"
+          <img *ngIf="receta.imagen" [src]="receta.imagen" alt="" class="mt-2"
           [ngClass]="{'offset-lg-2 col-lg-8': opcion === 'conservar', ' col-lg-5': opcion === 'cambiar'}">
         </div>
       </div>

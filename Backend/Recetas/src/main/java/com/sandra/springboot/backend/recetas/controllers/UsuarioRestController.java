@@ -146,7 +146,7 @@ public class UsuarioRestController {
 		// Si llegamos aquí es que el usuario que queremos modificar SI existe
 		try {
 			usuarioActual.setUsuario(usuario.getUsuario());
-			usuarioActual.setCorreo(usuario.getCorreo());
+			usuarioActual.setCorreo(usuario.getCorreo().toLowerCase());
 			usuarioActual.setPassword(usuario.getPassword());
 			if(usuario.getImagen()!=null) {
 				if (usuarioActual.getImagen()!=null) imageUtils.deleteImage("public", usuarioActual.getImagen());

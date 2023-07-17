@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { IUser } from '../interfaces/i-user';
 import { UsersService } from '../services/users.service';
 import { AuthService } from '../services/auth.service';
-import { ILogin } from '../interfaces/i-login';
 import jwtDecode from 'jwt-decode';
 
 @Component({
@@ -12,7 +11,19 @@ import jwtDecode from 'jwt-decode';
 })
 export class UserAddComponent implements OnInit {
   newPassword = '';
-  newUser!:IUser;
+  newUser:IUser = {
+    id: 0,
+    usuario: '',
+    correo: '',
+    password: '',
+    imagen: null,
+    datosUsuario: {
+      nombre: '',
+      apellido: '',
+      telefono: ''
+    },
+    recetas: []
+  };
   errores:string[] = [];
   usuarioExistente = false;
   correoExistente = false;
@@ -52,22 +63,17 @@ export class UserAddComponent implements OnInit {
     if (newUser.datosUsuario?.telefono == "") newUser.datosUsuario.telefono = null;
     this.authService.addUser(newUser).subscribe({
       next:()=>{
-        const userLogin:ILogin = {
-          usuario: newUser.usuario,
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          password: newUser.password!
-        };
-        this.authService.login(userLogin).subscribe({
-          next:token=>{
-            const tokenDecoded:{id:number} = jwtDecode(token);
-            this.usersService.getUser(tokenDecoded.id).subscribe(u=>this.authService.setData(token, u));
-          }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        this.authService.login({usuario: newUser.usuario, password: newUser.password!
+        }).subscribe({
+          next:token=>this.usersService.getUser(jwtDecode<{id:number}>(token).id).subscribe(u=>this.authService.setData(token, u))
         })
       },
       error:e=>{
+        console.log(e.error.error);
         this.errores = (e.error.errores != undefined) ? e.error.errores : [];
-        this.usuarioExistente = (e.error.error != undefined) ? e.error.error.includes("usuario_unique") : false;
-        this.correoExistente = (e.error.error != undefined) ? e.error.error.includes("correo_unique") : false;
+        this.usuarioExistente = (e.error.error != undefined) ? e.error.error.includes("(usuario)") : false;
+        this.correoExistente = (e.error.error != undefined) ? e.error.error.includes("(correo)") : false;
       }
     });
   }

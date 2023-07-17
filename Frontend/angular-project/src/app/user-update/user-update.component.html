@@ -3,32 +3,32 @@
     <h1 class="display-5 text-warning text-center fw-bold mt-5">Actualiza tu cuenta</h1>
     <form (ngSubmit)="updateUser(userUpdate, fileImage)" #form="ngForm">
       <div class="row g-0">
-        <div class="form-group form-floating my-1 offset-md-1 col-md-4">
+        <div class="form-group form-floating w-100 my-1 offset-md-1 col-md-4">
           <input type="text" class="form-control" autocomplete="off" name="nombre" [ngClass]="{'is-invalid': buscarErrores('nombre') !== -1,
           'is-valid': errores.length && buscarErrores('nombre') === -1}" placeholder="Nombre" [(ngModel)]="userUpdate.datosUsuario!.nombre" required>
           <div class="invalid-feedback">{{errores[buscarErrores('nombre')]}}</div>
           <label>Nombre<span class="text-danger">*</span></label>
         </div>
-        <div class="form-group form-floating my-1 offset-md-2 col-md-4">
+        <div class="form-group form-floating w-100 my-1 offset-md-2 col-md-4">
           <input type="text" class="form-control" autocomplete="off" name="apellido" [ngClass]="{'is-invalid': buscarErrores('apellido') !== -1,
           'is-valid': errores.length && buscarErrores('apellido') === -1}" placeholder="Apellido" [(ngModel)]="userUpdate.datosUsuario!.apellido">
           <div class="invalid-feedback">{{errores[buscarErrores('apellido')]}}</div>
           <label>Apellido</label>
         </div>
-        <div class="form-group form-floating my-1 offset-md-1 col-md-4">
+        <div class="form-group form-floating w-100 my-1 offset-md-1 col-md-4">
           <input type="text" class="form-control" autocomplete="off" name="teléfono" [ngClass]="{'is-invalid': buscarErrores('teléfono') !== -1,
           'is-valid': errores.length && buscarErrores('teléfono') === -1}" placeholder="Teléfono" [(ngModel)]="userUpdate.datosUsuario!.telefono">
           <div class="invalid-feedback">{{errores[buscarErrores('teléfono')]}}</div>
           <label>Teléfono</label>
         </div>
-        <div class="form-group form-floating my-1 offset-md-2 col-md-4">
+        <div class="form-group form-floating w-100 my-1 offset-md-2 col-md-4">
           <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('usuario') !== -1 || usuarioExistente,
           'is-valid': errores.length && buscarErrores('usuario') === -1 && !usuarioExistente}" name="usuario" placeholder="Usuario" [(ngModel)]="userUpdate.usuario" required>
           <div class="invalid-feedback" *ngIf="!usuarioExistente, else usuarioRepetido">{{errores[buscarErrores('usuario')]}}</div>
           <ng-template #usuarioRepetido><div class="invalid-feedback">Este usuario ya existe</div></ng-template>
           <label>Usuario<span class="text-danger">*</span></label>
         </div>
-        <div class="form-group form-floating my-1 offset-md-1 col-md-4">
+        <div class="form-group form-floating w-100 my-1 offset-md-1 col-md-4">
           <input type="email" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('correo') !== -1 || correoExistente,
           'is-valid': errores.length && buscarErrores('correo') === -1 && !correoExistente}" name="correo" placeholder="Correo electrónico" [(ngModel)]="userUpdate.correo" required>
           <div class="invalid-feedback" *ngIf="!correoExistente, else correoRepetido">{{errores[buscarErrores('correo')]}}</div>
@@ -36,7 +36,7 @@
           <label>Correo electrónico<span class="text-danger">*</span></label>
         </div>
 
-        <div class="form-group form-floating my-1 offset-md-2 col-md-4">
+        <div class="form-group form-floating w-100 my-1 offset-md-2 col-md-4">
           <input type="password" class="form-control" [ngClass]="{'is-invalid': passwordIncorrecto}"
           name="password" placeholder="Contraseña" [(ngModel)]="password" required>
           <div class="invalid-feedback">Contraseña incorrecta</div>
@@ -62,7 +62,7 @@
             Actualiza tus datos para que el cambio se haga efectivo.
           </div>
         </div>
-        <img *ngIf="userUpdate.imagen" [src]="userUpdate.imagen" alt="" class="mt-2 img-thumbnail rounded-circle offset-md-1 col-md-2">
+        <img *ngIf="userUpdate.imagen" [src]="userUpdate.imagen" alt="" class="mt-2 object-fit-cover rounded-circle offset-md-1 col-md-2">
       </div>
       <div class="row g-0 mt-4 mb-2 align-items-center" id="alertUpdate">
         <div class="text-danger fw-light offset-md-1 mb-3 col-md-10">

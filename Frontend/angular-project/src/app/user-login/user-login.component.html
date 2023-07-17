@@ -1,17 +1,17 @@
 <div class="row g-0">
-  <div class="d-none d-md-block col-md-6 p-0" id="imagen">
-    <img src="../../assets/sanji.png" alt="Registro" class="img-fluid">
+  <div class="d-none d-md-block col-md-6 p-0">
+    <img src="../../assets/sanji.png" alt="Registro" class="object-fit-cover w-100" [ngStyle]="{'height':'calc(100vh - 76px)'}">
   </div>
-  <div class="col-md-6" id="centrar">
+  <div class="col-md-6 my-auto">
     <div class="h1 text-primary fw-bold text-center my-4">Bienvenido de nuevo</div>
     <form (ngSubmit)="login()" #form="ngForm">
       <div class="row g-0">
-        <div class="form-group form-floating my-1 offset-md-3 col-md-6">
+        <div class="form-group form-floating w-100 my-1 offset-md-3 col-md-6">
           <input type="text" class="form-control" autocomplete="off" name="usuario"
           placeholder="Usuario" [(ngModel)]="userLogin.usuario" required>
           <label>Usuario</label>
         </div>
-        <div class="form-group form-floating my-1 offset-md-3 col-md-6">
+        <div class="form-group form-floating w-100 my-1 offset-md-3 col-md-6">
           <input type="password" class="form-control" name="password"
           placeholder="Contraseña" [(ngModel)]="userLogin.password" required>
           <label>Contraseña</label>

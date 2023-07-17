@@ -41,7 +41,7 @@
           <label for="image">Imagen<span class="text-danger">*</span>:</label>
           <input type="file" class="form-control" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
         </div>
-        <img *ngIf="newRepice.imagen" [src]="newRepice.imagen" alt="" class="bg-info img-thumbnail col-lg-5 mt-2">
+        <img *ngIf="newRepice.imagen" [src]="newRepice.imagen" alt="" class="col-lg-5 mt-2">
       </div>
       <div class="row g-0 my-2 align-items-center" id="alertAdd">
         <div class="text-danger fw-light col-md-6">

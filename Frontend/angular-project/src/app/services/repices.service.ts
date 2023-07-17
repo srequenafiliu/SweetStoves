@@ -19,22 +19,12 @@ export class RepicesService {
     );
   }
 
-  getRepice(idReceta:number):Observable<IRepice> {
-    return this.http.get<IRepice>(this.repiceURL+'/'+idReceta).pipe(response=>response);
-  }
+  getRepice = (idReceta:number):Observable<IRepice> => this.http.get<IRepice>(this.repiceURL+'/'+idReceta).pipe(response=>response);
 
-  addRepice(newRepice:IRepice):Observable<IRepice> {
-    return this.http.post<{receta:IRepice, mensaje:string, error?:string}>(this.repiceURL, newRepice)
-    .pipe(map(response => response.receta));
-  }
+  addRepice = (newRepice:IRepice):Observable<IRepice> => this.http.post<{receta:IRepice, mensaje:string, error?:string}>(this.repiceURL, newRepice).pipe(map(response => response.receta));
 
-  updateRepice(repice:IRepice):Observable<IRepice>{
-    return this.http.put<{receta:IRepice, mensaje:string, error?:string}>(this.repiceURL+'/'+repice.id, repice).pipe(
-      map(response=>response.receta)
-    )
-  }
+  updateRepice = (repice:IRepice):Observable<IRepice> => this.http.put<{receta:IRepice, mensaje:string, error?:string}>(this.repiceURL+'/'+repice.id, repice).pipe(map(response=>response.receta))
 
-  deleteRepice(idReceta:number):Observable<string> {
-    return this.http.delete<{mensaje:string}>(this.repiceURL+"/"+idReceta).pipe(map(response =>response.mensaje));
-  }
+  deleteRepice = (idReceta:number):Observable<string> => this.http.delete<{mensaje:string}>(this.repiceURL+"/"+idReceta).pipe(map(response =>response.mensaje));
+
 }

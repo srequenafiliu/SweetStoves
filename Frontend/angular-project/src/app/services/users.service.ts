@@ -17,16 +17,10 @@ export class UsersService {
     );
   }
 
-  getUser(idUsuario:number):Observable<IUser> {
-    return this.http.get<IUser>(this.userURL+'/'+idUsuario);
-  }
+  getUser = (idUsuario:number):Observable<IUser> => this.http.get<IUser>(this.userURL+'/'+idUsuario);
 
-  updateUser(user:IUser):Observable<IUser>{
-    return this.http.put<{usuario:IUser, mensaje:string, error?:string}>(this.userURL+'/'+user.id, user).pipe(
-      map(response=>response.usuario)
-    )
-  }
-  deleteUser(idUsuario:number):Observable<string> {
-    return this.http.delete<{mensaje:string}>(this.userURL+"/"+idUsuario).pipe(map(response =>response.mensaje));
-  }
+  updateUser = (user:IUser):Observable<IUser> => this.http.put<{usuario:IUser, mensaje:string, error?:string}>(this.userURL+'/'+user.id, user).pipe(map(response=>response.usuario))
+
+  deleteUser = (idUsuario:number):Observable<string> => this.http.delete<{mensaje:string}>(this.userURL+"/"+idUsuario).pipe(map(response =>response.mensaje));
+
 }

@@ -74,6 +74,7 @@ public class AuthRestController {
 				usuario.setImagen(ruta);
 			}
 			usuario.getDatosUsuario().setUsuario(usuario);
+			usuario.setCorreo(usuario.getCorreo().toLowerCase());
 			usuarioNew = usuarioService.save(usuario);
 			if(usuario.getImagen()!=null)
 				usuarioNew.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + usuarioNew.getImagen());
