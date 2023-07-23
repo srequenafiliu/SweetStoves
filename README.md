@@ -112,7 +112,7 @@ Si el usuario pulsa el botón _Iniciar sesión_ y al menos uno de los datos no e
 Cuando el usuario ha iniciado sesión, en la barra de navegación desaparecen los enlaces a los menús de login y registro. En su lugar, aparecerá la foto de perfil del usuario o la primera letra de su usuario en caso de no haber guardado foto.
 
 <p align="center">
-    <img src="images/16_link_usuario.png">
+    <img src="images/16_link_usuario.png" height="200">
 </p>
 
 En este menú, el usuario puede hacer varias tareas que puede elegir en el menú lateral que aparece cuando se pulsa el botón _¿Quieres hacer algo hoy?_
