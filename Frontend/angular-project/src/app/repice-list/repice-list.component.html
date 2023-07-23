@@ -1,6 +1,9 @@
 <div class="row g-0 py-4 d-flex align-items-center">
-  <div class="h1 offset-1 col-10 col-md-4 my-2 text-primary">Lista de recetas:</div>
-  <a type="button" class="btn btn-success offset-1 col-10 offset-md-0 col-md-3 offset-lg-2 col-lg-2 me-md-2" [routerLink]="['.']" [queryParams]="getQueryParams(1, 'id', 'asc', nombre, tipo, necesidades, dificultad)">Reestablecer orden</a>
+  <div class="h1 offset-1 col-10 col-md-4 col-lg-6 my-2"
+  [ngClass]="{'display-5 text-secondary fw-bold': url.includes('/perfil-usuario'), 'text-primary': !url.includes('/perfil-usuario')}">
+  Lista de <span *ngIf="url.includes('/perfil-usuario')"> tus </span> recetas:
+</div>
+  <a type="button" class="btn btn-success offset-1 col-10 offset-md-0 col-md-3 col-lg-2 me-md-2" [routerLink]="['.']" [queryParams]="getQueryParams(1, 'id', 'asc', nombre, tipo, necesidades, dificultad)">Reestablecer orden</a>
   <div class="btn-group dropdown offset-1 col-10 offset-md-0 col-md-3 col-lg-2">
     <button type="button" class="btn btn-secondary">
       <span class="icon text-white-50"><i class="fa-solid fa-sort"></i></span>
@@ -19,10 +22,10 @@
   </div>
 </div>
 <div class="row g-0">
-  <div class="offset-1 col-10 col-lg-3 mb-5 bg-success rounded p-3">
+  <div class="offset-1 col-10 col-lg-3 mb-5 bg-success rounded-3 p-3">
       <div class="h2 text-white"><i class="fa-solid fa-filter"></i> Filtros</div>
       <form class="form">
-        <div class="form-group row g-0 mb-2 bg-white bg-opacity-50 rounded p-3">
+        <div class="form-group row g-0 mb-2 bg-white bg-opacity-50 rounded-4 p-3">
           <label class="form-label h3">Tipo:&nbsp;</label>
           <div class="btn-group" role="group">
             <input type="radio" class="btn-check" name="btnradio" id="btnradio1" value="dulce" [(ngModel)]="tipo" (change)="filter(nombre, tipo, necesidades, dificultad)">
@@ -31,14 +34,14 @@
             <label class="btn btn-info" for="btnradio2">Salado</label>
           </div>
         </div>
-        <div class="form-group row g-0 mb-2 bg-white bg-opacity-50 rounded p-3">
+        <div class="form-group row g-0 mb-2 bg-white bg-opacity-50 rounded-4 p-3">
           <label class="form-label h3">Necesidades especiales:&nbsp;</label>
           <div class="form-check form-switch" *ngFor="let item of needs">
             <input class="form-check-input" type="checkbox" name="needs" [value]="item.value" (change)="getNecesidades()" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}">
             <label class="form-check-label" for="needs">{{item.title}}</label>
           </div>
         </div>
-        <div class="form-group mb-2 bg-white bg-opacity-50 rounded p-3">
+        <div class="form-group mb-2 bg-white bg-opacity-50 rounded-4 p-3">
           <label class="form-label h3">Dificultad:&nbsp;</label><br>
           <span *ngFor="let star of [1, 2, 3, 4 , 5]" (click)="filter(nombre, tipo, necesidades, star)"
           class="fa-star" [ngClass]="{'fas':star<=dificultad, 'far':star>dificultad}"></span>
@@ -51,7 +54,7 @@
   </div>
   <div class="row g-0 col col-lg-8" *ngIf="repices && repices.length; else noRepices">
     <repice-item class="offset-1 col-10 col-md-5 mt-4" *ngFor="let repice of repices, even as isEven"
-    [repice]="repice" [ngClass]="{'me-lg-1':isEven, 'offset-md-0 ms-lg-1': !isEven}"></repice-item>
+    [repice]="repice" [ngClass]="{'me-lg-1':isEven, 'offset-md-0 ms-lg-1': !isEven}" (deleteRepice)="borrarReceta()"></repice-item>
     <div class="offset-md-4 col-md-7 offset-lg-7 col-lg-4 d-flex flex-row mt-4 align-items-center justify-content-center justify-content-md-end">
       <span>Mostrar&nbsp;</span>
       <select class="form-select w-25" id="size" [(ngModel)]="size" (change)="getRecetas()">

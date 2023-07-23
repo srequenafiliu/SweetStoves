@@ -13,6 +13,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { RepicesService } from './services/repices.service';
 import { BaseUrlInterceptor } from './interceptores/base-url.interceptor';
 import { UserListComponent } from './user-list/user-list.component';
+import { NeedsComponent } from './needs/needs.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { UserAddComponent } from './user-add/user-add.component';
 import { UserLoginComponent } from './user-login/user-login.component';
@@ -22,10 +23,10 @@ import { RepiceAddComponent } from './repice-add/repice-add.component';
 import { UserUpdateComponent } from './user-update/user-update.component';
 import { UserPasswordComponent } from './user-password/user-password.component';
 import { RepiceUpdateComponent } from './repice-update/repice-update.component';
+import { UserDeleteComponent } from './user-delete/user-delete.component';
 
 import localeEs from '@angular/common/locales/es';
 import {registerLocaleData} from '@angular/common';
-import { NeedsComponent } from './needs/needs.component';
 registerLocaleData(localeEs, 'es');
 
 @NgModule({
@@ -44,7 +45,8 @@ registerLocaleData(localeEs, 'es');
     UserUpdateComponent,
     UserPasswordComponent,
     RepiceUpdateComponent,
-    NeedsComponent
+    NeedsComponent,
+    UserDeleteComponent
   ],
   imports: [
     BrowserModule,

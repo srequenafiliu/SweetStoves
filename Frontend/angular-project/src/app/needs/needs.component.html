@@ -6,7 +6,7 @@
       Desde SweetStoves hemos creado este apartado para ayudar a nuestros usuarios a cambiar los ingredientes de las
       recetas que les impiden disfrutarlas al máximo.
     </div>
-    <div class="offset-md-3 col-md-6 offset-lg-0 col-lg-4 border rounded bg-white mt-3 mt-lg-0 pt-3 ps-3">
+    <div class="offset-md-3 col-md-6 offset-lg-0 col-lg-4 border rounded-4 bg-white mt-3 mt-lg-0 pt-3 ps-3">
       <div class="h5">Contenido</div>
       <ol>
         <li *ngFor="let item of needs"><a [routerLink]="['.']" [fragment]="item.fragment">Para {{item.titulo}}...</a></li>

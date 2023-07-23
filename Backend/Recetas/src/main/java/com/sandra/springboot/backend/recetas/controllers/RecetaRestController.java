@@ -34,6 +34,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.sandra.springboot.backend.recetas.models.entity.Receta;
 import com.sandra.springboot.backend.recetas.models.entity.Usuario;
 import com.sandra.springboot.backend.recetas.models.services.RecetaService;
+import com.sandra.springboot.backend.recetas.models.services.UsuarioService;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
 
 import jakarta.validation.Valid;
@@ -48,6 +49,9 @@ public class RecetaRestController {
 	@Autowired
 	private RecetaService recetaService;
 	
+	@Autowired
+	private UsuarioService usuarioService;
+	
 	@GetMapping("")
 	public ResponseEntity<?> index(@RequestParam(name="pag", defaultValue = "1") Integer pag,
 			@RequestParam(name="size", defaultValue = "4") Integer size,
@@ -56,12 +60,13 @@ public class RecetaRestController {
 			@RequestParam(name="nombre", defaultValue="") String name,
 			@RequestParam(name="tipo", defaultValue = "") String tipo,
 			@RequestParam(name="necesidades", defaultValue = "") String needs,
-			@RequestParam(name="dificultad", required=false) Integer dificultad) {
+			@RequestParam(name="dificultad", required=false) Integer dificultad,
+			@RequestParam(name="id_usuario", defaultValue = "0") Integer id_usuario) {
 		Map<String,Object> response = new TreeMap<String, Object>();
 		try {
 			List<Integer> range = new ArrayList<>((dificultad==null) ? Arrays.asList(1,2,3,4,5) : Arrays.asList(dificultad));
 			Pageable pageable = PageRequest.of(pag-1, size, sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending());
-			Page<Receta> page = recetaService.findAllByFilters(name, tipo, needs, range, pageable);
+			Page<Receta> page = recetaService.findAllByFilters(name, tipo, needs, range, usuarioService.findById(id_usuario), pageable);
 			response.put("previous", (page.isFirst()) ? null : ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("pag", pag-1).toUriString());
 			response.put("next", (page.isLast()) ? null : ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("pag", pag+1).toUriString());
 			response.put("count", page.getTotalElements());

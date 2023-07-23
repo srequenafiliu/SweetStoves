@@ -2,23 +2,23 @@
   <div class="d-none d-md-block col-md-4 col-lg-6 p-0">
     <img src="../../assets/sanji.png" alt="Registro" class="object-fit-cover w-100" [ngStyle]="{'height':'calc(100vh - 76px)'}">
   </div>
-  <div class="offset-1 col-10 col-md-6 col-lg-4 my-auto">
+  <div class="row g-0 offset-1 col-10 col-md-6 col-lg-4 my-auto">
     <div class="h1 text-primary fw-bold text-center my-4">Bienvenido de nuevo</div>
     <form (ngSubmit)="login()" #form="ngForm">
       <div>
-        <div class="form-group form-floating my-1">
+        <div class="offset-md-1 col-md-10 form-group form-floating my-1">
           <input type="text" class="form-control" autocomplete="off" name="usuario"
           placeholder="Usuario" [(ngModel)]="userLogin.usuario" required>
           <label>Usuario</label>
         </div>
-        <div class="form-group form-floating my-1">
+        <div class="offset-md-1 col-md-10 form-group form-floating my-1">
           <input type="password" class="form-control" name="password"
           placeholder="Contraseña" [(ngModel)]="userLogin.password" required>
           <label>Contraseña</label>
         </div>
       </div>
-      <div class="row g-0 my-2 align-items-center" id="alertLogin">
-        <div class="offset-md-3 col-md-6 text-center mt-4">
+      <div class="row g-0 mt-4 mb-2 align-items-center" id="alertLogin">
+        <div class="offset-md-3 col-md-6 text-center">
           <button type="submit" class="btn btn-primary"
           [disabled]="form.invalid">Iniciar sesión</button>
         </div>

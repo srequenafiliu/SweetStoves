@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IRepice } from '../interfaces/i-repice';
 import { RepicesService } from '../services/repices.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'repice-list',
@@ -18,6 +19,8 @@ export class RepiceListComponent {
   tipo!:string;
   necesidades!:string;
   dificultad!:number;
+  id_usuario!:number;
+  url!:string;
   count!:number;
   repices!:IRepice[];
   pages!:(string|number)[];
@@ -27,10 +30,12 @@ export class RepiceListComponent {
     {value:'v', title:'Vegana', checked:false}
   ];
 
-  constructor(private repicesService:RepicesService, private route:ActivatedRoute, private router:Router) {
+  constructor(private repicesService:RepicesService, private authService:AuthService,
+    private route:ActivatedRoute, private router:Router) {
     this.innerWidth = window.innerWidth;
     this.size = (window.innerWidth>540) ? 4 : 2;
     this.route.queryParams.subscribe(params => {
+      this.url = window.location.pathname;
       this.pag = (+params["pag"]) ? +params["pag"] : 1;
       this.sortField = (params["sortField"]) ? params["sortField"] : 'id';
       this.sortDir = (params["sortDir"]) ? params["sortDir"] : 'asc';
@@ -39,12 +44,13 @@ export class RepiceListComponent {
       this.necesidades = (params["necesidades"]) ? params["necesidades"] : '';
       for (const n of this.needs) n.checked = this.necesidades.includes(n.value);
       this.dificultad = (+params["dificultad"]) ? +params["dificultad"] : 0;
+      this.id_usuario = this.url.includes('/perfil-usuario') ? authService.getUser().id : 0;
       this.getRecetas();
     })
   }
 
   getRecetas() {
-    this.repicesService.getRepices(this.pag, this.size, this.sortField, this.sortDir, this.nombre, this.tipo, this.necesidades, this.dificultad).subscribe({
+    this.repicesService.getRepices(this.pag, this.size, this.sortField, this.sortDir, this.nombre, this.tipo, this.necesidades, this.dificultad, this.id_usuario).subscribe({
       next: r=>{
         this.count = r.count;
         this.repices=r.result;
@@ -71,12 +77,17 @@ export class RepiceListComponent {
     'dificultad': (dificultad !== 0) ? dificultad : null}
   }
 
-  filter = (nombre:string, tipo:string, necesidades:string, dificultad:number) => this.router.navigate(["/recetas"], {queryParams: this.getQueryParams(1, this.sortField, this.sortDir, nombre, tipo, necesidades, dificultad)});
+  filter = (nombre:string, tipo:string, necesidades:string, dificultad:number) => this.router.navigate([this.url], {queryParams: this.getQueryParams(1, this.sortField, this.sortDir, nombre, tipo, necesidades, dificultad)});
 
   getNecesidades() {
     this.necesidades = "";
     for (const n of this.needs) this.necesidades += (n.checked) ? n.value : "";
     this.filter(this.nombre, this.tipo, this.necesidades, this.dificultad);
+  }
+
+  borrarReceta() {
+    if (this.pag != 1 && this.repices.length == 1) this.filter(this.nombre, this.tipo, this.necesidades, this.dificultad);
+    this.getRecetas();
   }
 
 }

@@ -7,7 +7,7 @@
       'far':star>repice.dificultad, 'text-danger':repice.tipo === 'Dulce', 'text-info':repice.tipo !== 'Dulce'}"></span>
     </div>
     <div class="d-flex justify-content-evenly" *ngIf="repice.necesidades.length, else noNeeds">
-      <span class="h5 bg-warning shadow-sm p-3 rounded" *ngFor="let need of repice.necesidades">{{need}}</span>
+      <span class="h5 bg-warning shadow-sm p-3 rounded-pill" *ngFor="let need of repice.necesidades">{{need}}</span>
     </div>
     <ng-template #noNeeds>
       <div class="text-dark px-5 my-3">

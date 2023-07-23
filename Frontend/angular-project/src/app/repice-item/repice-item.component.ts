@@ -12,15 +12,15 @@ import { IUser } from '../interfaces/i-user';
 })
 export class RepiceItemComponent {
   @Input() repice!:IRepice;
-  @Output() deleteRepice = new EventEmitter<IRepice>();
+  @Output() deleteRepice = new EventEmitter();
   constructor(private repicesService:RepicesService, private router : Router, private authService:AuthService) {}
 
-  cuentaUsuario = ():boolean => !this.router.url.includes('/recetas') &&  this.authService.getUser().usuario === this.repice.usuario.usuario;
+  cuentaUsuario = ():boolean => this.router.url.includes('/perfil-usuario') && this.authService.getUser().usuario === this.repice.usuario.usuario;
 
   borrarReceta(){
     this.repicesService.deleteRepice(this.repice.id).subscribe({
       next:()=>{
-        this.deleteRepice.emit(this.repice);
+        this.deleteRepice.emit();
         const usuario:IUser = this.authService.getUser();
         usuario.recetas = usuario.recetas?.filter(r=>r.id!=this.repice.id);
         usuario.recetas_seguidas = usuario.recetas_seguidas?.filter(r=>r.id!=this.repice.id);

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { IRepice } from '../interfaces/i-repice';
 import { IUser } from '../interfaces/i-user';
-import { RepicesService } from '../services/repices.service';
 import { UsersService } from '../services/users.service';
 import { AuthService } from '../services/auth.service';
 
@@ -13,35 +12,29 @@ import { AuthService } from '../services/auth.service';
 })
 export class UserInfoComponent implements OnInit {
   user!:IUser;
-  recetas_seguidas:IRepice[] = [];
-  mostrar = "lista";
+  opciones:{titulo:string, color:string, link:string, texto:string}[] = [
+    {titulo:'Tu lista de recetas', color:'btn-outline-secondary', link:'recetas', texto:'Comprueba las recetas que has creado y seguido'},
+    {titulo:'Nueva receta', color:'btn-outline-success', link:'nueva-receta', texto:'Crea una nueva receta que se vinculará a tu cuenta'},
+    {titulo:'Actualiza tus recetas', color:'btn-outline-info', link:'actualizar-receta', texto:'Actualiza cualquiera de tus recetas'},
+    {titulo:'Actualiza tu cuenta', color:'btn-outline-warning', link:'actualizar-cuenta', texto:'Actualiza los datos de tu cuenta excepto tu contraseña'},
+    {titulo:'Cambia tu contraseña', color:'btn-outline-dark', link:'actualizar-password', texto:'Cambia tu contraseña para hacer tu cuenta más segura'},
+    {titulo:'Borra tu cuenta', color:'btn-outline-danger', link:'borrar-cuenta', texto:'Puedes borrar tu cuenta sin compromiso, pero te echaremos de menos'}
+  ];
 
-  constructor(private routeDirecto: Router, private usersService: UsersService,
-    private repicesService: RepicesService, private authService:AuthService) {}
+  constructor(private router: Router, private usersService: UsersService,
+    private authService:AuthService) {}
 
   ngOnInit() {
     this.user = this.authService.getUser();
-    this.user.recetas_seguidas?.map(receta=>receta.id).forEach(r=>this.repicesService.getRepice(r).subscribe({
-      next:u => this.recetas_seguidas.push(u)
-    }))
   }
-  addNewRepice = (recetaNueva:IRepice) => this.recetas_seguidas.push(recetaNueva);
 
-  updateRepice(recetaAct:IRepice){
-    for (const i in this.recetas_seguidas) if(this.recetas_seguidas[i].id == recetaAct.id) this.recetas_seguidas.splice(+i, 1, recetaAct);
-  }
+  addNewRepice = (recetaNueva:IRepice) => console.log(recetaNueva);
+
+  updateRepice = (recetaAct:IRepice) => console.log(recetaAct);
 
   modificarUsuario = (updateUser:IUser) => this.user = updateUser;
 
-  deleteUsuario(){
-    this.usersService.deleteUser(this.user.id).subscribe({
-      next:()=>this.logout()
-    })
-  }
-
-  borrarReceta = (receta:IRepice) => this.recetas_seguidas = this.recetas_seguidas.filter(r=>r!=receta)
-
   logout(){
-    if (this.authService.logout()) this.routeDirecto.navigate(['/inicio'])
+    if (this.authService.logout()) this.router.navigate(['/inicio'])
   }
 }

@@ -10,10 +10,11 @@ export class RepicesService {
   private repiceURL="recetas";
   constructor(private http:HttpClient) { }
 
-  getRepices(pag:number, size:number, sortField:string, sortDir:string, nombre:string, tipo:string, necesidades:string, dificultad:number):Observable<{count:number, result:IRepice[]}> {
+  getRepices(pag:number, size:number, sortField:string, sortDir:string, nombre:string, tipo:string, necesidades:string, dificultad:number, id_usuario:number):Observable<{count:number, result:IRepice[]}> {
     let params:HttpParams = new HttpParams().set("pag", pag).set("size", size).set("sortField", sortField)
     .set("sortDir", sortDir).set("nombre", nombre).set("tipo", tipo).set("necesidades", necesidades);
     params = (dificultad != 0) ? params.set("dificultad", dificultad) : params;
+    params = (id_usuario != 0) ? params.set("id_usuario", id_usuario) : params;
     return this.http.get<{count:number, result:IRepice[]}>(this.repiceURL, {params}).pipe(
       catchError((resp: HttpErrorResponse) => throwError( () => 'Error '+resp.status+': '+resp.statusText))
     );

@@ -5,6 +5,7 @@ import { RepicesService } from '../services/repices.service';
 import { Location } from '@angular/common';
 import { IUser } from '../interfaces/i-user';
 import { AuthService } from '../services/auth.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'repice-detail',
@@ -18,12 +19,13 @@ export class RepiceDetailComponent implements OnInit {
   guardado?:boolean;
 
   constructor(private location: Location, private repicesService: RepicesService,
-    private authService:AuthService, private route: ActivatedRoute) {}
+    private authService:AuthService, private route: ActivatedRoute, private titleService: Title) {}
 
   ngOnInit() {
     this.repicesService.getRepice(+this.route.snapshot.params['id']).subscribe({
       next:p => {
         this.repice = p;
+        this.titleService.setTitle(this.titleService.getTitle()+" "+p.nombre)
         this.user = this.authService.getUser();
         this.receta_creada = this.user.recetas?.map(rec => rec.id).includes(p.id);
         this.guardado = this.user.recetas_seguidas?.map(rec => rec.id).includes(p.id);

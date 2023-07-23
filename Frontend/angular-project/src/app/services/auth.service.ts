@@ -55,7 +55,7 @@ export class AuthService {
   addAlert(id:string, correcto:boolean, texto:string, first:boolean){
     const div = document.getElementById(id);
     const alert = document.createElement("div");
-    alert.className = "alert alert-dismissible "+((correcto)?"alert-primary":"alert-danger")+" offset-md-5 col-md-7 fade show";
+    alert.className = "alert alert-dismissible "+(correcto?"alert-primary":"alert-info")+" offset-md-1 col-md-10 fade show"; // Retocar el tamaño cuando se arreglen las otras partes
     const icon = document.createElement("i");
     icon.className = "fa-solid fa-circle-"+((correcto)?"check":"xmark");
     const close = document.createElement("button");

@@ -5,7 +5,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarWeb">
-      <ul class="navbar-nav d-flex flex-row text-center order-lg-3 bg-light bg-opacity-25 rounded" *ngIf="!user, else cuentaUser">
+      <ul class="navbar-nav d-flex flex-row text-center order-lg-3 bg-light bg-opacity-25 rounded-4" *ngIf="!user, else cuentaUser">
         <li class="nav-item flex-fill" *ngFor="let item of navbar, last as isLast">
           <a class="nav-link" [ngClass]="{'border-start': isLast}" [routerLink]="[item.link]" [routerLinkActive]="['active']">
             <i [class]="'fas fa-'+item.icon"></i> {{item.titulo}}
@@ -15,7 +15,15 @@
       <ng-template #cuentaUser>
         <ul class="navbar-nav order-lg-3">
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/perfil-usuario']" [routerLinkActive]="['active']">{{user.usuario}}</a>
+            <a class="d-flex nav-link" [routerLink]="['/perfil-usuario']" [routerLinkActive]="['active']" [title]="user.usuario">
+              <img class="rounded-circle object-fit-cover" [src]="user.imagen" [alt]="user.usuario" *ngIf="user.imagen, else sinFoto">
+              <ng-template #sinFoto>
+                <div class="d-flex bg-secondary rounded-circle">
+                  <span class="h3 text-white fw-bold m-auto">{{user.usuario[0].toUpperCase()}}</span>
+                </div>
+              </ng-template>
+              <div class="d-lg-none my-auto ps-2">Perfil de {{user.usuario}}</div>
+            </a>
           </li>
         </ul>
       </ng-template>
