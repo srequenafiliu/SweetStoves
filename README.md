@@ -109,7 +109,7 @@ Si el usuario pulsa el botón _Iniciar sesión_ y al menos uno de los datos no e
  Solo cuando los datos sean válidos, la web le mandará a su menú de usuario. Si el usuario no está registrado, debajo de este botón está el link que redirecciona al menú de registro.
 
 ### Menú de usuario
-Cuando el usuario ha iniciado sesión, en la barra de navegación desaparecen los enlaces a los menús de login y registro. En su lugar, aparecerá la foto de perfil del usuario o la primera letra de su usuario en caso de no haber guardado foto.
+Cuando el usuario ha iniciado sesión, en la barra de navegación desaparecen los enlaces a los menús de login y registro. En su lugar, aparecerá la foto de perfil del usuario (como es el caso de _trafasan_) o la primera letra de su usuario en caso de no haber guardado foto (como es el caso de *darks13*).
 
 <p align="center">
     <img src="images/16_link_usuario.png" height="200">
