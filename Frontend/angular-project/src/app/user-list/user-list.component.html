@@ -51,17 +51,17 @@
       </div>
     </div>
   </ng-template>
-</div>
-<div class="d-flex justify-content-center" *ngIf="users && users.length">
-  <ul class="pagination" [ngClass]="{'pagination-lg':innerWidth>=576}">
-    <li class="page-item" [ngClass]="{'disabled': pag === 1}">
-      <a class="page-link" [routerLink]="['.']" [queryParams]="{'pag': (pag-1 !== 1) ? pag-1 : null}">&laquo;</a>
-    </li>
-    <li class="page-item" [ngClass]="{'active': pag === P}" *ngFor="let P of pages, let i=index">
-      <a class="page-link" [ngClass]="{'opacity-75': P === '...'}" [routerLink]="['.']" [queryParams]="{'pag': ((P!=='...' ? +P : +pages[i-1]+1) !== 1) ? P!=='...' ? +P : +pages[i-1]+1 : null}">{{P}}</a>
-    </li>
-    <li class="page-item" [ngClass]="{'disabled': pages[pages.length-1] === pag}">
-      <a class="page-link" [routerLink]="['.']" [queryParams]="{'pag': (pag+1 !== 1) ? pag+1 : null}">&raquo;</a>
-    </li>
-  </ul>
+  <div class="d-flex justify-content-center" *ngIf="users && users.length">
+    <ul class="pagination" [ngClass]="{'pagination-lg':innerWidth>=576}">
+      <li class="page-item" [ngClass]="{'disabled': pag === 1}">
+        <a class="page-link" [routerLink]="['.']" [queryParams]="{'pag': (pag-1 !== 1) ? pag-1 : null}">&laquo;</a>
+      </li>
+      <li class="page-item" [ngClass]="{'active': pag === P}" *ngFor="let P of pages, let i=index">
+        <a class="page-link" [ngClass]="{'opacity-75': P === '...'}" [routerLink]="['.']" [queryParams]="{'pag': ((P!=='...' ? +P : +pages[i-1]+1) !== 1) ? P!=='...' ? +P : +pages[i-1]+1 : null}">{{P}}</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': pages[pages.length-1] === pag}">
+        <a class="page-link" [routerLink]="['.']" [queryParams]="{'pag': (pag+1 !== 1) ? pag+1 : null}">&raquo;</a>
+      </li>
+    </ul>
+  </div>
 </div>

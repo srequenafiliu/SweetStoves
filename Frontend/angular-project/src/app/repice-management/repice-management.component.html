@@ -1,0 +1,101 @@
+<div class="row g-0">
+  <div class="offset-1 col-10">
+    <h1 [ngClass]="{'text-success': url.includes('nueva-receta'), 'text-info': !url.includes('nueva-receta')}"
+    class="display-5 text-center fw-bold mt-5">{{titulo}}</h1>
+    <div class="offset-lg-3 col-lg-6">
+      <select class="form-select form-select-lg my-3" [disabled]="user.recetas!.length === 0" [(ngModel)]="id_receta" (change)="getReceta()" *ngIf="url.includes('actualizar-receta')">
+        <option value="0" hidden *ngIf="user.recetas!.length, else sinRecetas">Selecciona una de tus recetas para actualizar sus datos</option>
+        <ng-template #sinRecetas><option value="0">No has guardado ninguna receta en SweetStoves</option></ng-template>
+        <option *ngFor="let receta of user.recetas" [value]="receta.id">{{receta.nombre}}</option>
+      </select>
+    </div>
+    <form (ngSubmit)="repiceManagement(receta, fileImage)" #form="ngForm" *ngIf="url.includes('nueva-receta') || id_receta !== 0, else noChoice">
+      <div class="row g-0">
+        <div class="col-md-5">
+          <div class="form-group form-floating my-3">
+            <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('nombre') !== -1,
+            'is-valid': errores.length && buscarErrores('nombre') === -1}" name="nombre" placeholder="Nombre" [(ngModel)]="receta.nombre" required>
+            <div class="invalid-feedback">{{errores[buscarErrores('nombre')]}}</div>
+            <label>Nombre<span class="text-danger">*</span></label>
+          </div>
+          <div class="row g-0">
+            <div class="form-group col-lg-6 my-lg-auto">
+              <label class="form-label">Tipo<span class="text-danger">*</span>:&nbsp;</label>
+              <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                <input type="radio" class="btn-check" name="addtype" id="addtypeD" value="Dulce" [(ngModel)]="receta.tipo" required>
+                <label class="btn btn-outline-danger" for="addtypeD">Dulce</label>
+                <input type="radio" class="btn-check" name="addtype" id="addtypeS" value="Salado" [(ngModel)]="receta.tipo">
+                <label class="btn btn-outline-info" for="addtypeS">Salado</label>
+              </div>
+            </div>
+            <div class="form-group col-lg-6 mt-3 my-lg-auto">
+              <label class="form-label my-0">Dificultad<span class="text-danger">*</span>:&nbsp;</label>
+              <span *ngFor="let star of [1, 2, 3, 4 , 5]" class="fa-star"
+              [ngClass]="{'fas':star<=receta.dificultad, 'far':star>receta.dificultad}"
+              (click)="setLevel(star)"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group offset-md-2 col-md-5 my-3">
+          <label class="form-label">Necesidades especiales:&nbsp;</label>
+          <div class="form-check form-switch" *ngFor="let item of checklist">
+            <input class="form-check-input" type="checkbox" [name]="item.id" [value]="item.value" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}">
+            <label class="form-check-label" [for]="item.id">{{item.value}}</label>
+          </div>
+        </div>
+        <div class="form-group col-md-5 my-md-3" [ngClass]="{'offset-md-2 my-3': isOdd}" *ngFor="let item of textareas, odd as isOdd">
+          <label for="exampleTextarea" class="form-label my-2">{{item.title}}<span class="text-danger">**:</span></label>
+          <textarea class="form-control" [name]="item.name" rows="3" [(ngModel)]="item.value" [placeholder]="item.ej" (input)="getArray(item.name, item.value)"
+          [ngClass]="{'is-invalid': buscarErrores(item.name) !==-1 , 'is-valid': errores.length && buscarErrores(item.name) === -1}" required></textarea>
+          <div class="invalid-feedback">{{errores[buscarErrores(item.name)]}}</div>
+        </div>
+        <div class="form-group mb-3" [ngClass]="{'offset-md-7 col-md-5': !receta.imagen, 'row g-0': receta.imagen}">
+          <div class="text-center my-auto" [ngClass]="{'col-md-6 col-lg-5': receta.imagen}" *ngIf="receta.imagen">
+            <img class="object-fit-cover" [src]="receta.imagen">
+          </div>
+          <div [ngClass]="{'row g-0 offset-md-1 col-md-5 offset-lg-2 col-lg-5': receta.imagen}">
+            <div class="mb-3 mt-md-0" [ngClass]="{'mt-3': receta.imagen}">
+              <h4 *ngIf="url.includes('actualizar-receta')">Opciones para la foto de la receta:</h4>
+              <div class="btn-group w-100" [ngClass]="{'mb-3': opcion === 'cambiar'}" role="group" *ngIf="url.includes('actualizar-receta')">
+                <input type="radio" class="btn-check" name="btnradio" id="repiceimg1" value="conservar" [(ngModel)]="opcion" (click)="fileImage.value = ''">
+                <label class="btn btn-outline-success" for="repiceimg1">Conservar</label>
+                <input type="radio" class="btn-check" name="btnradio" id="repiceimg2" value="cambiar" [(ngModel)]="opcion">
+                <label class="btn btn-outline-warning" for="repiceimg2">Cambiar</label>
+              </div>
+              <div [ngClass]="{'d-none': url.includes('actualizar-receta') && opcion === 'conservar'}">
+                <label for="image">Imagen<span class="text-danger">*</span>:</label>
+                <input type="file" class="form-control" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
+              </div>
+            </div>
+            <div [ngClass]="{'mt-auto': receta.imagen}" id="alertRepice">
+              <div class="text-danger fw-light my-3">
+                <div>*Campos obligatorios</div>
+                <div>**Estos datos serán separados según los párrafos que se escriban</div>
+              </div>
+              <div class="row g-0">
+                <input type="button" class="btn btn-secondary col-lg-5 mb-3 mb-lg-0" (click)="reset(fileImage)"
+                [value]="url.includes('actualizar-receta') ? 'Reestablecer datos' : 'Borrar datos'">
+                <input type="submit" class="btn btn-primary offset-lg-2 col-lg-5"
+                [disabled]="form.invalid || receta.dificultad === 0 || (url.includes('nueva-receta') && fileImage.value === '')"
+                [value]="url.includes('actualizar-receta') ? 'Actualizar receta' : 'Registrar receta'">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+    <ng-template #noChoice>
+      <div class="row g-0 my-4 text-muted align-items-center">
+        <img class="col-lg-5" src="../../assets/error.png" alt="Elige una receta">
+        <div class="col-lg-6 text-center">
+          <h3>Escoge una receta para actualizarla</h3>
+          <div class="fs-5">
+            Si no encuentras ninguna receta en la lista es porque no has creado o has borrado las recetas que creaste en SweetStoves.<br>
+            No te preocupes, siempre puedes guardar una <a [routerLink]="['/perfil-usuario', 'nueva-receta']">nueva receta</a> desde tu
+            perfil de usuario.
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

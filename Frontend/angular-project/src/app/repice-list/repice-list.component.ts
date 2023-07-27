@@ -11,16 +11,16 @@ import { AuthService } from '../services/auth.service';
 })
 export class RepiceListComponent {
   pag!:number;
-  size!:number;
-  innerWidth!:number;
+  innerWidth = window.innerWidth;
+  size = (this.innerWidth>540) ? 4 : 2;
   sortField!:string;
   sortDir!:string;
   nombre!:string;
   tipo!:string;
   necesidades!:string;
   dificultad!:number;
-  id_usuario!:number;
-  url!:string;
+  url = window.location.pathname;
+  id_usuario = this.url.includes('/perfil-usuario') ? this.authService.getUser().id : 0;
   count!:number;
   repices!:IRepice[];
   pages!:(string|number)[];
@@ -32,10 +32,7 @@ export class RepiceListComponent {
 
   constructor(private repicesService:RepicesService, private authService:AuthService,
     private route:ActivatedRoute, private router:Router) {
-    this.innerWidth = window.innerWidth;
-    this.size = (window.innerWidth>540) ? 4 : 2;
     this.route.queryParams.subscribe(params => {
-      this.url = window.location.pathname;
       this.pag = (+params["pag"]) ? +params["pag"] : 1;
       this.sortField = (params["sortField"]) ? params["sortField"] : 'id';
       this.sortDir = (params["sortDir"]) ? params["sortDir"] : 'asc';
@@ -44,7 +41,6 @@ export class RepiceListComponent {
       this.necesidades = (params["necesidades"]) ? params["necesidades"] : '';
       for (const n of this.needs) n.checked = this.necesidades.includes(n.value);
       this.dificultad = (+params["dificultad"]) ? +params["dificultad"] : 0;
-      this.id_usuario = this.url.includes('/perfil-usuario') ? authService.getUser().id : 0;
       this.getRecetas();
     })
   }

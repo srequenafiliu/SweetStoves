@@ -147,7 +147,7 @@ public class AuthRestController {
                 .withIssuer("srequenafiliu")
                 .withClaim("id", user.getId())
                 .withIssuedAt(new Date(System.currentTimeMillis()))
-                .withExpiresAt(new Date(System.currentTimeMillis() + (24*3600*1000))) // Caduca en un día
+                // .withExpiresAt(new Date(System.currentTimeMillis() + (24*3600*1000))) Caducaría en un día
                 .sign(algorithm);
         return token;
     }

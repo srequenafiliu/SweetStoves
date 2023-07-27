@@ -41,6 +41,7 @@ public class UsuarioService {
 				// borrado del fichero de la imagen
 				imageUtils.deleteImage("public", usuarioActual.getImagen());
 			}
+			usuarioActual.getRecetas().forEach(r->{if(r.getImagen() != null) imageUtils.deleteImage("public", r.getImagen());});
 		usuario.deleteById(id);
 		}
 	}

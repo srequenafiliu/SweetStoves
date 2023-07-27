@@ -120,47 +120,65 @@ En este menú, el usuario puede hacer varias tareas que puede elegir en el menú
 <img src="images/17_usuario_opciones.png">
 
 Cuando se mantiene el cursor en uno de los botones, aparece una ventana con una pequeña explicación de la opción y, si se pulsa, debajo de los botones _¿Quieres hacer algo hoy?_ y _Cerrar sesión_ aparece el componente seleccionado:
-- Lista de recetas: Componente seleccionado por defecto. Esta lista de recetas se diferencia a la lista general en dos detalles:
+
+#### Lista de recetas
+Componente seleccionado por defecto. Esta lista de recetas se diferencia a la lista general en dos detalles:
     1. Solo aparecen las recetas que ha guardado el usuario en cuestión.
     2. Aparece el botón “Borrar receta” en las recetas que ha creado el usuario. Si se borra la receta, desaparecerá del blog.
 
 <img src="images/18_usuario_recetas.png">
 
-- Nueva receta: Este formulario solo está disponible para los usuarios de SweetStoves, ya que la receta debe estar vinculada a un usuario. Al igual que los otros formularios, el botón para enviar los datos estará disponible cuando todos los campos obligatorios se rellenen correctamente.
+#### Nueva receta
+Este formulario solo está disponible para los usuarios de SweetStoves, ya que la receta debe estar vinculada a un usuario. Al igual que los otros formularios, el botón para enviar los datos estará disponible cuando todos los campos obligatorios se rellenen correctamente.
 
 <img src="images/19_usuario_receta_nueva.png">
 
-- Actualiza tu cuenta: En este formulario aparecen ya los campos rellenados con los datos actuales del usuario excepto el de la contraseña. Funciona de la misma manera que el formulario de registro en cuanto a errores se refiere. Además, se debe insertar la contraseña actual para poder actualizar los datos correctamente. Nada más enviarlo, los cambios se verán reflejados en el menú de usuario y aparecerá una alerta confirmando que la acción se ha realizado.
+#### Actualiza tus recetas
+En este apartado aparece un desplegable con todas las recetas creadas del usuario. Este desplegable se encontrará deshabilitado si el usuario no ha
+creado ninguna receta.
 
-<img src="images/20_usuario_update.png">
+<img src="images/20_usuario_receta_update.png">
 
-- Cambia tu contraseña: Este formulario es específico para actualizar la contraseña. Solo se actualizará cuando la contraseña actual sea la correcta, la nueva contraseña se ajuste al formato y las contraseñas coincidan. Cuando se cumplimente adecuadamente, aparecerá una alerta confirmando que la actualización se ha realizado.
+Al seleccionar una receta, aparecerá un formulario casi idéntico que el formulario para añadir una _nueva receta_. La única diferencia son las opciones para la foto de la receta, la cual se puede conservar o cambiar (cuando se selecciona esta opción, aparece el campo para subir la imagen)
 
-<img src="images/21_usuario_pass.png">
+<p align="center">
+    <img src="images/21_foto_receta.png" width="850">
+</p>
 
-- Borra tu cuenta: En esta última opción el usuario puede borrar su cuenta, aunque también borrará las recetas que ha creado en SweetStoves.
+#### Actualiza tu cuenta
+En este formulario aparecen ya los campos rellenados con los datos actuales del usuario excepto el de la contraseña. Funciona de la misma manera que el formulario de registro en cuanto a errores se refiere. Además, se debe insertar la contraseña actual para poder actualizar los datos correctamente. Nada más enviarlo, los cambios se verán reflejados en el menú de usuario y aparecerá una alerta confirmando que la acción se ha realizado.
 
-<img src="images/22_usuario_borrar.png">
+<img src="images/22_usuario_update.png">
+
+#### Cambia tu contraseña
+Este formulario es específico para actualizar la contraseña. Solo se actualizará cuando la contraseña actual sea la correcta, la nueva contraseña se ajuste al formato y las contraseñas coincidan. Cuando se cumplimente adecuadamente, aparecerá una alerta confirmando que la actualización se ha realizado.
+
+<img src="images/23_usuario_pass.png">
+
+#### Borra tu cuenta
+En esta última opción el usuario puede borrar su cuenta, aunque también borrará las recetas que ha creado en SweetStoves.
+
+<img src="images/24_usuario_borrar.png">
 
 ### Otros dispositivos
 La experiencia de SweetStoves también se puede vivir en Tablet y en móvil. En este apartado se pueden ver algunos menús en formato Tablet (768x886) y móvil (425x886):
 - Menú de inicio:
     <p align="center">
-    <img src="images/23_inicio_movil.png" height="450">
-    <img src="images/24_inicio_tablet.png" height="450">
+    <img src="images/25_inicio_movil.png" height="450">
+    <img src="images/26_inicio_tablet.png" height="450">
     </p>
 - Lista de recetas:
     <p align="center">
-    <img src="images/25_recetas_tablet.png" height="900">
-    <img src="images/26_recetas_movil.png" height="900">
+    <img src="images/27_recetas_tablet.png" height="900">
+    <img src="images/28_recetas_movil.png" height="900">
     </p>
 - Lista de usuarios:
     <p align="center">
-    <img src="images/27_usuarios_movil.png" height="900">
-    <img src="images/28_usuarios_tablet.png" height="900">
+    <img src="images/29_usuarios_movil.png" height="900">
+    <img src="images/30_usuarios_tablet.png" height="900">
     </p>
 - Registro:
     <p align="center">
-    <img src="images/29_registro_tablet.png" height="450">
-    <img src="images/30_registro_movil.png" height="450">
+    <img src="images/31_registro_tablet.png" height="450">
+    <img src="images/32_registro_movil.png" height="450">
     </p>

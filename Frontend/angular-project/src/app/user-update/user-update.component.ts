@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component } from '@angular/core';
 import { IUser } from '../interfaces/i-user';
 import { UsersService } from '../services/users.service';
 import { AuthService } from '../services/auth.service';
@@ -8,9 +8,8 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './user-update.component.html',
   styleUrls: ['./user-update.component.css']
 })
-export class UserUpdateComponent implements OnInit {
-  @Input() user!:IUser;
-  userUpdate!:IUser;
+export class UserUpdateComponent {
+  user = this.authService.getUser();
   opcion = 'conservar';
   errores:string[] = [];
   usuarioExistente = false;
@@ -19,52 +18,29 @@ export class UserUpdateComponent implements OnInit {
   passwordIncorrecto = false;
 
   constructor(private usersService:UsersService, private authService:AuthService) {}
-  ngOnInit(): void {
-    this.initUser(this.user);
-  }
-
-  initUser(usuario:IUser) {
-    this.userUpdate = {
-      id: usuario.id,
-      usuario: usuario.usuario,
-      correo: usuario.correo,
-      password: usuario.password,
-      imagen: null,
-      datosUsuario: {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        nombre: usuario.datosUsuario!.nombre,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        apellido: usuario.datosUsuario!.apellido,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        telefono: usuario.datosUsuario!.telefono
-      },
-      recetas: usuario.recetas,
-      recetas_seguidas: usuario.recetas_seguidas
-    };
-  }
 
   changeImage(fileInput:HTMLInputElement) {
-    if (!fileInput.files || fileInput.files.length === 0) this.userUpdate.imagen = null;
+    if (!fileInput.files || fileInput.files.length === 0) this.user.imagen = null;
     else {
       const reader: FileReader = new FileReader();
       reader.readAsDataURL(fileInput.files[0]);
-      reader.addEventListener('loadend', () => this.userUpdate.imagen = reader.result as string);
+      reader.addEventListener('loadend', () => this.user.imagen = reader.result as string);
     }
   }
 
-  @Output() modificarUsuario = new EventEmitter<IUser>();
-
-  updateUser(newUser:IUser, fileImage:HTMLInputElement) {
-    if (this.opcion == 'borrar') newUser.imagen = this.opcion;
-    if (newUser.datosUsuario?.apellido == "") newUser.datosUsuario.apellido = null;
-    if (newUser.datosUsuario?.telefono == "") newUser.datosUsuario.telefono = null;
-    newUser.password = this.password;
-    this.usersService.updateUser(newUser).subscribe({
+  updateUser(user:IUser, fileImage:HTMLInputElement) {
+    const copia_usuario = Object.assign({}, user)
+    if (this.opcion == "conservar") copia_usuario.imagen = null;
+    else if (this.opcion == 'borrar') copia_usuario.imagen = this.opcion;
+    if (copia_usuario.datosUsuario?.apellido == "") copia_usuario.datosUsuario.apellido = null;
+    if (copia_usuario.datosUsuario?.telefono == "") copia_usuario.datosUsuario.telefono = null;
+    copia_usuario.password = this.password;
+    this.usersService.updateUser(copia_usuario).subscribe({
       next:respu=>{
         this.user = respu;
-        this.modificarUsuario.emit(respu);
+        this.authService.sendData(respu)
         this.authService.setUser(respu);
-        this.reset(newUser, fileImage);
+        this.reset(fileImage);
         this.authService.addAlert("alertUpdate", true, "Datos actualizados correctamente", false);
       },
       error:e=>{
@@ -86,8 +62,8 @@ export class UserUpdateComponent implements OnInit {
     return -1;
   }
 
-  reset(newUser:IUser, fileImage:HTMLInputElement){
-    this.initUser(newUser);
+  reset(fileImage:HTMLInputElement){
+    this.user = this.authService.getUser()
     this.errores = [];
     this.usuarioExistente = false;
     this.correoExistente = false;

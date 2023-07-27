@@ -1,78 +1,87 @@
 <div class="row g-0">
-  <div class="offset-md-3 col-md-6" id="centrar">
+  <div class="offset-1 col-10">
     <h1 class="display-5 text-warning text-center fw-bold mt-5">Actualiza tu cuenta</h1>
-    <form (ngSubmit)="updateUser(userUpdate, fileImage)" #form="ngForm">
+    <form (ngSubmit)="updateUser(user, fileImage)" #form="ngForm">
       <div class="row g-0">
-        <div class="form-group form-floating w-100 my-1 offset-md-1 col-md-4">
-          <input type="text" class="form-control" autocomplete="off" name="nombre" [ngClass]="{'is-invalid': buscarErrores('nombre') !== -1,
-          'is-valid': errores.length && buscarErrores('nombre') === -1}" placeholder="Nombre" [(ngModel)]="userUpdate.datosUsuario!.nombre" required>
-          <div class="invalid-feedback">{{errores[buscarErrores('nombre')]}}</div>
-          <label>Nombre<span class="text-danger">*</span></label>
-        </div>
-        <div class="form-group form-floating w-100 my-1 offset-md-2 col-md-4">
-          <input type="text" class="form-control" autocomplete="off" name="apellido" [ngClass]="{'is-invalid': buscarErrores('apellido') !== -1,
-          'is-valid': errores.length && buscarErrores('apellido') === -1}" placeholder="Apellido" [(ngModel)]="userUpdate.datosUsuario!.apellido">
-          <div class="invalid-feedback">{{errores[buscarErrores('apellido')]}}</div>
-          <label>Apellido</label>
-        </div>
-        <div class="form-group form-floating w-100 my-1 offset-md-1 col-md-4">
-          <input type="text" class="form-control" autocomplete="off" name="teléfono" [ngClass]="{'is-invalid': buscarErrores('teléfono') !== -1,
-          'is-valid': errores.length && buscarErrores('teléfono') === -1}" placeholder="Teléfono" [(ngModel)]="userUpdate.datosUsuario!.telefono">
-          <div class="invalid-feedback">{{errores[buscarErrores('teléfono')]}}</div>
-          <label>Teléfono</label>
-        </div>
-        <div class="form-group form-floating w-100 my-1 offset-md-2 col-md-4">
-          <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('usuario') !== -1 || usuarioExistente,
-          'is-valid': errores.length && buscarErrores('usuario') === -1 && !usuarioExistente}" name="usuario" placeholder="Usuario" [(ngModel)]="userUpdate.usuario" required>
-          <div class="invalid-feedback" *ngIf="!usuarioExistente, else usuarioRepetido">{{errores[buscarErrores('usuario')]}}</div>
-          <ng-template #usuarioRepetido><div class="invalid-feedback">Este usuario ya existe</div></ng-template>
-          <label>Usuario<span class="text-danger">*</span></label>
-        </div>
-        <div class="form-group form-floating w-100 my-1 offset-md-1 col-md-4">
-          <input type="email" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('correo') !== -1 || correoExistente,
-          'is-valid': errores.length && buscarErrores('correo') === -1 && !correoExistente}" name="correo" placeholder="Correo electrónico" [(ngModel)]="userUpdate.correo" required>
-          <div class="invalid-feedback" *ngIf="!correoExistente, else correoRepetido">{{errores[buscarErrores('correo')]}}</div>
-          <ng-template #correoRepetido><div class="invalid-feedback">Este correo ya está registrado</div></ng-template>
-          <label>Correo electrónico<span class="text-danger">*</span></label>
-        </div>
-
-        <div class="form-group form-floating w-100 my-1 offset-md-2 col-md-4">
-          <input type="password" class="form-control" [ngClass]="{'is-invalid': passwordIncorrecto}"
-          name="password" placeholder="Contraseña" [(ngModel)]="password" required>
-          <div class="invalid-feedback">Contraseña incorrecta</div>
-          <label>Contraseña<span class="text-danger">**</span></label>
-        </div>
-
-        <div class="form-group row g-0 mt-3 offset-md-1 col-md-10">
-          <h4>Opciones para la foto de perfil:</h4>
-          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-            <input type="radio" class="btn-check" name="btnradio" id="userimg1" value="conservar" [(ngModel)]="opcion" (click)="fileImage.value = '';">
-            <label class="btn btn-outline-success" for="userimg1">Conservar</label>
-            <input type="radio" class="btn-check" name="btnradio" id="userimg2" value="cambiar" [(ngModel)]="opcion">
-            <label class="btn btn-outline-warning" for="userimg2">Cambiar</label>
-            <input type="radio" class="btn-check" name="btnradio" id="userimg3" value="borrar" [(ngModel)]="opcion" (click)="fileImage.value = '';">
-            <label class="btn btn-outline-danger" for="userimg3">Borrar</label>
+        <div class="row g-0 col-md-6">
+          <div class="h3 col-lg-10 text-info text-center text-decoration-underline mb-3">Datos personales</div>
+          <div class="col-lg-10 form-group form-floating my-1">
+            <input type="text" class="form-control" autocomplete="off" name="nombre" [ngClass]="{'is-invalid': buscarErrores('nombre') !== -1,
+            'is-valid': errores.length && buscarErrores('nombre') === -1}" placeholder="Nombre" [(ngModel)]="user.datosUsuario!.nombre" required>
+            <div class="invalid-feedback">{{errores[buscarErrores('nombre')]}}</div>
+            <label>Nombre<span class="text-danger">*</span></label>
           </div>
-          <div class="mt-3" [ngClass]="{'d-none': opcion !== 'cambiar'}">
-            <label for="image">Imagen</label>
-            <input type="file" class="form-control mt-2" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
+          <div class="col-lg-10 form-group form-floating my-1">
+            <input type="text" class="form-control" autocomplete="off" name="apellido" [ngClass]="{'is-invalid': buscarErrores('apellido') !== -1,
+            'is-valid': errores.length && buscarErrores('apellido') === -1}" placeholder="Apellido" [(ngModel)]="user.datosUsuario!.apellido">
+            <div class="invalid-feedback">{{errores[buscarErrores('apellido')]}}</div>
+            <label>Apellido</label>
           </div>
-          <div class="mt-3" [ngClass]="{'d-none': opcion !== 'borrar'}">
-            Tu foto de perfil se borrará de nuestros servidores y no se podrá recuperar.
-            Actualiza tus datos para que el cambio se haga efectivo.
+          <div class="col-lg-10 form-group form-floating my-1">
+            <input type="text" class="form-control" autocomplete="off" name="teléfono" [ngClass]="{'is-invalid': buscarErrores('teléfono') !== -1,
+            'is-valid': errores.length && buscarErrores('teléfono') === -1}" placeholder="Teléfono" [(ngModel)]="user.datosUsuario!.telefono">
+            <div class="invalid-feedback">{{errores[buscarErrores('teléfono')]}}</div>
+            <label>Teléfono</label>
           </div>
         </div>
-        <img *ngIf="userUpdate.imagen" [src]="userUpdate.imagen" alt="" class="mt-2 object-fit-cover rounded-circle offset-md-1 col-md-2">
-      </div>
-      <div class="row g-0 mt-4 mb-2 align-items-center" id="alertUpdate">
-        <div class="text-danger fw-light offset-md-1 mb-3 col-md-10">
-          *Campos obligatorios<br>
-          **Debe introducir su contraseña para aplicar los cambios
+        <div class="row g-0 col-md-6">
+          <div class="h3 offset-lg-2 col-lg-10 text-info text-center text-decoration-underline my-3 mt-md-0">Datos de la cuenta</div>
+          <div class="offset-lg-2 col-lg-10 form-group form-floating my-1">
+            <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('usuario') !== -1 || usuarioExistente,
+            'is-valid': errores.length && buscarErrores('usuario') === -1 && !usuarioExistente}" name="usuario" placeholder="Usuario" [(ngModel)]="user.usuario" required>
+            <div class="invalid-feedback" *ngIf="!usuarioExistente, else usuarioRepetido">{{errores[buscarErrores('usuario')]}}</div>
+            <ng-template #usuarioRepetido><div class="invalid-feedback">Este usuario ya existe</div></ng-template>
+            <label>Usuario<span class="text-danger">*</span></label>
+          </div>
+          <div class="offset-lg-2 col-lg-10 form-group form-floating my-1">
+            <input type="email" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('correo') !== -1 || correoExistente,
+            'is-valid': errores.length && buscarErrores('correo') === -1 && !correoExistente}" name="correo" placeholder="Correo electrónico" [(ngModel)]="user.correo" required>
+            <div class="invalid-feedback" *ngIf="!correoExistente, else correoRepetido">{{errores[buscarErrores('correo')]}}</div>
+            <ng-template #correoRepetido><div class="invalid-feedback">Este correo ya está registrado</div></ng-template>
+            <label>Correo electrónico<span class="text-danger">*</span></label>
+          </div>
+          <div class="offset-lg-2 col-lg-10 form-group form-floating my-1">
+            <input type="password" class="form-control" [ngClass]="{'is-invalid': passwordIncorrecto}"
+            name="password" placeholder="Contraseña" [(ngModel)]="password" required>
+            <div class="invalid-feedback">Contraseña incorrecta</div>
+            <label>Contraseña<span class="text-danger">**</span></label>
+          </div>
         </div>
-        <div class="col d-flex justify-content-end">
-          <button type="button" class="btn btn-secondary" (click)="reset(user, fileImage)">Reestablecer datos</button>
-          <div class="mx-3"></div>
-          <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Actualiza tus datos</button>
+        <div class="form-group mb-3" [ngClass]="{'offset-md-7 col-md-5': !user.imagen, 'row g-0': user.imagen}">
+          <div class="text-center my-auto" [ngClass]="{'col-md-5 col-lg-5': user.imagen}" *ngIf="user.imagen">
+            <img class="object-fit-cover rounded-circle" [src]="user.imagen">
+          </div>
+          <div [ngClass]="{'row g-0 offset-md-1 col-md-6 offset-lg-2 col-lg-5': user.imagen}">
+            <div class="mb-3 mt-md-0" [ngClass]="{'mt-3': user.imagen}">
+              <h4 >Opciones para la foto:</h4>
+              <div class="btn-group w-100" [ngClass]="{'mb-3': opcion !== 'conservar'}" role="group">
+                <input type="radio" class="btn-check" name="btnradio" id="userimg1" value="conservar" [(ngModel)]="opcion" (click)="fileImage.value = '';">
+                <label class="btn btn-outline-success" for="userimg1">Conservar</label>
+                <input type="radio" class="btn-check" name="btnradio" id="userimg2" value="cambiar" [(ngModel)]="opcion">
+                <label class="btn btn-outline-warning" for="userimg2">Cambiar</label>
+                <input type="radio" class="btn-check" name="btnradio" id="userimg3" value="borrar" [(ngModel)]="opcion" (click)="fileImage.value = '';">
+                <label class="btn btn-outline-danger" for="userimg3">Borrar</label>
+              </div>
+              <div [ngClass]="{'d-none': opcion !== 'cambiar'}">
+                <label for="image">Imagen<span class="text-danger">*</span>:</label>
+                <input type="file" class="form-control" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
+              </div>
+              <div [ngClass]="{'d-none': opcion !== 'borrar'}">
+                Tu foto de perfil se borrará de nuestros servidores y no se podrá recuperar.
+                Actualiza tus datos para que el cambio se haga efectivo.
+              </div>
+            </div>
+            <div [ngClass]="{'mt-auto': user.imagen}" id="alertUpdate">
+              <div class="text-danger fw-light my-3">
+                <div>*Campos obligatorios</div>
+                <div>**Estos datos serán separados según los párrafos que se escriban</div>
+              </div>
+              <div class="row g-0">
+                <button type="button" class="btn btn-secondary col-lg-5 mb-3 mb-lg-0" (click)="reset(fileImage)">Reestablecer datos</button>
+                <button type="submit" class="btn btn-primary  offset-lg-2 col-lg-5" [disabled]="form.invalid">Actualiza tus datos</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </form>

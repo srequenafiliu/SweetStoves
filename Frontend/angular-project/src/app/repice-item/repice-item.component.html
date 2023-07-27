@@ -13,11 +13,46 @@
         Dificultad: <span *ngFor="let star of [1, 2, 3, 4 , 5]" class="fa-star"
         [ngClass]="{'fas':star<=repice.dificultad, 'far':star>repice.dificultad}"></span>
       </span>
-      <button *ngIf="cuentaUsuario()" type="button" class="btn btn-light w-100 mt-2" placement="bottom" (click)="borrarReceta()"
-      ngbTooltip="Se borrará la receta para todos. Si estás seguro de borrarla, pulsa el botón">Borrar receta</button>
+      <button *ngIf="cuentaUsuario()" type="button" class="btn btn-light w-100 mt-2"
+      data-bs-toggle="modal" [attr.data-bs-target]="'#confirmacion'+repice.id">Borrar receta</button>
     </div>
   </div>
   <div class="card-footer text-white">
     <b>Fecha de publicación:</b> {{repice.creacion| date:'dd/MM/y'}}
+  </div>
+</div>
+<div class="modal fade" [id]="'confirmacion'+repice.id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">¿Estás seguro de borrar <span class="fst-italic">{{repice.nombre}}</span>?</h1>
+      </div>
+      <div class="modal-body">
+        La receta <span class="fst-italic">{{repice.nombre}}</span> se borrará para todos nuestros
+        usuarios y no se podrá recuperar. Te recordamos que siempre actualizar esta receta en
+        <a class="fw-bold" data-bs-dismiss="modal" [routerLink]="['/perfil-usuario', 'actualizar-receta']"
+        [queryParams]="{'id': repice.id}">Actualiza tus recetas</a>.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">Conservar receta</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="borrarReceta()"
+        data-bs-target="#borrado" data-bs-toggle="modal">Borrar receta</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="borrado" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Receta borrada correctamente</h1>
+      </div>
+      <div class="modal-body">
+        La receta <span class="fst-italic">{{repice.nombre}}</span> se ha borrado definitivamente de nuestro recetario.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
   </div>
 </div>

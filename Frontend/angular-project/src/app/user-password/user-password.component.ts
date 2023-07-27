@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { IUser, IUserPass } from '../interfaces/i-user';
+import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -7,22 +6,17 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './user-password.component.html',
   styleUrls: ['./user-password.component.css']
 })
-export class UserPasswordComponent implements OnInit {
-  @Input() user!:IUser;
-  @Output() modificarUsuario = new EventEmitter<IUser>();
-  userPass!:IUserPass;
+export class UserPasswordComponent {
+  user = this.authService.getUser();
+  userPass = this.initUserPass();
   new_pass = '';
   passwordIncorrecto = false;
 
   constructor(private authService:AuthService) {}
 
-  ngOnInit(): void {
-    this.initUser(this.user);
-  }
-
-  initUser(usuario:IUser) {
-    this.userPass = {
-      usuario: usuario.usuario,
+  initUserPass() {
+    return {
+      usuario: this.user.usuario,
       password: '',
       new_password: ''
     };
@@ -34,7 +28,6 @@ export class UserPasswordComponent implements OnInit {
       this.authService.changePassword(this.userPass).subscribe({
         next:respu=>{
           this.user.password = respu;
-          this.modificarUsuario.emit(this.user);
           this.authService.setUser(this.user);
           this.reset();
           this.authService.addAlert("alertPass", true, "Contraseña cambiada correctamente", false);
@@ -49,7 +42,7 @@ export class UserPasswordComponent implements OnInit {
   }
 
   reset() {
-    this.initUser(this.user);
+    this.userPass = this.initUserPass();
     this.new_pass = '';
   }
 }

@@ -1,55 +1,55 @@
-<div>
-  <div class="row g-0">
-    <div class="row g-0 offset-1 col-10">
-      <h1 class="display-3 text-success text-center fw-bold mt-5">Perfil de {{user.usuario}}</h1>
-      <div class="card border-primary offset-md-1 col-md-10 offset-lg-0 col-lg-7 my-3">
-        <div class="row g-0 card-body">
-          <div class="text-center my-auto">
-            <div class="h1 display-4 text-primary fw-bold">{{user.usuario}}</div>
-            <div class="h4 mt-3">{{user.datosUsuario!.nombre}} {{user.datosUsuario!.apellido}}</div>
-          </div>
-          <img class="border border-primary rounded object-fit-cover" [src]="user.imagen" [alt]="user.imagen" *ngIf="user.imagen; else sinFoto">
-          <ng-template #sinFoto>
-            <span class="fa-4x d-flex rounded" [ngStyle]="{'background-color':'rgb(120,194,173)'}">
-              <i class="fas fa-bell-concierge fa-lg fa-inverse m-auto"></i>
-            </span>
-          </ng-template>
-          <div class="row g-0 card-text mt-4">
-            <div class="col-lg-8 mt-md-2 my-lg-3"><span class="h5 text-primary">Correo: </span>{{user.correo}}</div>
-            <div class="col-lg-4 my-2 my-lg-3">
-              <span class="h5 text-primary">Teléfono: </span>
-              <span *ngIf="user.datosUsuario!.telefono, else sinTelefono">{{user.datosUsuario!.telefono}}</span>
-              <ng-template #sinTelefono>Sin teléfono</ng-template>
-            </div>
-          </div>
+<div class="row g-0">
+  <div class="row g-0 offset-1 col-10">
+    <h1 class="display-3 text-primary text-center fw-bold mt-5">Perfil de {{user.usuario}}</h1>
+    <div class="card border-primary offset-md-1 col-md-10 offset-lg-0 col-lg-7 my-3">
+      <div class="row g-0 card-body">
+        <div class="text-center my-auto">
+          <div class="h1 display-4 text-primary fw-bold">{{user.usuario}}</div>
+          <div class="h4 mt-3">{{user.datosUsuario!.nombre}} {{user.datosUsuario!.apellido}}</div>
         </div>
-      </div>
-      <div class="row g-0 col-lg-5 my-3 text-end">
-        <div class="col-7 col-md-6 col-lg-12 my-auto">
-          <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
-            ¿Quieres hacer algo hoy?
-          </button>
-          <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-              <div class="offcanvas-header">
-                <h5 class="offcanvas-title text-primary" id="offcanvasExampleLabel">Menú de usuario</h5>
-                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-              </div>
-              <div class="offcanvas-body text-start">
-                <div class="mb-3">
-                  {{user.usuario}}, tus aportes siempre son bienvenidos. Elige cualquiera de las opciones que se muestran a continuación:
-                </div>
-                <a type="button" class="btn offset-md-1 col-md-6 my-2" [ngClass]="boton.color" placement="right"
-                [ngbTooltip]="boton.texto" [routerLink]="['.', boton.link]" [routerLinkActive]="['active']"
-                [routerLinkActiveOptions]="{'exact':true}" *ngFor="let boton of opciones">{{boton.titulo}}</a>
-              </div>
+        <img class="border border-primary rounded object-fit-cover" [src]="user.imagen" [alt]="user.imagen"
+          *ngIf="user.imagen; else sinFoto">
+        <ng-template #sinFoto>
+          <span class="fa-4x d-flex rounded" [ngStyle]="{'background-color':'rgb(120,194,173)'}">
+            <i class="fas fa-bell-concierge fa-lg fa-inverse m-auto"></i>
+          </span>
+        </ng-template>
+        <div class="row g-0 card-text mt-4">
+          <div class="col-lg-8 mt-md-2 my-lg-3"><span class="h5 text-primary">Correo: </span>{{user.correo}}</div>
+          <div class="col-lg-4 my-2 my-lg-3">
+            <span class="h5 text-primary">Teléfono: </span>
+            <span *ngIf="user.datosUsuario!.telefono, else sinTelefono">{{user.datosUsuario!.telefono}}</span>
+            <ng-template #sinTelefono>Sin teléfono</ng-template>
           </div>
-        </div>
-        <div class="offset-1 col-4 offset-md-0 col-md-6 col-lg-12 my-auto">
-            <button class="btn btn-warning btn-lg" type="button" (click)="logout()">Cierra sesión</button>
         </div>
       </div>
     </div>
+    <div class="row g-0 col-lg-5 my-3 text-end">
+      <div class="col-7 col-md-6 col-lg-12 my-auto">
+        <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="offcanvas"
+          data-bs-target="#opciones" aria-controls="opciones">
+          ¿Quieres hacer algo hoy?
+        </button>
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="opciones" aria-labelledby="opcionesLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title text-primary" id="opcionesLabel">Menú de usuario</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body text-start">
+            <div class="mb-3">
+              {{user.usuario}}, tus aportes siempre son bienvenidos. Elige cualquiera de las opciones que se muestran a
+              continuación:
+            </div>
+            <a type="button" class="btn offset-1 col-6 my-2" [ngClass]="boton.color" placement="right"
+              [ngbTooltip]="boton.texto" [routerLink]="['.', boton.link]" [routerLinkActive]="['active']"
+              [routerLinkActiveOptions]="routerLinkActiveOptions" *ngFor="let boton of opciones">{{boton.titulo}}</a>
+          </div>
+        </div>
+      </div>
+      <div class="offset-1 col-4 offset-md-0 col-md-6 col-lg-12 my-auto">
+        <button class="btn btn-warning btn-lg" type="button" (click)="authService.logout()">Cierra sesión</button>
+      </div>
+    </div>
   </div>
-
   <router-outlet></router-outlet>
 </div>

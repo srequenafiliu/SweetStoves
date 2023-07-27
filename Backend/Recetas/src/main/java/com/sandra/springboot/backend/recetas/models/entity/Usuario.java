@@ -68,7 +68,7 @@ public class Usuario implements java.io.Serializable {
 	@Valid
 	private DatosUsuario datosUsuario;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "usuario", cascade = CascadeType.ALL)
 	@JsonIgnoreProperties({"usuario","tipo","necesidades","ingredientes","elaboracion","dificultad","imagen","creacion","usuarios"})
 	private Set<Receta> recetas = new HashSet<Receta>(0);
 	

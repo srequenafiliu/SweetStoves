@@ -1,6 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { IUser } from '../interfaces/i-user';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { AuthService } from '../services/auth.service';
 
@@ -9,22 +7,13 @@ import { AuthService } from '../services/auth.service';
   templateUrl: './user-delete.component.html',
   styleUrls: ['./user-delete.component.css']
 })
-export class UserDeleteComponent implements OnInit {
-  user!:IUser;
-  constructor(private router: Router, private usersService: UsersService, private authService:AuthService) {}
-
-  ngOnInit() {
-    this.user = this.authService.getUser();
-  }
+export class UserDeleteComponent {
+  user = this.authService.getUser();
+  constructor(private usersService: UsersService, private authService:AuthService) {}
 
   deleteUsuario(){
     this.usersService.deleteUser(this.user.id).subscribe({
-      next:()=>this.logout()
+      next:()=>this.authService.logout()
     })
   }
-
-  logout(){
-    if (this.authService.logout()) this.router.navigate(['/inicio'])
-  }
-
 }

@@ -13,12 +13,12 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./repice-detail.component.css']
 })
 export class RepiceDetailComponent implements OnInit {
-  repice!: IRepice;
-  user!: IUser;
-  receta_creada?: boolean;
+  repice!:IRepice;
+  user:IUser = this.authService.getUser();
+  receta_creada?:boolean;
   guardado?:boolean;
 
-  constructor(private location: Location, private repicesService: RepicesService,
+  constructor(protected location: Location, private repicesService: RepicesService,
     private authService:AuthService, private route: ActivatedRoute, private titleService: Title) {}
 
   ngOnInit() {
@@ -26,7 +26,6 @@ export class RepiceDetailComponent implements OnInit {
       next:p => {
         this.repice = p;
         this.titleService.setTitle(this.titleService.getTitle()+" "+p.nombre)
-        this.user = this.authService.getUser();
         this.receta_creada = this.user.recetas?.map(rec => rec.id).includes(p.id);
         this.guardado = this.user.recetas_seguidas?.map(rec => rec.id).includes(p.id);
       }
@@ -44,6 +43,4 @@ export class RepiceDetailComponent implements OnInit {
       }
     })
   }
-
-  goBack = () => this.location.back();
 }

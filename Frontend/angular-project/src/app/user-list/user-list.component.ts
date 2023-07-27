@@ -10,13 +10,12 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class UserListComponent {
   pag!:number;
-  size!:number;
-  innerWidth!:number;
+  innerWidth = window.innerWidth;
+  size = (this.innerWidth>540) ? 6 : 3;
   count!:number;
   users!:IUser[];
   pages!:(string|number)[];
   constructor(private usersService:UsersService, private route:ActivatedRoute) {
-    this.innerWidth = window.innerWidth;
     this.size = (window.innerWidth>540) ? 6 : 3;
     this.route.queryParams.subscribe(params => {
       this.pag = (+params["pag"]) ? +params["pag"] : 1;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IUser } from '../interfaces/i-user';
 import { UsersService } from '../services/users.service';
 import { AuthService } from '../services/auth.service';
@@ -9,32 +9,17 @@ import jwtDecode from 'jwt-decode';
   templateUrl: './user-add.component.html',
   styleUrls: ['./user-add.component.css']
 })
-export class UserAddComponent implements OnInit {
+export class UserAddComponent {
   newPassword = '';
-  newUser:IUser = {
-    id: 0,
-    usuario: '',
-    correo: '',
-    password: '',
-    imagen: null,
-    datosUsuario: {
-      nombre: '',
-      apellido: '',
-      telefono: ''
-    },
-    recetas: []
-  };
+  newUser = this.initUser();
   errores:string[] = [];
   usuarioExistente = false;
   correoExistente = false;
 
   constructor(private usersService:UsersService, private authService:AuthService) {}
-  ngOnInit(): void {
-    this.initUser();
-  }
 
-  initUser() {
-    this.newUser = {
+  initUser(): IUser {
+    return {
       id: 0,
       usuario: '',
       correo: '',
@@ -88,7 +73,7 @@ export class UserAddComponent implements OnInit {
   }
 
   reset(fileImage:HTMLInputElement){
-    this.initUser();
+    this.newUser = this.initUser();
     this.errores = [];
     this.usuarioExistente = false;
     this.correoExistente = false;

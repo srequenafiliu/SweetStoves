@@ -4,19 +4,20 @@
 </div>
 <section class="page-section mt-5">
   <div class="container">
-      <div class="text-center mb-4">
-          <h2 class="section-heading text-uppercase">Servicios</h2>
-          <h3 class="section-subheading text-muted">Echa un vistazo a lo que ofrece SweetStoves</h3>
+    <div class="text-center mb-4">
+      <h2 class="section-heading text-uppercase">Servicios</h2>
+      <h3 class="section-subheading text-muted">Echa un vistazo a lo que ofrece SweetStoves</h3>
+    </div>
+    <div class="row g-0 text-center">
+      <div class="col-md-4 offset-lg-0" [ngClass]="{'offset-md-2': !isEven, 'offset-md-1': isEven}"
+        *ngFor="let servicio of servicios, even as isEven">
+        <span class="d-none d-md-inline-block fa-stack fa-4x">
+          <i class="fas fa-circle fa-stack-2x text-primary"></i>
+          <i [class]="'fas fa-'+servicio.icon+' fa-stack-1x fa-inverse'"></i>
+        </span>
+        <h4 class="my-3">{{servicio.titulo}}</h4>
+        <p class="text-muted">{{servicio.texto}}</p>
       </div>
-      <div class="row text-center">
-          <div class="row g-0 col-md-4 offset-lg-0" [ngClass]="{'offset-md-2': !isEven, 'offset-md-1': isEven}" *ngFor="let servicio of servicios, even as isEven">
-              <span class="d-none d-md-block fa-stack fa-4x">
-                  <i class="fas fa-circle fa-stack-2x text-primary"></i>
-                  <i [class]="'fas fa-'+servicio.icon+' fa-stack-1x fa-inverse'"></i>
-              </span>
-              <h4 class="my-3">{{servicio.titulo}}</h4>
-              <p class="text-muted">{{servicio.texto}}</p>
-          </div>
-      </div>
+    </div>
   </div>
 </section>

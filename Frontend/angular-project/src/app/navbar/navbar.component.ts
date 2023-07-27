@@ -1,15 +1,15 @@
-import { Component, DoCheck } from '@angular/core';
-import { IUser } from '../interfaces/i-user';
+import { Component } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { ActivatedRoute, IsActiveMatchOptions, Router } from '@angular/router';
+import { IsActiveMatchOptions, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements DoCheck {
-  user!:IUser;
+export class NavbarComponent {
+  user = this.authService.getUser()
   search = "";
   navbar:{icon:string, link:string, titulo:string}[] = [
     {icon:'user-check', link:'/login', titulo:'Iniciar sesión'},
@@ -20,16 +20,12 @@ export class NavbarComponent implements DoCheck {
     queryParams: 'ignored',
     fragment: 'ignored',
     paths: 'exact'
-    };
+  };
 
-  constructor(private authService:AuthService, private router:Router, private route:ActivatedRoute) {}
-
-  ngDoCheck() {
-    this.authService.checkToken(this.authService.getToken());
-    this.user = this.authService.getUser();
+  subscription: Subscription;
+  constructor(private authService:AuthService, private router:Router) {
+    this.subscription = authService.getData().subscribe(u=>this.user = u)
   }
-
-  isLinkActive = (link:string) => this.router.url.includes('/'+link);
 
   searchRepice() {
     this.router.navigate(["/recetas"], {queryParams: {nombre: this.search}});

@@ -51,7 +51,7 @@ public class Receta implements java.io.Serializable {
 	
 	@NonNull
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "usuario", nullable = false)
+	@JoinColumn(name = "usuario")
 	@JsonIgnoreProperties({"correo","password","imagen","datosUsuario","recetas","recetas_seguidas"})
 	private Usuario usuario;
 	

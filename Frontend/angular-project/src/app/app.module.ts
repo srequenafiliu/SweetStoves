@@ -11,6 +11,7 @@ import { RouterModule } from '@angular/router';
 import { APP_ROUTES } from './app.routes';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { RepicesService } from './services/repices.service';
+import { AuthService } from './services/auth.service';
 import { BaseUrlInterceptor } from './interceptores/base-url.interceptor';
 import { UserListComponent } from './user-list/user-list.component';
 import { NeedsComponent } from './needs/needs.component';
@@ -19,11 +20,10 @@ import { UserAddComponent } from './user-add/user-add.component';
 import { UserLoginComponent } from './user-login/user-login.component';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { RepiceAddComponent } from './repice-add/repice-add.component';
 import { UserUpdateComponent } from './user-update/user-update.component';
 import { UserPasswordComponent } from './user-password/user-password.component';
-import { RepiceUpdateComponent } from './repice-update/repice-update.component';
 import { UserDeleteComponent } from './user-delete/user-delete.component';
+import { RepiceManagementComponent } from './repice-management/repice-management.component';
 
 import localeEs from '@angular/common/locales/es';
 import {registerLocaleData} from '@angular/common';
@@ -41,12 +41,11 @@ registerLocaleData(localeEs, 'es');
     UserLoginComponent,
     UserInfoComponent,
     NavbarComponent,
-    RepiceAddComponent,
     UserUpdateComponent,
     UserPasswordComponent,
-    RepiceUpdateComponent,
     NeedsComponent,
-    UserDeleteComponent
+    UserDeleteComponent,
+    RepiceManagementComponent
   ],
   imports: [
     BrowserModule,
@@ -66,6 +65,7 @@ registerLocaleData(localeEs, 'es');
       multi: true,
     },
     {provide: LOCALE_ID, useValue: "es"},
+    AuthService
   ],
   bootstrap: [AppComponent]
 })

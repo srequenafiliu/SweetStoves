@@ -7,11 +7,10 @@ import { UserListComponent } from "./user-list/user-list.component";
 import { UserLoginComponent } from "./user-login/user-login.component";
 import { WelcomeComponent } from "./welcome/welcome.component";
 import { NeedsComponent } from "./needs/needs.component";
-import { RepiceAddComponent } from "./repice-add/repice-add.component";
-import { RepiceUpdateComponent } from "./repice-update/repice-update.component";
 import { UserUpdateComponent } from "./user-update/user-update.component";
 import { UserPasswordComponent } from "./user-password/user-password.component";
 import { UserDeleteComponent } from "./user-delete/user-delete.component";
+import { RepiceManagementComponent } from "./repice-management/repice-management.component";
 
 export const APP_ROUTES:Route[]=[
   { path: 'inicio', component: WelcomeComponent, title: "SweetStoves" },
@@ -23,8 +22,8 @@ export const APP_ROUTES:Route[]=[
   { path: 'registro', component: UserAddComponent, title: "SweetStoves | Registro" },
   { path: 'perfil-usuario', component: UserInfoComponent, title: "SweetStoves | Perfil del usuario", children: [
     { path: 'recetas', component: RepiceListComponent },
-    { path: "nueva-receta", component: RepiceAddComponent },
-    { path: "actualizar-receta", component: RepiceUpdateComponent },
+    { path: "nueva-receta", component: RepiceManagementComponent },
+    { path: "actualizar-receta", component: RepiceManagementComponent },
     { path: "actualizar-cuenta", component: UserUpdateComponent },
     { path: "actualizar-password", component: UserPasswordComponent },
     { path: "borrar-cuenta", component: UserDeleteComponent },

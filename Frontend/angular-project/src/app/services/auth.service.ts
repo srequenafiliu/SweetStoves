@@ -1,9 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IUser, IUserPass } from '../interfaces/i-user';
-import { Observable, map } from 'rxjs';
+import { Observable, Subject, map } from 'rxjs';
 import { Router } from '@angular/router';
-import jwtDecode from 'jwt-decode';
 import { ILogin } from '../interfaces/i-login';
 
 @Injectable({
@@ -22,40 +21,38 @@ export class AuthService {
   addUser = (newUser:IUser):Observable<IUser> => this.http
   .post<{usuario:IUser, mensaje:string, error?:string}>(this.authURL+'/registro', newUser).pipe(map(response => response.usuario));
 
-  setUser(usuario:IUser){
-    localStorage.setItem('usuario', JSON.stringify(usuario));
-  }
-
-  setData(token:string, usuario:IUser) {
-    localStorage.setItem('token', token);
-    localStorage.setItem('usuario', JSON.stringify(usuario));
-    this.router.navigate(['/perfil-usuario']);
-  }
-
-  getToken = () => localStorage.getItem('token');
+  private subject = new Subject<IUser|null>(); // Pseudo EventEmitter
+  sendData = (usuario:IUser|null) => this.subject.next(usuario);
+  getData = (): Observable<IUser|null> => this.subject.asObservable();
 
   getUser(){
     const usuarioStr = localStorage.getItem('usuario');
     return (usuarioStr != null) ? JSON.parse(usuarioStr) : null;
   }
-  checkToken(token:string|null) {
-    if (token) {
-      const tokenDecoded:{exp:number} = jwtDecode(token);
-      const expDate = tokenDecoded.exp;
-      if (new Date(expDate*1000) < new Date()) this.logout();
-    }
+  setUser = (usuario:IUser) => localStorage.setItem('usuario', JSON.stringify(usuario));
+
+  getToken = () => localStorage.getItem('token');
+  /*expiredToken = (token:string|null) => token && new Date(jwtDecode<{exp:number}>(token).exp*1000) < new Date()
+  Si el token tuviese fecha de caducidad, se usaría esta función y, si devolviera true, se debería llamar a logout()*/
+
+  setData(token:string, usuario:IUser) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('usuario', JSON.stringify(usuario));
+    this.sendData(usuario);
+    this.router.navigate(['/perfil-usuario']);
   }
 
   logout(){
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
-    return true;
+    this.sendData(null)
+    this.router.navigate(['/inicio'])
   }
 
   addAlert(id:string, correcto:boolean, texto:string, first:boolean){
     const div = document.getElementById(id);
     const alert = document.createElement("div");
-    alert.className = "alert alert-dismissible "+(correcto?"alert-primary":"alert-info")+" offset-md-1 col-md-10 fade show"; // Retocar el tamaño cuando se arreglen las otras partes
+    alert.className = "alert alert-dismissible "+(correcto?"alert-primary":"alert-info")+" fade show"; // Retocar el tamaño cuando se arreglen las otras partes offset-md-1 col-md-10
     const icon = document.createElement("i");
     icon.className = "fa-solid fa-circle-"+((correcto)?"check":"xmark");
     const close = document.createElement("button");
