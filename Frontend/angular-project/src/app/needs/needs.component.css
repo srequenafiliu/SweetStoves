@@ -9,3 +9,26 @@ ul li::before {
   width: 1em;
   margin-left: -1em;
 }
+
+section {
+  view-timeline-name: --reveal-section;
+  view-timeline-axis: block;
+
+  animation-name: show;
+  animation-fill-mode: both;
+  animation-timing-function: ease;
+  animation-timeline: --reveal-section;
+
+  animation-range: entry 10% cover 20%;
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+    scale: 75%;
+  }
+  to {
+    opacity: 1;
+    scale: 100%;
+  }
+}
