@@ -19,13 +19,13 @@ section {
   animation-timing-function: ease;
   animation-timeline: --reveal-section;
 
-  animation-range: entry 10% cover 20%;
+  animation-range: entry 1% cover 20%;
 }
 
 @keyframes show {
   from {
     opacity: 0;
-    scale: 75%;
+    scale: 25%;
   }
   to {
     opacity: 1;

@@ -33,7 +33,14 @@ La API generada, con enlace *http://localhost:8080/api*, muestra los siguientes 
 - __recetas__: Lista de recetas creadas por el usuario
 - __recetas_seguidas__: Lista de recetas que ha seguido el usuario
 ## Frontend
-**Para hacer funcionar SweetStoves debes instalar node-modules y jwt-decode.**
+Para hacer funcionar SweetStoves debes instalar los siguientes paquetes:
+<pre>
+npm install
+npm i bootstrap
+npm i bootswatch@5.3.0
+npm i @ng-bootstrap/ng-bootstrap@14.2.0
+npm i jwt-decode@3.1.2
+</pre>
 Podrás acceder a SweetStoves desde el enlace _http://localhost:4200/_, el cual te redireccionará al menú de inicio.
 Sabrás que estás en SweetStoves ya que la web tiene un icono propio en la pestaña del navegador.
 ### Menú de inicio
