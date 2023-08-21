@@ -39,7 +39,7 @@ npm install
 npm i bootstrap
 npm i bootswatch@5.3.0
 npm i @ng-bootstrap/ng-bootstrap@14.2.0
-npm install @fortawesome/fontawesome-free
+npm i @fortawesome/fontawesome-free
 npm i jwt-decode@3.1.2
 </pre>
 Podrás acceder a SweetStoves desde el enlace _http://localhost:4200/_, el cual te redireccionará al menú de inicio.
