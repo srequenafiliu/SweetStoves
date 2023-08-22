@@ -9,6 +9,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { RepiceListComponent } from './repice-list/repice-list.component';
+import { RepiceItemComponent } from './repice-item/repice-item.component';
 import { RepiceDetailComponent } from './repice-detail/repice-detail.component';
 import { UserListComponent } from './user-list/user-list.component';
 import { NeedsComponent } from './needs/needs.component';
@@ -24,7 +25,6 @@ import { BaseUrlInterceptor } from './interceptors/base-url.interceptor';
 
 import localeEs from '@angular/common/locales/es';
 import {registerLocaleData} from '@angular/common';
-import { RepiceItemComponent } from './repice-item/repice-item.component';
 registerLocaleData(localeEs, 'es');
 
 @NgModule({

@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.sandra.springboot.backend.recetas.models.dto.RecetaDto;
 import com.sandra.springboot.backend.recetas.models.entity.Receta;
 import com.sandra.springboot.backend.recetas.models.entity.Usuario;
 import com.sandra.springboot.backend.recetas.models.services.RecetaService;
@@ -70,10 +71,10 @@ public class RecetaRestController {
 			response.put("previous", (page.isFirst()) ? null : ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("pag", pag-1).toUriString());
 			response.put("next", (page.isLast()) ? null : ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("pag", pag+1).toUriString());
 			response.put("count", page.getTotalElements());
-			List<Receta> listaRecetas = page.getContent()
+			List<RecetaDto> listaRecetas = page.getContent()
 					.stream()
 					.map(r -> {
-						Receta receta = new Receta(r);
+						RecetaDto receta = new RecetaDto(r);
 						if(receta.getImagen()!=null)
 							receta.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + receta.getImagen());
 						return receta;
@@ -91,23 +92,22 @@ public class RecetaRestController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable int id) {
-		Receta receta = null;
+		RecetaDto recetaDto = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			receta = recetaService.findById(id);
+			recetaDto = new RecetaDto(recetaService.findById(id));
 		} catch (DataAccessException e) {  // Error al acceder a la base de datos
 			response.put("mensaje", "Error al conectar con la base de datos");
 			response.put("error", e.getMessage().concat(":")
 					.concat(e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		if (receta==null) {
+		}catch (NullPointerException e) {
 			response.put("mensaje", "La receta con ID ".concat(Integer.toString(id)).concat(" no existe"));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-		if(receta.getImagen()!=null)
-			receta.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + receta.getImagen());
-		return new ResponseEntity<Receta>(receta, HttpStatus.OK);
+		if(recetaDto.getImagen()!=null)
+			recetaDto.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + recetaDto.getImagen());
+		return new ResponseEntity<RecetaDto>(recetaDto, HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
