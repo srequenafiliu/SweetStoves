@@ -3,15 +3,15 @@
   width: 200px;
   height: 200px;
   @media screen and (max-width:767px) {
-    width: 125px;
-    height: 125px;
+    width: 90px;
+    height: 90px;
   }
 }
 
 .card-body > .text-center {
   width: calc(100% - 200px);
   @media screen and (max-width:767px) {
-    width: calc(100% - 125px)
+    width: calc(100% - 90px)
   }
 }
 
@@ -23,7 +23,7 @@
   content: "";
   background-image: url('../../assets/logo.png');
   background-position: bottom;
-  background-repeat: space;
+  background-repeat: no-repeat;
   background-size: contain;
   opacity: 0.25;
   top: 1rem;

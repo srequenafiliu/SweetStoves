@@ -10,6 +10,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class UserInfoComponent {
   user = this.authService.getUser();
+  movil = window.innerWidth<767;
   opciones:{titulo:string, color:string, link:string, texto:string}[] = [
     {titulo:'Tu lista de recetas', color:'btn-outline-secondary', link:'recetas', texto:'Comprueba las recetas que has creado y seguido'},
     {titulo:'Nueva receta', color:'btn-outline-success', link:'nueva-receta', texto:'Crea una nueva receta que se vinculará a tu cuenta'},

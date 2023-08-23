@@ -46,6 +46,7 @@ export class RepiceListComponent {
   }
 
   getRecetas() {
+    this.pag = (this.pag-1)*this.size>=this.count ? Math.ceil(this.count/this.size) : this.pag;
     this.repicesService.getRepices(this.pag, this.size, this.sortField, this.sortDir, this.nombre, this.tipo, this.necesidades, this.dificultad, this.id_usuario).subscribe({
       next: r=>{
         this.count = r.count;

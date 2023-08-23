@@ -24,6 +24,7 @@ export class UserListComponent {
   }
 
   getUsuarios() {
+    this.pag = (this.pag-1)*this.size>=this.count ? Math.ceil(this.count/this.size) : this.pag;
     this.usersService.getUsers(this.pag, this.size).subscribe({
       next: r=>{
         this.count = r.count;
