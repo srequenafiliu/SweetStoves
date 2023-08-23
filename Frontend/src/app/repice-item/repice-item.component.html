@@ -7,7 +7,7 @@
     <div class="card-text">
       <div class="fw-bold" *ngIf="repice.necesidades.length, else noNeeds">{{repice.necesidades.join(', ')}}</div>
       <ng-template #noNeeds>
-        <div class="fw-bold">Ver <a [routerLink]="['necesidades-especiales']" class="link-dark">necesidades especiales</a> </div>
+        <div class="fw-bold">Ver <a [routerLink]="['/necesidades-especiales']" class="link-dark">necesidades especiales</a> </div>
       </ng-template>
       <span class="fw-bold">
         Dificultad: <span *ngFor="let star of [1, 2, 3, 4 , 5]" class="fa-star"
