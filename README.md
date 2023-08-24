@@ -58,7 +58,7 @@ Esta lista se puede ordenar por dificultad y por fecha de publicación, tanto as
 
 <img src="images/03_recetas_ordenadas.png">
 
-Además, se puede filtrar de diferentes maneras para que el usuario de la web pueda encontrar la receta que más se ajuste a él en el menor tiempo posible. También se pueden buscar recetas por nombre mediante la barra de búsqueda en la barra de navegación de SweetStoves. En el siguiente ejemplo se han utilizado los filtros _Dulce_ y *dificultad 2 de 5*.
+Además, se puede filtrar de diferentes maneras para que el usuario de la web pueda encontrar la receta que más se ajuste a él en el menor tiempo posible. El menú de filtros es desplegable en versión tablet y móvil. También se pueden buscar recetas por nombre mediante la barra de búsqueda en la barra de navegación de SweetStoves. En el siguiente ejemplo se han utilizado los filtros _Dulce_ y *dificultad 2 de 5*.
 
 <img src="images/04_recetas_filtradas.png">
 
@@ -79,7 +79,7 @@ Si se pincha en el título de una de las recetas, se pueden observar los detalle
 Aparte de los datos visibles en la lista de recetas, también se pueden consultar la lista de ingredientes y el menú de la elaboración de la receta. Dicho menú se puede ir desplegando para ir navegando por cada paso.\
 El paso final contiene un botón para volver a la lista de recetas y un botón para añadir la receta a la lista personal del usuario en el caso de haber iniciado sesión y no ser el creador de la receta.
 
-<p align="center"><img src="images/09_paso_final.png" height="450"></p>
+<p align="center"><img src="images/09_paso_final.png" width="525"></p>
 
 ### Lista de usuarios
 Aquí se pueden ver todos los usuarios registrados en el blog con parte de sus datos. Los usuarios que no tengan foto de perfil tendrán un icono predeterminado (este es el caso del usuario *darks13*). En este apartado también se han añadido la paginación y la opción de cambiar los usuarios mostrados por página. Además, en esta lista se pueden consultar las recetas que ha creado cada usuario pulsando el botón que se encuentra debajo del nombre del usuario.
@@ -99,7 +99,7 @@ Se puede acceder a este menú desde la barra de navegación y desde el enlace qu
 La persona que quiera registrarse en SweetStoves debe rellenar al menos los campos obligatorios. Si los rellena mal, saltarán los errores que haya cometido cuando intente registrarse. Asimismo, no se permitirá el registro de un usuario y/o correo electrónico duplicado. El futuro usuario de la web puede retocar los datos erróneos o borrar los datos del formulario con el botón _Borrar datos_.
 
 <p align="center">
-    <img src="images/13_registro_errores.png" height="450">
+    <img src="images/13_registro_errores.png" width="670">
 </p>
 
 Cuando se envía el formulario correctamente, se redirecciona al usuario al perfil del nuevo usuario.\
@@ -120,7 +120,7 @@ Si el usuario pulsa el botón _Iniciar sesión_ y al menos uno de los datos no e
 Cuando el usuario ha iniciado sesión, en la barra de navegación desaparecen los enlaces a los menús de login y registro. En su lugar, aparecerá la foto de perfil del usuario (como es el caso de _trafasan_) o la primera letra de su usuario en caso de no haber guardado foto (como es el caso de *darks13*).
 
 <p align="center">
-    <img src="images/16_link_usuario.png" height="200">
+    <img src="images/16_link_usuario.png" width="415">
 </p>
 
 En este menú, el usuario puede hacer varias tareas que puede elegir en el menú lateral que aparece cuando se pulsa el botón _¿Quieres hacer algo hoy?_
@@ -172,21 +172,21 @@ En esta última opción el usuario puede borrar su cuenta, aunque también borra
 La experiencia de SweetStoves también se puede vivir en Tablet y en móvil. En este apartado se pueden ver algunos menús en formato Tablet (768x886) y móvil (425x886):
 - Menú de inicio:
     <p align="center">
-    <img src="images/25_inicio_movil.png" height="450">
-    <img src="images/26_inicio_tablet.png" height="450">
+    <img src="images/25_inicio_movil.png" width="215">
+    <img src="images/26_inicio_tablet.png" width="390">
     </p>
 - Lista de recetas:
     <p align="center">
-    <img src="images/27_recetas_tablet.png" height="900">
-    <img src="images/28_recetas_movil.png" height="900">
+    <img src="images/27_recetas_tablet.png" width="390">
+    <img src="images/28_recetas_movil.png" width="215">
     </p>
 - Lista de usuarios:
     <p align="center">
-    <img src="images/29_usuarios_movil.png" height="900">
-    <img src="images/30_usuarios_tablet.png" height="900">
+    <img src="images/29_usuarios_movil.png" width="215">
+    <img src="images/30_usuarios_tablet.png" width="390">
     </p>
 - Registro:
     <p align="center">
-    <img src="images/31_registro_tablet.png" height="450">
-    <img src="images/32_registro_movil.png" height="450">
+    <img src="images/31_registro_tablet.png" width="390">
+    <img src="images/32_registro_movil.png" width="215">
     </p>

@@ -41,12 +41,12 @@
   <div class="accordion offset-1 col-10 col-lg-3 mb-5 bg-success rounded-3" id="accordionFilters">
     <div class="accordion-item bg-success border-0">
       <h2 class="accordion-header" id="filters">
-        <button class="accordion-button bg-success shadow-none collapsed" *ngIf="innerWidth<767, else noButton" type="button" data-bs-toggle="collapse" data-bs-target="#filterscollapseFilters" [attr.aria-expanded]="innerWidth>=767" aria-controls="filterscollapseFilters">
+        <button class="accordion-button bg-success shadow-none collapsed" *ngIf="innerWidth<992, else noButton" type="button" data-bs-toggle="collapse" data-bs-target="#filterscollapseFilters" [attr.aria-expanded]="innerWidth>=992" aria-controls="filterscollapseFilters">
           <div class="h2 text-white"><i class="fa-solid fa-filter"></i>Filtros</div>
         </button>
         <ng-template #noButton><div class="h2 text-white ps-3 pt-3"><i class="fa-solid fa-filter"></i>Filtros</div></ng-template>
       </h2>
-      <div id="filterscollapseFilters" class="accordion-collapse collapse border-0" [ngClass]="{'show':innerWidth>=767}" aria-labelledby="filters" data-bs-parent="#accordionFilters">
+      <div id="filterscollapseFilters" class="accordion-collapse collapse border-0" [ngClass]="{'show':innerWidth>=992}" aria-labelledby="filters" data-bs-parent="#accordionFilters">
         <div class="accordion-body">
           <form>
             <div class="form-group row g-0 mb-2 bg-white bg-opacity-50 rounded-4 p-3">
