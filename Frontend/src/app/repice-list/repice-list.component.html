@@ -38,38 +38,49 @@
       </ul>
     </div>
   </div>
-  <div class="offset-1 col-10 col-lg-3 mb-5 bg-success rounded-3 p-3">
-    <div class="h2 text-white"><i class="fa-solid fa-filter"></i> Filtros</div>
-    <form class="form">
-      <div class="form-group row g-0 mb-2 bg-white bg-opacity-50 rounded-4 p-3">
-        <label class="form-label h3">Tipo:&nbsp;</label>
-        <div class="btn-group" role="group">
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio1" value="dulce" [(ngModel)]="tipo"
-            (change)="filter(nombre, tipo, necesidades, dificultad)">
-          <label class="btn btn-danger" for="btnradio1">Dulce</label>
-          <input type="radio" class="btn-check" name="btnradio" id="btnradio2" value="salado" [(ngModel)]="tipo"
-            (change)="filter(nombre, tipo, necesidades, dificultad)">
-          <label class="btn btn-info" for="btnradio2">Salado</label>
+  <div class="accordion offset-1 col-10 col-lg-3 mb-5 bg-success rounded-3" id="accordionFilters">
+    <div class="accordion-item bg-success border-0">
+      <h2 class="accordion-header" id="filters">
+        <button class="accordion-button bg-success shadow-none collapsed" *ngIf="innerWidth<767, else noButton" type="button" data-bs-toggle="collapse" data-bs-target="#filterscollapseFilters" [attr.aria-expanded]="innerWidth>=767" aria-controls="filterscollapseFilters">
+          <div class="h2 text-white"><i class="fa-solid fa-filter"></i>Filtros</div>
+        </button>
+        <ng-template #noButton><div class="h2 text-white ps-3 pt-3"><i class="fa-solid fa-filter"></i>Filtros</div></ng-template>
+      </h2>
+      <div id="filterscollapseFilters" class="accordion-collapse collapse border-0" [ngClass]="{'show':innerWidth>=767}" aria-labelledby="filters" data-bs-parent="#accordionFilters">
+        <div class="accordion-body">
+          <form>
+            <div class="form-group row g-0 mb-2 bg-white bg-opacity-50 rounded-4 p-3">
+              <label class="form-label h3">Tipo:&nbsp;</label>
+              <div class="btn-group" role="group">
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio1" value="dulce" [(ngModel)]="tipo"
+                  (change)="filter(nombre, tipo, necesidades, dificultad)">
+                <label class="btn btn-danger" for="btnradio1">Dulce</label>
+                <input type="radio" class="btn-check" name="btnradio" id="btnradio2" value="salado" [(ngModel)]="tipo"
+                  (change)="filter(nombre, tipo, necesidades, dificultad)">
+                <label class="btn btn-info" for="btnradio2">Salado</label>
+              </div>
+            </div>
+            <div class="form-group row g-0 mb-2 bg-white bg-opacity-50 rounded-4 p-3">
+              <label class="form-label h3">Necesidades especiales:&nbsp;</label>
+              <div class="form-check form-switch" *ngFor="let item of needs">
+                <input class="form-check-input" type="checkbox" name="needs" [value]="item.value" (change)="getNecesidades()"
+                  [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}">
+                <label class="form-check-label" for="needs">{{item.title}}</label>
+              </div>
+            </div>
+            <div class="form-group mb-2 bg-white bg-opacity-50 rounded-4 p-3">
+              <label class="form-label h3">Dificultad:&nbsp;</label><br>
+              <span *ngFor="let star of [1, 2, 3, 4 , 5]" (click)="filter(nombre, tipo, necesidades, star)" class="fa-star"
+                [ngClass]="{'fas':star<=dificultad, 'far':star>dificultad}"></span>
+            </div>
+            <button type="reset" class="btn btn-secondary btn-icon-split my-auto" (click)="filter('', '', '', 0)">
+              <span class="icon text-white-50"><i class="fas fa-trash"></i></span>
+              <span class="text"> Borrar<span class="d-none d-lg-inline"> todos los</span> filtros</span>
+            </button>
+          </form>
         </div>
       </div>
-      <div class="form-group row g-0 mb-2 bg-white bg-opacity-50 rounded-4 p-3">
-        <label class="form-label h3">Necesidades especiales:&nbsp;</label>
-        <div class="form-check form-switch" *ngFor="let item of needs">
-          <input class="form-check-input" type="checkbox" name="needs" [value]="item.value" (change)="getNecesidades()"
-            [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}">
-          <label class="form-check-label" for="needs">{{item.title}}</label>
-        </div>
-      </div>
-      <div class="form-group mb-2 bg-white bg-opacity-50 rounded-4 p-3">
-        <label class="form-label h3">Dificultad:&nbsp;</label><br>
-        <span *ngFor="let star of [1, 2, 3, 4 , 5]" (click)="filter(nombre, tipo, necesidades, star)" class="fa-star"
-          [ngClass]="{'fas':star<=dificultad, 'far':star>dificultad}"></span>
-      </div>
-      <button type="reset" class="btn btn-secondary btn-icon-split my-auto" (click)="filter('', '', '', 0)">
-        <span class="icon text-white-50"><i class="fas fa-trash"></i></span>
-        <span class="text"> Borrar<span class="d-none d-lg-inline"> todos los</span> filtros</span>
-      </button>
-    </form>
+    </div>
   </div>
   <div class="row g-0 col col-lg-8" *ngIf="repices && repices.length; else noRepices">
     <repice-item class="offset-1 col-10 col-md-5 mt-4" *ngFor="let repice of repices, even as isEven" [repice]="repice"
