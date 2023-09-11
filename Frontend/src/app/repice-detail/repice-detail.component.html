@@ -7,8 +7,8 @@
         <span *ngFor="let star of [1, 2, 3, 4 , 5]" class="fa-star" [ngClass]="{'fas':star<=repice.dificultad,
         'far':star>repice.dificultad, 'text-danger':repice.tipo === 'Dulce', 'text-info':repice.tipo !== 'Dulce'}"></span>
       </div>
-      <div class="d-flex justify-content-evenly" *ngIf="repice.necesidades.length, else noNeeds">
-        <span class="h5 bg-warning shadow-sm p-3 rounded-pill" *ngFor="let need of repice.necesidades">{{need}}</span>
+      <div class="d-flex justify-content-evenly" *ngIf="repice.needs.length, else noNeeds">
+        <span class="h5 bg-warning shadow-sm p-3 rounded-pill" *ngFor="let need of necesidades">{{need}}</span>
       </div>
       <ng-template #noNeeds>
         <div class="text-dark px-5 my-3">
@@ -46,11 +46,11 @@
       <div id="collapseFinal" class="accordion-collapse collapse" aria-labelledby="headingFinal" data-bs-parent="#accordionRepice">
         <div class="accordion-body">
           Enhorabuena<span *ngIf="user"> {{user.usuario}}</span>, has finalizado la receta.
-          <div *ngIf="user, else noLogged">
+          <div *ngIf="token, else noLogged">
             <span *ngIf="receta_creada, else guardar" class="fw-light text-danger">No puedes eliminar una receta tuya de tu lista personal</span>
             <ng-template #guardar>
               <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault" value="guardado" [(ngModel)]="guardado" (change)="updateRecetas_seguidas()">
+                <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault" value="guardado" [(ngModel)]="guardado" (change)="this.repicesService.followRepice(this.id_receta)">
                 <label class="form-check-label" for="flexSwitchCheckDefault">Añadir esta receta a tu lista personal</label>
               </div>
             </ng-template>

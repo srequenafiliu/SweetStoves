@@ -7,7 +7,6 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./user-password.component.css']
 })
 export class UserPasswordComponent {
-  user = this.authService.getUser();
   userPass = this.initUserPass();
   new_pass = '';
   passwordIncorrecto = false;
@@ -16,7 +15,6 @@ export class UserPasswordComponent {
 
   initUserPass() {
     return {
-      usuario: this.user.usuario,
       password: '',
       new_password: ''
     };
@@ -27,8 +25,6 @@ export class UserPasswordComponent {
     else {
       this.authService.changePassword(this.userPass).subscribe({
         next:respu=>{
-          this.user.password = respu;
-          this.authService.setUser(this.user);
           this.reset();
           this.authService.addAlert("alertPass", true, "Contraseña cambiada correctamente", false);
         },

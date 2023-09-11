@@ -11,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sandra.springboot.backend.recetas.models.dto.UsuarioDto;
 import com.sandra.springboot.backend.recetas.models.entity.Usuario;
 import com.sandra.springboot.backend.recetas.models.repositories.Iusuario;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
@@ -37,10 +36,7 @@ public class UsuarioService {
 	public void delete(int id) {
 		Usuario usuarioActual = usuario.findById(id).orElse(null);
 		if(usuarioActual!=null) {
-			if(usuarioActual.getImagen()!=null) {
-				// borrado del fichero de la imagen
-				imageUtils.deleteImage("public", usuarioActual.getImagen());
-			}
+			if(usuarioActual.getImagen()!=null) imageUtils.deleteImage("public", usuarioActual.getImagen());
 			usuarioActual.getRecetas().forEach(r->{if(r.getImagen() != null) imageUtils.deleteImage("public", r.getImagen());});
 		usuario.deleteById(id);
 		}
@@ -49,10 +45,6 @@ public class UsuarioService {
 	public Usuario save(Usuario usuarioNew) throws NoSuchAlgorithmException {
 		usuarioNew.setPassword(encodePassword(usuarioNew.getPassword()));
 		return usuario.save(usuarioNew);
-	}
-	
-	public Usuario findByUsuario(UsuarioDto user) throws NoSuchAlgorithmException {
-		return usuario.findByUsuario(user.getUsuario()).orElse(null);
 	}
 
 	public Usuario findByUsuarioAndPassword(String user, String password) throws NoSuchAlgorithmException {

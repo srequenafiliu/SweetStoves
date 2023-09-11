@@ -19,7 +19,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.sandra.springboot.backend.recetas.models.dto.UsuarioDto;
+import com.sandra.springboot.backend.recetas.models.dto.LoginDto;
+import com.sandra.springboot.backend.recetas.models.dto.PasswordDto;
 import com.sandra.springboot.backend.recetas.models.entity.Usuario;
 import com.sandra.springboot.backend.recetas.models.services.UsuarioService;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
@@ -29,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 
 @RequiredArgsConstructor
@@ -41,12 +44,16 @@ public class AuthRestController {
 
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	private static String getUrl() {
+		return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+	}
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody Usuario usuario) throws NoSuchAlgorithmException {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDto usuario) throws NoSuchAlgorithmException {
 		Map<String,Object> response = new HashMap<>();
         Usuario u = usuarioService.findByUsuarioAndPassword(usuario.getUsuario(), usuario.getPassword());
-		if(u==null) {
+		if(u == null) {
 			response.put("error", "Usuario y/o contraseña no válidos");
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.UNAUTHORIZED);
 		}
@@ -59,10 +66,8 @@ public class AuthRestController {
 		Usuario usuarioNew = null;
 		Map<String,Object> response = new HashMap<>();
 		if(result.hasErrors() || !usuario.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$")) {
-			List<String> errors = result.getFieldErrors()
-					.stream()
-					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
-					.collect(Collectors.toList());
+			List<String> errors = result.getFieldErrors().stream()
+					.map(err -> String.format("El campo '%s' %s", err.getField(), err.getDefaultMessage())).collect(Collectors.toList());
 			if (!usuario.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$"))
 				errors.add("El campo 'password' no tiene el formato correcto");
 			response.put("errores", errors);
@@ -76,12 +81,10 @@ public class AuthRestController {
 			usuario.getDatosUsuario().setUsuario(usuario);
 			usuario.setCorreo(usuario.getCorreo().toLowerCase());
 			usuarioNew = usuarioService.save(usuario);
-			if(usuario.getImagen()!=null)
-				usuarioNew.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + usuarioNew.getImagen());
-		} catch (DataAccessException e) {  // Error al acceder a la base de datos
+			if(usuario.getImagen()!=null) usuarioNew.setImagen(String.format("%s/%s", getUrl(), usuarioNew.getImagen()));
+		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al conectar con la base de datos");
-			response.put("error", e.getMessage().concat(":")
-					.concat(e.getMostSpecificCause().getMessage()));
+			response.put("error", String.format("%s: %s", e.getMessage(), e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		response.put("mensaje", "El usuario se ha insertado correctamente");
@@ -90,9 +93,9 @@ public class AuthRestController {
 	}
 	
 	@PutMapping("/change_password")
-	public ResponseEntity<?> changePassword(@Valid @RequestBody UsuarioDto usuario, BindingResult result) throws NoSuchAlgorithmException{
-		Usuario usuarioActual = null;
-		Usuario usuarioUpdated = null;
+	public ResponseEntity<?> changePassword(@Valid @RequestBody PasswordDto passwordDto, BindingResult result) throws NoSuchAlgorithmException{
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Usuario usuario = null;
 		Map<String,Object> response = new HashMap<>();
 		if(result.hasErrors()) {
 			List<String> errors = result.getFieldErrors()
@@ -103,33 +106,19 @@ public class AuthRestController {
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		try {
-			if(usuarioService.findByUsuario(usuario)==null) { // El usuario no existe en la base de datos
-				response.put("error", "El usuario '"+usuario.getUsuario()+"' no existe");
-				return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
-			}
-		} catch (DataAccessException e) {  // Error al acceder a la base de datos
-			response.put("mensaje", "Error al conectar con la base de datos");
-			response.put("error", e.getMessage().concat(":")
-					.concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		try {
-			usuarioActual = usuarioService.findByUsuarioAndPassword(usuario.getUsuario(), usuario.getPassword());
-			// Comprueba si la contraseña coincide con la guardada en la base de datos
+			usuario = usuarioService.findById(Integer.parseInt(auth.getCredentials().toString()));
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al conectar con la base de datos");
-			response.put("error", e.getMessage().concat(":")
-					.concat(e.getMostSpecificCause().getMessage()));
+			response.put("error", String.format("%s: %s", e.getMessage(), e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		if(usuarioActual==null) { // No existe en la base de datos
+		if(!usuarioService.samePassword(usuario.getPassword(), passwordDto.getPassword())) {
 			response.put("error", "Contraseña actual incorrecta");
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
 		}
-		// Si llegamos aquí es que el usuario que queremos modificar SI existe
 		try {
-			usuarioActual.setPassword(usuario.getNew_password());
-			usuarioUpdated = usuarioService.save(usuarioActual);
+			usuario.setPassword(passwordDto.getNew_password());
+			usuarioService.save(usuario);
 		} catch (DataAccessException e) {  // Error al acceder a la base de datos
 			response.put("mensaje", "Error al conectar con la base de datos");
 			response.put("error", e.getMessage().concat(":")
@@ -137,7 +126,6 @@ public class AuthRestController {
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		response.put("mensaje", "La contraseña se ha modificado correctamente");
-		response.put("password", usuarioUpdated.getPassword());
 		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.CREATED);
 	}
 

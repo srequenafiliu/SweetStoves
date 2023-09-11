@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { AuthService } from '../services/auth.service';
 import { IUser } from '../interfaces/i-user';
@@ -8,8 +8,8 @@ import { IUser } from '../interfaces/i-user';
   templateUrl: './user-update.component.html',
   styleUrls: ['./user-update.component.css']
 })
-export class UserUpdateComponent {
-  user = this.authService.getUser();
+export class UserUpdateComponent implements OnInit {
+  user!:IUser;
   opcion = 'conservar';
   errores:string[] = [];
   usuarioExistente = false;
@@ -18,6 +18,9 @@ export class UserUpdateComponent {
   passwordIncorrecto = false;
 
   constructor(private usersService:UsersService, private authService:AuthService) {}
+  ngOnInit(): void {
+    this.usersService.getUser().subscribe(u => this.user = u)
+  }
 
   changeImage(fileInput:HTMLInputElement) {
     if (!fileInput.files || fileInput.files.length === 0) this.user.imagen = null;
@@ -39,7 +42,6 @@ export class UserUpdateComponent {
       next:respu=>{
         this.user = respu;
         this.authService.sendData(respu)
-        this.authService.setUser(respu);
         this.reset(fileImage);
         this.authService.addAlert("alertUpdate", true, "Datos actualizados correctamente", false);
       },
@@ -63,7 +65,7 @@ export class UserUpdateComponent {
   }
 
   reset(fileImage:HTMLInputElement){
-    this.user = this.authService.getUser()
+    this.usersService.getUser().subscribe(u => this.user = u)
     this.errores = [];
     this.usuarioExistente = false;
     this.correoExistente = false;

@@ -79,15 +79,13 @@ public class Usuario implements java.io.Serializable {
 	@JsonIgnoreProperties({"usuario","tipo","necesidades","ingredientes","elaboracion","dificultad","imagen","creacion","usuarios"})
 	private Set<Receta> recetas_seguidas = new HashSet<Receta>(0);
 	
-	public Usuario(Usuario u) {
-		this.id = u.id;
+	public void updateUser(Usuario u) {
 		this.usuario = u.usuario;
-		this.correo = u.correo;
+		this.correo = u.correo.toLowerCase();
 		this.password = u.password;
-		this.imagen = u.imagen;
-		this.datosUsuario = u.datosUsuario;
-		this.recetas = u.recetas;
-		this.recetas_seguidas = u.recetas_seguidas;
+		this.datosUsuario.setNombre(u.datosUsuario.getNombre());
+		this.datosUsuario.setApellido(u.datosUsuario.getApellido());
+		this.datosUsuario.setTelefono(u.datosUsuario.getTelefono());
 	}
 
 }

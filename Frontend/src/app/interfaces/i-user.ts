@@ -17,8 +17,15 @@ export interface IUserinfo {
   telefono:string|null;
 }
 
-export interface IUserPass {
+export interface IUserDto {
+  id:number;
   usuario:string;
+  imagen:string|null;
+  nombre:string;
+  recetas:string[];
+}
+
+export interface IPasswordDto {
   password:string;
   new_password:string;
 }

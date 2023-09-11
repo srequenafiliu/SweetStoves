@@ -22,6 +22,7 @@ import { UserPasswordComponent } from './user-password/user-password.component';
 import { UserDeleteComponent } from './user-delete/user-delete.component';
 
 import { BaseUrlInterceptor } from './interceptors/base-url.interceptor';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 import localeEs from '@angular/common/locales/es';
 import {registerLocaleData} from '@angular/common';
@@ -57,6 +58,11 @@ registerLocaleData(localeEs, 'es');
       provide: HTTP_INTERCEPTORS,
       useClass: BaseUrlInterceptor,
       multi: true,
+    },
+    {
+      provide : HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi   : true,
     },
     {provide: LOCALE_ID, useValue: "es"}
   ],

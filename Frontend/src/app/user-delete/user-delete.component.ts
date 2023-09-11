@@ -8,12 +8,7 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./user-delete.component.css']
 })
 export class UserDeleteComponent {
-  user = this.authService.getUser();
   constructor(private usersService: UsersService, private authService:AuthService) {}
 
-  deleteUsuario(){
-    this.usersService.deleteUser(this.user.id).subscribe({
-      next:()=>this.authService.logout()
-    })
-  }
+  deleteUsuario = () => this.usersService.deleteUser().subscribe(()=>this.authService.logout())
 }

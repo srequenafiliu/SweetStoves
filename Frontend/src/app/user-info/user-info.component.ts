@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IsActiveMatchOptions } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { IUser } from '../interfaces/i-user';
+import { UsersService } from '../services/users.service';
 
 @Component({
   selector: 'user-info',
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css']
 })
-export class UserInfoComponent {
-  user = this.authService.getUser();
+export class UserInfoComponent implements OnInit {
+  user!:IUser;
   movil = window.innerWidth<=767;
   opciones:{titulo:string, color:string, link:string, texto:string}[] = [
     {titulo:'Tu lista de recetas', color:'btn-outline-secondary', link:'recetas', texto:'Comprueba las recetas que has creado y seguido'},
@@ -27,7 +29,10 @@ export class UserInfoComponent {
   };
 
   subscription: Subscription;
-  constructor(protected authService:AuthService) {
-    this.subscription = authService.getData().subscribe(u => this.user = u)
+  constructor(private usersService:UsersService, protected authService:AuthService) {
+    this.subscription = authService.getData().subscribe(u => this.user = <IUser>u)
+  }
+  ngOnInit(): void {
+    this.usersService.getUser().subscribe(u => this.user = u)
   }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IUser } from '../interfaces/i-user';
+import { IUser, IUserDto } from '../interfaces/i-user';
 import { UsersService } from '../services/users.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -13,7 +13,7 @@ export class UserListComponent {
   innerWidth = window.innerWidth;
   size = (this.innerWidth>540) ? 6 : 3;
   count!:number;
-  users!:IUser[];
+  users!:IUserDto[];
   pages!:(string|number)[];
   constructor(private usersService:UsersService, private route:ActivatedRoute) {
     this.size = (window.innerWidth>540) ? 6 : 3;
@@ -44,6 +44,4 @@ export class UserListComponent {
       default: return [1, (pagActual == 4) ? 2 : '...', pagActual-1, pagActual, pagActual+1, (pagActual == length-3) ? length-1 : '...', length];
     }
   }
-
-  getRecetas = (user:IUser) => user.recetas?.length ? user.recetas?.map(r => r.nombre).join(', ') : 'Sin recetas';
 }

@@ -13,7 +13,7 @@
         </li>
       </ul>
       <ng-template #cuentaUser>
-        <ul class="navbar-nav order-lg-3">
+        <ul class="navbar-nav order-lg-3" *ngIf="user">
           <li class="nav-item">
             <a class="d-flex nav-link" [routerLink]="['/perfil-usuario']" [routerLinkActive]="['active']" [title]="user.usuario">
               <img class="rounded-circle object-fit-cover" [src]="user.imagen" [alt]="user.usuario" *ngIf="user.imagen, else sinFoto">

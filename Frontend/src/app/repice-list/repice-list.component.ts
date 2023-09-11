@@ -1,15 +1,17 @@
-import { Component } from '@angular/core';
-import { IRepice } from '../interfaces/i-repice';
+import { Component, OnInit } from '@angular/core';
+import { IRepiceDto } from '../interfaces/i-repice';
 import { RepicesService } from '../services/repices.service';
 import { AuthService } from '../services/auth.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import jwtDecode from 'jwt-decode';
+import { UsersService } from '../services/users.service';
 
 @Component({
   selector: 'repice-list',
   templateUrl: './repice-list.component.html',
   styleUrls: ['./repice-list.component.css']
 })
-export class RepiceListComponent {
+export class RepiceListComponent implements OnInit {
   pag!:number;
   innerWidth = window.innerWidth;
   size = (this.innerWidth>540) ? 4 : 2;
@@ -20,9 +22,10 @@ export class RepiceListComponent {
   necesidades!:string;
   dificultad!:number;
   url = window.location.pathname;
-  id_usuario = this.url.includes('/perfil-usuario') ? this.authService.getUser().id : 0;
+  id_usuario = this.url.includes('/perfil-usuario') && this.authService.getToken() != null ? jwtDecode<{id:number}>(<string>this.authService.getToken()).id : 0;
+  usuario!:string;
   count!:number;
-  repices!:IRepice[];
+  repices!:IRepiceDto[];
   pages!:(string|number)[];
   needs:{value:string, title:string, checked:boolean}[] = [
     {value:'g', title:'Sin gluten', checked:false},
@@ -31,7 +34,7 @@ export class RepiceListComponent {
   ];
 
   constructor(private repicesService:RepicesService, private authService:AuthService,
-    private route:ActivatedRoute, private router:Router) {
+    private usersService:UsersService, private route:ActivatedRoute, private router:Router) {
     this.route.queryParams.subscribe(params => {
       this.pag = (+params["pag"]) ? +params["pag"] : 1;
       this.sortField = (params["sortField"]) ? params["sortField"] : 'id';
@@ -43,6 +46,10 @@ export class RepiceListComponent {
       this.dificultad = (+params["dificultad"]) ? +params["dificultad"] : 0;
       this.getRecetas();
     })
+  }
+
+  ngOnInit(): void {
+    if (this.authService.getToken()) this.usersService.getUser().subscribe(u=>this.usuario = u.usuario)
   }
 
   getRecetas() {

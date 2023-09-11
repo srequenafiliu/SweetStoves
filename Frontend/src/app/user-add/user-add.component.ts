@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { UsersService } from '../services/users.service';
 import { AuthService } from '../services/auth.service';
 import { IUser } from '../interfaces/i-user';
-import jwtDecode from 'jwt-decode';
 
 @Component({
   selector: 'user-add',
@@ -50,8 +49,9 @@ export class UserAddComponent {
       next:()=>{
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         this.authService.login({usuario: newUser.usuario, password: newUser.password!
-        }).subscribe({
-          next:token=>this.usersService.getUser(jwtDecode<{id:number}>(token).id).subscribe(u=>this.authService.setData(token, u))
+        }).subscribe(token=>{
+          this.authService.setToken(token);
+          this.usersService.getUser().subscribe(u=>this.authService.setData(u))
         })
       },
       error:e=>{

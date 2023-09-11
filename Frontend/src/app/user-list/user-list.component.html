@@ -11,10 +11,10 @@
         </span>
       </ng-template>
       <div class="h3 fw-bold mt-3">{{user.usuario}}</div>
-      <div>({{user.datosUsuario!.nombre}}<span *ngIf="user.datosUsuario?.apellido"> {{user.datosUsuario!.apellido}}</span>)</div>
-      <button type="button" class="btn btn-secondary mt-3" placement="bottom" [ngbPopover]="getRecetas(user)"
-      [popoverTitle]="'Lista de recetas de '+user.usuario">
-      {{user.recetas!.length}} receta<span *ngIf="user.recetas!.length !== 1">s</span>
+      <div>({{user.nombre}})</div>
+      <button type="button" class="btn btn-secondary mt-3" placement="bottom" [popoverTitle]="'Lista de recetas de '+user.usuario"
+      [ngbPopover]="user.recetas.length ? user.recetas.join(', ') : 'Sin recetas'">
+      {{user.recetas.length}} receta<span *ngIf="user.recetas!.length !== 1">s</span>
       </button>
     </div>
     <div class="row g-0 col-12 my-4">

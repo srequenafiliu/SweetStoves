@@ -38,10 +38,7 @@ public class RecetaService {
 	public void delete(int id) {
 		Receta recetaActual = receta.findById(id).orElse(null);
 		if(recetaActual!=null) {
-			if(recetaActual.getImagen()!=null) {
-				// borrado del fichero de la imagen
-				imageUtils.deleteImage("public", recetaActual.getImagen());
-			}
+			if(recetaActual.getImagen()!=null) imageUtils.deleteImage("public", recetaActual.getImagen());
 			receta.deleteById(id);
 		}
 	}

@@ -18,6 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -49,42 +51,39 @@ public class RecetaRestController {
 	
 	@Autowired
 	private RecetaService recetaService;
-	
 	@Autowired
 	private UsuarioService usuarioService;
 	
+	private static String getUrl() {
+		return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+	}
+	
 	@GetMapping("")
-	public ResponseEntity<?> index(@RequestParam(name="pag", defaultValue = "1") Integer pag,
-			@RequestParam(name="size", defaultValue = "4") Integer size,
-			@RequestParam(name="sortField", defaultValue = "id") String sortField,
-			@RequestParam(name="sortDir", defaultValue = "asc") String sortDir,
-			@RequestParam(name="nombre", defaultValue="") String name,
-			@RequestParam(name="tipo", defaultValue = "") String tipo,
-			@RequestParam(name="necesidades", defaultValue = "") String needs,
-			@RequestParam(name="dificultad", required=false) Integer dificultad,
+	public ResponseEntity<?> index(@RequestParam(name="pag",defaultValue="1")Integer pag, @RequestParam(name="size",defaultValue="4")Integer size,
+			@RequestParam(name="sortField",defaultValue="id")String sortField, @RequestParam(name="sortDir",defaultValue="asc") String sortDir,
+			@RequestParam(name="nombre",defaultValue="")String name, @RequestParam(name="tipo",defaultValue="")String tipo,
+			@RequestParam(name="necesidades",defaultValue="")String needs, @RequestParam(name="dificultad",required=false)Integer dificultad,
 			@RequestParam(name="id_usuario", defaultValue = "0") Integer id_usuario) {
 		Map<String,Object> response = new TreeMap<String, Object>();
 		try {
 			List<Integer> range = new ArrayList<>((dificultad==null) ? Arrays.asList(1,2,3,4,5) : Arrays.asList(dificultad));
-			Pageable pageable = PageRequest.of(pag-1, size, sortDir.equals("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending());
+			Pageable pageable = PageRequest.of(pag-1, size, sortDir.equals("asc") ? Sort.by(sortField).ascending() :
+				Sort.by(sortField).descending());
 			Page<Receta> page = recetaService.findAllByFilters(name, tipo, needs, range, usuarioService.findById(id_usuario), pageable);
-			response.put("previous", (page.isFirst()) ? null : ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("pag", pag-1).toUriString());
-			response.put("next", (page.isLast()) ? null : ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("pag", pag+1).toUriString());
+			response.put("previous", (page.isFirst()) ? null : ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("pag", pag-1)
+					.toUriString());
+			response.put("next", (page.isLast()) ? null : ServletUriComponentsBuilder.fromCurrentRequest().replaceQueryParam("pag", pag+1)
+					.toUriString());
 			response.put("count", page.getTotalElements());
-			List<RecetaDto> listaRecetas = page.getContent()
-					.stream()
-					.map(r -> {
-						RecetaDto receta = new RecetaDto(r);
-						if(receta.getImagen()!=null)
-							receta.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + receta.getImagen());
-						return receta;
-					})
-					.collect(Collectors.toList());
+			List<RecetaDto> listaRecetas = page.getContent().stream().map(r -> {
+				RecetaDto receta = new RecetaDto(r);
+				if(receta.getImagen()!=null) receta.setImagen(String.format("%s/%s", getUrl(), receta.getImagen()));
+				return receta;
+			}).collect(Collectors.toList());
 			response.put("result", listaRecetas);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al conectar con la base de datos");
-			response.put("error", e.getMessage().concat(":")
-					.concat(e.getMostSpecificCause().getMessage()));
+			response.put("error", String.format("%s: %s",  e.getMessage(), e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
@@ -92,75 +91,48 @@ public class RecetaRestController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> show(@PathVariable int id) {
-		RecetaDto recetaDto = null;
+		Receta receta = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
-			recetaDto = new RecetaDto(recetaService.findById(id));
-		} catch (DataAccessException e) {  // Error al acceder a la base de datos
+			receta = recetaService.findById(id);
+		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al conectar con la base de datos");
-			response.put("error", e.getMessage().concat(":")
-					.concat(e.getMostSpecificCause().getMessage()));
+			response.put("error", String.format("%s: %s",  e.getMessage(), e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}catch (NullPointerException e) {
-			response.put("mensaje", "La receta con ID ".concat(Integer.toString(id)).concat(" no existe"));
+		} catch (NullPointerException e) {
+			response.put("mensaje", String.format("La receta con ID %d no existe", id));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-		if(recetaDto.getImagen()!=null)
-			recetaDto.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + recetaDto.getImagen());
-		return new ResponseEntity<RecetaDto>(recetaDto, HttpStatus.OK);
-	}
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete(@PathVariable int id){
-		Map<String,Object> response = new HashMap<>();
-		if (recetaService.findById(id)==null) {
-			response.put("mensaje", "Error al eliminar la receta");
-			response.put("error", "La receta con ID ".concat(Integer.toString(id)).concat(" no existe"));
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-		}
-		try {
-			recetaService.delete(id);
-		} catch (DataAccessException e) {  // Error al acceder a la base de datos
-			response.put("mensaje", "Error al eliminar la receta");
-			response.put("error", e.getMessage().concat(":")
-					.concat(e.getMostSpecificCause().getMessage()));
-			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		response.put("mensaje", "La receta se ha borrado correctamente");
-		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+		if(receta.getImagen()!=null) receta.setImagen(String.format("%s/%s", getUrl(), receta.getImagen()));
+		return new ResponseEntity<Receta>(receta, HttpStatus.OK);
 	}
 	
 	@PostMapping("")
 	public ResponseEntity<?> create(@Valid @RequestBody Receta receta, BindingResult result){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Receta recetaNew = null;
+		boolean tipo_incorrecto = !new ArrayList<String>(Arrays.asList("Dulce", "Salado")).contains(receta.getTipo());
 		Map<String,Object> response = new HashMap<>();
-		if(result.hasErrors() || !receta.getTipo().equals("Dulce") && !receta.getTipo().equals("Salado")) {
-			List<String> errors = result.getFieldErrors()
-					.stream()
-					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
-					.collect(Collectors.toList());
-			if (!receta.getTipo().equals("Dulce") && !receta.getTipo().equals("Salado"))
-				errors.add("El campo 'tipo' solo puede ser 'Dulce' o 'Salado'");
+		if(result.hasErrors() || tipo_incorrecto) {
+			List<String> errors = result.getFieldErrors().stream()
+					.map(err -> String.format("El campo '%s' %s", err.getField(), err.getDefaultMessage())).collect(Collectors.toList());
+			if (tipo_incorrecto) errors.add("El campo 'tipo' solo puede ser 'Dulce' o 'Salado'");
 			response.put("errores", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		try {
-			receta.setNeeds("");
+			receta.setUsuario(usuarioService.findById(Integer.parseInt(auth.getCredentials().toString())));
 			if(receta.getImagen()!=null) {
 				String ruta = imageUtils.saveImageBase64("recetas", receta.getImagen());
 				receta.setImagen(ruta);
 			}
-			Set<Usuario> usuarios = receta.getUsuarios();
-			usuarios.add(receta.getUsuario());
-			receta.setUsuarios(usuarios);
+			receta.setUsuarios(Set.of(receta.getUsuario()));
 			receta.setCreacion(new Date());
 			recetaNew = recetaService.save(receta);
-			if(receta.getImagen()!=null)
-				recetaNew.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + recetaNew.getImagen());
-		} catch (DataAccessException e) {  // Error al acceder a la base de datos
+			if(receta.getImagen()!=null) recetaNew.setImagen(String.format("%s/%s", getUrl(), recetaNew.getImagen()));
+		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al conectar con la base de datos");
-			response.put("error", e.getMessage().concat(":")
-					.concat(e.getMostSpecificCause().getMessage()));
+			response.put("error", String.format("%s: %s",  e.getMessage(), e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		response.put("mensaje", "La receta se ha insertado correctamente");
@@ -170,58 +142,119 @@ public class RecetaRestController {
 	
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@Valid @RequestBody Receta receta, @PathVariable int id, BindingResult result){
-		Receta recetaActual = null;
-		Receta recetaUpdated = null;
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Receta recetaActual = null, recetaUpdated = null;
+		boolean tipo_incorrecto = !new ArrayList<String>(Arrays.asList("Dulce", "Salado")).contains(receta.getTipo());
 		Map<String,Object> response = new HashMap<>();
-		if(result.hasErrors() || !receta.getTipo().equals("Dulce") && !receta.getTipo().equals("Salado")) {
-			List<String> errors = result.getFieldErrors()
-					.stream()
-					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
-					.collect(Collectors.toList());
-			if (!receta.getTipo().equals("Dulce") && !receta.getTipo().equals("Salado"))
-				errors.add("El campo 'tipo' solo puede ser 'Dulce' o 'Salado'");
+		if(result.hasErrors() || tipo_incorrecto) {
+			List<String> errors = result.getFieldErrors().stream()
+					.map(err -> String.format("El campo '%s' %s", err.getField(), err.getDefaultMessage())).collect(Collectors.toList());
+			if (tipo_incorrecto) errors.add("El campo 'tipo' solo puede ser 'Dulce' o 'Salado'");
 			response.put("errores", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
 		try {
-			recetaActual = recetaService.findById(id); // La receta puede existir o no
-		} catch (DataAccessException e) {  // Error al acceder a la base de datos
+			recetaActual = recetaService.findById(id);
+		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al conectar con la base de datos");
-			response.put("error", e.getMessage().concat(":")
-					.concat(e.getMostSpecificCause().getMessage()));
+			response.put("error", String.format("%s: %s",  e.getMessage(), e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		if(recetaActual==null) { // No existe en la base de datos
-			response.put("mensaje", "La receta con ID ".concat(Integer.toString(id)).concat(" no existe en la base de datos"));
+		if(recetaActual==null) {
+			response.put("mensaje", String.format("La receta con ID %d no existe en la base de datos", id));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NOT_FOUND);
 		}
-		// Si llegamos aquí es que el evento que queremos modificar SI existe
+		else if (recetaActual.getUsuario().getId() != Integer.parseInt(auth.getCredentials().toString())) {
+			response.put("mensaje", "No puedes modificar una receta de otro usuario");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.UNAUTHORIZED);
+		}
 		try {
-			receta.setNeeds("");
-			recetaActual.setNombre(receta.getNombre());
-			recetaActual.setTipo(receta.getTipo());
-			recetaActual.setNecesidades(receta.getNecesidades());
-			recetaActual.setNeeds("");
-			recetaActual.setIngredientes(receta.getIngredientes());
-			recetaActual.setElaboracion(receta.getElaboracion());
-			recetaActual.setDificultad(receta.getDificultad());
-			recetaActual.setUsuarios(receta.getUsuarios());
+			recetaActual.updateRepice(receta);
 			if(receta.getImagen()!=null) {
 				imageUtils.deleteImage("public", recetaActual.getImagen());
 				String ruta = imageUtils.saveImageBase64("recetas", receta.getImagen());
 				recetaActual.setImagen(ruta);
 			}
 			recetaUpdated = recetaService.save(recetaActual);
-			if(recetaUpdated.getImagen()!=null)
-				recetaUpdated.setImagen(ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/" + recetaUpdated.getImagen());
-		} catch (DataAccessException e) {  // Error al acceder a la base de datos
+			if(recetaUpdated.getImagen()!=null) recetaUpdated.setImagen(String.format("%s/%s", getUrl(), recetaUpdated.getImagen()));
+		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al conectar con la base de datos");
-			response.put("error", e.getMessage().concat(":")
-					.concat(e.getMostSpecificCause().getMessage()));
+			response.put("error", String.format("%s: %s",  e.getMessage(), e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		response.put("mensaje", "La receta se ha modificado correctamente");
 		response.put("receta", recetaUpdated);
-		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.CREATED);
+		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+	}
+	
+	@PutMapping("/{id}/seguimiento")
+	public ResponseEntity<?> update_seguimiento(@PathVariable int id){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        int id_usuario = Integer.parseInt(auth.getCredentials().toString());
+		Receta receta = null;
+		Map<String, Object> response = new HashMap<>();
+		try {
+			receta = recetaService.findById(id);
+		} catch (DataAccessException e) {
+			response.put("mensaje", "Error al conectar con la base de datos");
+			response.put("error", String.format("%s: %s",  e.getMessage(), e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}catch (NullPointerException e) {
+			response.put("mensaje", String.format("La receta con ID %d no existe en la base de datos", id));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		if (receta.getUsuario().getId() == id_usuario) {
+			response.put("mensaje", "No puedes eliminar una receta tuya de tu lista personal");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.UNAUTHORIZED);
+		}
+		Set<Usuario> usuarios = receta.getUsuarios();
+		boolean receta_guardada = usuarios.stream().anyMatch(u -> u.getId() == Integer.parseInt(auth.getCredentials().toString()));
+		try {
+			if (receta_guardada) receta.setUsuarios(usuarios.stream().filter(u -> u.getId() != id_usuario).collect(Collectors.toSet()));
+			else {
+				usuarios.add(usuarioService.findById(id_usuario));
+				receta.setUsuarios(usuarios);
+			};
+			recetaService.save(receta);
+		} catch (DataAccessException e) {
+			response.put("mensaje", "Error al conectar con la base de datos");
+			response.put("error", String.format("%s: %s",  e.getMessage(), e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		response.put("mensaje", String.format("La receta se ha %s correctamente %s tu lista personal de recetas",
+				receta_guardada ? "eliminado": "añadido", receta_guardada ? "de": "en"));
+		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> delete(@PathVariable int id){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Map<String,Object> response = new HashMap<>();
+		Receta receta = null;
+		try {
+			receta = recetaService.findById(id);
+		} catch (DataAccessException e) {
+			response.put("mensaje", "Error al conectar con la base de datos");
+			response.put("error", String.format("%s: %s",  e.getMessage(), e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		if (receta == null) {
+			response.put("mensaje", "Error al eliminar la receta");
+			response.put("error", String.format("La receta con ID %d no existe", id));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
+		}
+		else if (receta.getUsuario().getId() != Integer.parseInt(auth.getCredentials().toString())) {
+			response.put("mensaje", "No puedes eliminar una receta de otro usuario");
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.UNAUTHORIZED);
+		}
+		try {
+			recetaService.delete(id);
+		} catch (DataAccessException e) {
+			response.put("mensaje", "Error al eliminar la receta");
+			response.put("error", String.format("%s: %s",  e.getMessage(), e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		response.put("mensaje", "La receta se ha borrado correctamente");
+		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 	}
 }

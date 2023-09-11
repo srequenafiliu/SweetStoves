@@ -1,33 +1,37 @@
 package com.sandra.springboot.backend.recetas.models.dto;
 
-import java.io.Serializable;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.sandra.springboot.backend.recetas.models.entity.Usuario;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@RequiredArgsConstructor
-@AllArgsConstructor
-public class UsuarioDto implements Serializable {
+public class UsuarioDto implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	@NonNull
-	@NotBlank
-	private String usuario;
-	
+	private Integer id;
 	@NonNull
 	@NotBlank
-	private String password;
-	
+	private String usuario;
+	@NonNull
 	@NotBlank
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$", message = "no tiene el formato correcto")
-	private String new_password;
+	private String nombre;
+	private String imagen;
+	private List<String> recetas;
+
+	public UsuarioDto(Usuario u) {
+		this.id = u.getId();
+		this.usuario = u.getUsuario();
+		this.nombre = String.format("%s%s", u.getDatosUsuario().getNombre(),
+				u.getDatosUsuario().getApellido() != null ? " "+u.getDatosUsuario().getApellido() : "");
+		this.imagen = u.getImagen();
+		this.recetas = u.getRecetas().stream().map(r->r.getNombre()).collect(Collectors.toList());
+	}
 
 }

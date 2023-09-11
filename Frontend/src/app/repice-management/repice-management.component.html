@@ -1,26 +1,26 @@
-<div class="row g-0">
+<div class="row g-0" *ngIf="user">
   <div class="offset-1 col-10">
     <h1 [ngClass]="{'text-success': url.includes('nueva-receta'), 'text-info': !url.includes('nueva-receta')}"
     class="display-5 text-center fw-bold mt-5">{{titulo}}</h1>
     <div class="offset-lg-3 col-lg-6">
-      <select class="form-select form-select-lg my-3" [disabled]="user.recetas!.length === 0" [(ngModel)]="id_receta" (change)="getReceta()" *ngIf="url.includes('actualizar-receta')">
+      <select class="form-select form-select-lg my-3" id="recetas" [disabled]="user.recetas!.length === 0" [(ngModel)]="id_receta" (change)="getReceta()" *ngIf="url.includes('actualizar-receta')">
         <option value="0" hidden *ngIf="user.recetas!.length, else sinRecetas">Selecciona una de tus recetas para actualizar sus datos</option>
         <ng-template #sinRecetas><option value="0">No has guardado ninguna receta en SweetStoves</option></ng-template>
         <option *ngFor="let receta of user.recetas" [value]="receta.id">{{receta.nombre}}</option>
       </select>
     </div>
-    <form (ngSubmit)="repiceManagement(receta, fileImage)" #form="ngForm" *ngIf="url.includes('nueva-receta') || id_receta !== 0, else noChoice">
+    <form (ngSubmit)="repiceManagement(receta, fileImage)" #form="ngForm" *ngIf="url.includes('nueva-receta') || (id_receta !== 0 && receta), else noChoice">
       <div class="row g-0">
         <div class="col-md-5">
           <div class="form-group form-floating my-3">
             <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('nombre') !== -1,
-            'is-valid': errores.length && buscarErrores('nombre') === -1}" name="nombre" placeholder="Nombre" [(ngModel)]="receta.nombre" required>
+            'is-valid': errores.length && buscarErrores('nombre') === -1}" id="nombre" name="nombre" placeholder="Nombre" [(ngModel)]="receta.nombre" required>
             <div class="invalid-feedback">{{errores[buscarErrores('nombre')]}}</div>
-            <label>Nombre<span class="text-danger">*</span></label>
+            <label for="nombre">Nombre<span class="text-danger">*</span></label>
           </div>
           <div class="row g-0">
             <div class="form-group col-lg-6 my-lg-auto">
-              <label class="form-label">Tipo<span class="text-danger">*</span>:&nbsp;</label>
+              <span class="form-label">Tipo<span class="text-danger">*</span>:&nbsp;</span>
               <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                 <input type="radio" class="btn-check" name="addtype" id="addtypeD" value="Dulce" [(ngModel)]="receta.tipo" required>
                 <label class="btn btn-outline-danger" for="addtypeD">Dulce</label>
@@ -29,7 +29,7 @@
               </div>
             </div>
             <div class="form-group col-lg-6 mt-3 my-lg-auto">
-              <label class="form-label my-0">Dificultad<span class="text-danger">*</span>:&nbsp;</label>
+              <span class="form-label my-0">Dificultad<span class="text-danger">*</span>:&nbsp;</span>
               <span *ngFor="let star of [1, 2, 3, 4 , 5]" class="fa-star"
               [ngClass]="{'fas':star<=receta.dificultad, 'far':star>receta.dificultad}"
               (click)="setLevel(star)"></span>
@@ -37,15 +37,15 @@
           </div>
         </div>
         <div class="form-group offset-md-2 col-md-5 my-3">
-          <label class="form-label">Necesidades especiales:&nbsp;</label>
+          <span class="form-label">Necesidades especiales:&nbsp;</span>
           <div class="form-check form-switch" *ngFor="let item of checklist">
-            <input class="form-check-input" type="checkbox" [name]="item.id" [value]="item.value" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}">
-            <label class="form-check-label" [for]="item.id">{{item.value}}</label>
+            <input class="form-check-input" type="checkbox" [id]="item.id" [name]="item.id" [value]="item.value" [(ngModel)]="item.checked" [ngModelOptions]="{standalone: true}">
+            <label class="form-check-label" [for]="item.id">{{item.titulo}}</label>
           </div>
         </div>
         <div class="form-group col-md-5 my-md-3" [ngClass]="{'offset-md-2 my-3': isOdd}" *ngFor="let item of textareas, odd as isOdd">
-          <label for="exampleTextarea" class="form-label my-2">{{item.title}}<span class="text-danger">**:</span></label>
-          <textarea class="form-control" [name]="item.name" rows="3" [(ngModel)]="item.value" [placeholder]="item.ej" (input)="getArray(item.name, item.value)"
+          <label [for]="item.name" class="form-label my-2">{{item.title}}<span class="text-danger">**:</span></label>
+          <textarea class="form-control" [id]="item.name" [name]="item.name" rows="3" [(ngModel)]="item.value" [placeholder]="item.ej" (input)="getArray(item.name, item.value)"
           [ngClass]="{'is-invalid': buscarErrores(item.name) !==-1 , 'is-valid': errores.length && buscarErrores(item.name) === -1}" required></textarea>
           <div class="invalid-feedback">{{errores[buscarErrores(item.name)]}}</div>
         </div>
@@ -63,8 +63,8 @@
                 <label class="btn btn-outline-warning" for="repiceimg2">Cambiar</label>
               </div>
               <div [ngClass]="{'d-none': url.includes('actualizar-receta') && opcion === 'conservar'}">
-                <label for="image">Imagen<span class="text-danger">*</span>:</label>
-                <input type="file" class="form-control" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
+                <label for="imagen">Imagen<span class="text-danger">*</span>:</label>
+                <input type="file" class="form-control" id="imagen" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
               </div>
             </div>
             <div [ngClass]="{'mt-auto': receta.imagen}" id="alertRepice">

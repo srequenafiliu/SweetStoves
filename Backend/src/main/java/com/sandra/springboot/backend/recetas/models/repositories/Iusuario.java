@@ -8,7 +8,6 @@ import com.sandra.springboot.backend.recetas.models.entity.Usuario;
 
 public interface Iusuario extends JpaRepository<Usuario, Integer> {
 	
-	Optional<Usuario> findByUsuario(String usuario);
 	Optional<Usuario> findByUsuarioAndPassword(String usuario, String password);
 
 }

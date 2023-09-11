@@ -1,4 +1,4 @@
-<div class="row g-0">
+<div class="row g-0" *ngIf="user">
   <div class="offset-1 col-10">
     <h1 class="display-5 text-warning text-center fw-bold mt-5">Actualiza tu cuenta</h1>
     <form (ngSubmit)="updateUser(user, fileImage)" #form="ngForm">
@@ -6,45 +6,45 @@
         <div class="row g-0 col-md-6">
           <div class="h3 col-lg-10 text-info text-center text-decoration-underline mb-3">Datos personales</div>
           <div class="col-lg-10 form-group form-floating my-1">
-            <input type="text" class="form-control" autocomplete="off" name="nombre" [ngClass]="{'is-invalid': buscarErrores('nombre') !== -1,
+            <input type="text" class="form-control" autocomplete="off" id="nombre" name="nombre" [ngClass]="{'is-invalid': buscarErrores('nombre') !== -1,
             'is-valid': errores.length && buscarErrores('nombre') === -1}" placeholder="Nombre" [(ngModel)]="user.datosUsuario!.nombre" required>
             <div class="invalid-feedback">{{errores[buscarErrores('nombre')]}}</div>
-            <label>Nombre<span class="text-danger">*</span></label>
+            <label for="nombre">Nombre<span class="text-danger">*</span></label>
           </div>
           <div class="col-lg-10 form-group form-floating my-1">
-            <input type="text" class="form-control" autocomplete="off" name="apellido" [ngClass]="{'is-invalid': buscarErrores('apellido') !== -1,
+            <input type="text" class="form-control" autocomplete="off" id="apellido" name="apellido" [ngClass]="{'is-invalid': buscarErrores('apellido') !== -1,
             'is-valid': errores.length && buscarErrores('apellido') === -1}" placeholder="Apellido" [(ngModel)]="user.datosUsuario!.apellido">
             <div class="invalid-feedback">{{errores[buscarErrores('apellido')]}}</div>
-            <label>Apellido</label>
+            <label for="apellido">Apellido</label>
           </div>
           <div class="col-lg-10 form-group form-floating my-1">
-            <input type="text" class="form-control" autocomplete="off" name="teléfono" [ngClass]="{'is-invalid': buscarErrores('teléfono') !== -1,
+            <input type="text" class="form-control" autocomplete="off" id="teléfono" name="teléfono" [ngClass]="{'is-invalid': buscarErrores('teléfono') !== -1,
             'is-valid': errores.length && buscarErrores('teléfono') === -1}" placeholder="Teléfono" [(ngModel)]="user.datosUsuario!.telefono">
             <div class="invalid-feedback">{{errores[buscarErrores('teléfono')]}}</div>
-            <label>Teléfono</label>
+            <label for="teléfono">Teléfono</label>
           </div>
         </div>
         <div class="row g-0 col-md-6">
           <div class="h3 offset-lg-2 col-lg-10 text-info text-center text-decoration-underline my-3 mt-md-0">Datos de la cuenta</div>
           <div class="offset-lg-2 col-lg-10 form-group form-floating my-1">
             <input type="text" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('usuario') !== -1 || usuarioExistente,
-            'is-valid': errores.length && buscarErrores('usuario') === -1 && !usuarioExistente}" name="usuario" placeholder="Usuario" [(ngModel)]="user.usuario" required>
+            'is-valid': errores.length && buscarErrores('usuario') === -1 && !usuarioExistente}" id="usuario" name="usuario" placeholder="Usuario" [(ngModel)]="user.usuario" required>
             <div class="invalid-feedback" *ngIf="!usuarioExistente, else usuarioRepetido">{{errores[buscarErrores('usuario')]}}</div>
             <ng-template #usuarioRepetido><div class="invalid-feedback">Este usuario ya existe</div></ng-template>
-            <label>Usuario<span class="text-danger">*</span></label>
+            <label for="usuario">Usuario<span class="text-danger">*</span></label>
           </div>
           <div class="offset-lg-2 col-lg-10 form-group form-floating my-1">
             <input type="email" class="form-control" autocomplete="off" [ngClass]="{'is-invalid': buscarErrores('correo') !== -1 || correoExistente,
-            'is-valid': errores.length && buscarErrores('correo') === -1 && !correoExistente}" name="correo" placeholder="Correo electrónico" [(ngModel)]="user.correo" required>
+            'is-valid': errores.length && buscarErrores('correo') === -1 && !correoExistente}" id="correo" name="correo" placeholder="Correo electrónico" [(ngModel)]="user.correo" required>
             <div class="invalid-feedback" *ngIf="!correoExistente, else correoRepetido">{{errores[buscarErrores('correo')]}}</div>
             <ng-template #correoRepetido><div class="invalid-feedback">Este correo ya está registrado</div></ng-template>
-            <label>Correo electrónico<span class="text-danger">*</span></label>
+            <label for="correo">Correo electrónico<span class="text-danger">*</span></label>
           </div>
           <div class="offset-lg-2 col-lg-10 form-group form-floating my-1">
             <input type="password" class="form-control" [ngClass]="{'is-invalid': passwordIncorrecto}"
-            name="password" placeholder="Contraseña" [(ngModel)]="password" required>
+            id="password" name="password" placeholder="Contraseña" [(ngModel)]="password" required>
             <div class="invalid-feedback">Contraseña incorrecta</div>
-            <label>Contraseña<span class="text-danger">**</span></label>
+            <label for="password">Contraseña<span class="text-danger">**</span></label>
           </div>
         </div>
         <div class="form-group mb-3" [ngClass]="{'offset-md-7 col-md-5': !user.imagen, 'row g-0': user.imagen}">
@@ -63,8 +63,8 @@
                 <label class="btn btn-outline-danger" for="userimg3">Borrar</label>
               </div>
               <div [ngClass]="{'d-none': opcion !== 'cambiar'}">
-                <label for="image">Imagen<span class="text-danger">*</span>:</label>
-                <input type="file" class="form-control" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
+                <label for="imagen">Imagen<span class="text-danger">*</span>:</label>
+                <input type="file" class="form-control" id="imagen" name="image" #fileImage (change)="changeImage(fileImage)" accept="image/png">
               </div>
               <div [ngClass]="{'d-none': opcion !== 'borrar'}">
                 Tu foto de perfil se borrará de nuestros servidores y no se podrá recuperar.

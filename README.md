@@ -3,33 +3,50 @@ SweetStoves es un blog de recetas en el cual se pueden encontrar diferentes rece
 En este repositorio encontrarás el código tanto de Back como de Front.
 ## Backend
 La API generada, con enlace *http://localhost:8080/api*, muestra los siguientes recursos:
-### Recetas
-#### ***Enlaces***
-- **/recetas**: Datos de todas las recetas
-- **/recetas/id**: Datos de una receta en concreto
-#### ___Atributos___
+### **/recetas**
+En este enlace se podrá consultar el número de recetas guardadas en la base de datos que coincidan con los filtros especificados (si no se especifica ninguno, este número será el total) y una lista de recetas paginada. En cada página aparecerán máximo 4 recetas si no se establece otro tamaño, y se puede navegar entre páginas con los enlaces en _previous_ y *next*. Las recetas aparecen ordenadas por su ID de forma ascendente, pero se puede cambiar la manera de ordenarlas mediante parámetros. Los atributos que aparecen en las recetas son los siguientes:
 - **id**: Dato numérico que identifica la receta
-- **usuario**: El usuario creador de la receta
+- **usuario**: Dato de tipo string con el nombre del usuario creador de la receta
 - **nombre**: Dato de tipo string con el nombre de la receta
 - **tipo**: Dato de tipo string. Solo puede ser _dulce_ o _salado_
 - **necesidades**: Array de string. Las opciones pueden ser *Sin gluten*, *Sin lactosa* y/o *Vegana*
-- **ingredientes**: Array de strings con todos los ingredientes necesarios para elaborar la receta
-- **elaboracion**: Array de string con los pasos a seguir para realizar la receta
 - **dificultad**: Dato numérico entre el 1 y el 5 que representa la dificultad de la receta
 - **imagen**: URL donde se ha guardado la foto de la receta 
 - **creacion**: Fecha con formato _yyyy-mm-dd_ de cuando se creó la receta
-- **usuarios**: Lista de usuarios que guardaron la receta
-### Usuarios
-#### ***Enlaces***
-- __/usuarios__: Datos de todos los usuarios
-- __/usuarios/id__: Datos de un usuario en concreto
-#### ___Atributos___
+#### ***Parámetros***
+Como se ha mencionado anteriormente, se pueden especificar el número de recetas visualizadas, el orden de las recetas y los filtros para buscar recetas con características contretas. Los parámetros que se pueden usar son los siguientes:
+- __size__: Número de recetas visualizadas. Por defecto es 4
+- __sortField__: Atributo que se utiliza para ordenar las recetas. Por defecto se utiliza el id
+- __sortDir__: Orden de clasificación de la lista. Por defecto es ascendente. Para ordenar descendentemente, se puede utilizar cualquier valor en este parámetro
+- __nombre__: Filtro por el nombre de la receta
+- __tipo__: Filtro por el tipo de receta (dulce o salado)
+- __necesidades__: Filtro por las necesidades especiales de la receta. En este filtro se pueden usar las siguientes letras (se pueden combinar, pero deben estar en el mismo orden que el siguiente para que el filtro funcione adecuadamente):
+    - __g__: Hace referencia a la necesidad _Sin gluten_
+    - __l__: Hace referencia a la necesidad _Sin lactosa_
+    - __v__: Hace referencia a la necesidad _Vegana_
+- __dificultad__: Filtro por la dificultad de la receta
+- __id_usuario__: Filtro por el usuario creador de la(s) receta(s)
+### __/recetas/{id}__
+En este enlace se podrá consultar una receta específica. Algunos atributos cambian con respecto a los encontrados en la lista anterior. Asimismo, se añaden otros:
+- **usuario**: Este atributo pasa a mostrar un dato de clase Usuario con el id y nombre del mismo
+- **needs**: El atributo _necesidades_ pasa a ser un dato de tipo string que tiene el mismo comportamiento que el filtro de necesidades.
+- **ingredientes**: Array de strings con todos los ingredientes necesarios para elaborar la receta
+- **elaboracion**: Array de string con los pasos a seguir para realizar la receta
+- **usuarios**: Lista de datos de clase Usuario que guardaron la receta en su lista personal.
+### __/usuarios__
+En este enlace se podrá consultar el número de usuarios registrados en la base de datos y una lista de usuarios paginada. Estas páginas funcionan de la misma manera que las de recetas en cuanto a tamaño y navegación. Los atributos que aparecen en las recetas son los siguientes:
 - __id__: Dato numérico que identifica al usuario
 - __usuario__: Dato de tipo string con el nombre de usuario
+- __nombre__: Dato de tipo string con el nombre y apellido(s) del usuario
+- __imagen__: URL donde se ha guardado la foto de perfil del usuario. Este dato puede ser nulo
+- __recetas__: Lista de los nombres de las recetas creadas por el usuario
+#### ***Parámetros***
+En este caso, solo se puede especificar el número de usuarios visualizados con el parámetro _size_, cuyo valor por defecto es 6.
+### __/usuarios/logged__
+En este enlace se podrá consultar el usuario que ha iniciado sesión. De esta manera, sus datos personales son inaccesibles para el resto de personas. Algunos atributos cambian con respecto a los encontrados en la lista anterior. Asimismo, se añaden otros:
 - __correo__: Dato de tipo string con el correo del usuario
 - __password__: Dato de tipo string con la contraseña del usuario
-- __imagen__: URL donde se ha guardado la foto de perfil del usuario. Este dato puede ser nulo
-- __datosUsuario__: Datos personales del usuario (nombre, apellido y teléfono). Todos estos datos son de tipo string y el apellido y el teléfono pueden ser nulos
+- __datosUsuario__: Dato de clase DatosUsuario que contiene el nombre, apellido(s) y teléfono del usuario. Todos estos datos son de tipo string y el apellido y el teléfono pueden ser nulos. Este atributo reemplaza al atributo _nombre_
 - __recetas__: Lista de recetas creadas por el usuario
 - __recetas_seguidas__: Lista de recetas que ha seguido el usuario
 ## Frontend
@@ -38,9 +55,9 @@ Para hacer funcionar SweetStoves debes instalar los siguientes paquetes:
 npm install
 npm i bootstrap
 npm i bootswatch@5.3.0
-npm i @ng-bootstrap/ng-bootstrap@14.2.0
+npm i @ng-bootstrap/ng-bootstrap
 npm i @fortawesome/fontawesome-free
-npm i jwt-decode@3.1.2
+npm i jwt-decode
 </pre>
 Podrás acceder a SweetStoves desde el enlace _http://localhost:4200/_, el cual te redireccionará al menú de inicio.
 Sabrás que estás en SweetStoves ya que la web tiene un icono propio en la pestaña del navegador.

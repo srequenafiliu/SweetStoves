@@ -3,6 +3,8 @@ import { IRepice } from '../interfaces/i-repice';
 import { RepicesService } from '../services/repices.service';
 import { AuthService } from '../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
+import { IUser } from '../interfaces/i-user';
+import { UsersService } from '../services/users.service';
 
 @Component({
   selector: 'repice-management',
@@ -12,14 +14,14 @@ import { ActivatedRoute } from '@angular/router';
 export class RepiceManagementComponent implements OnInit {
   url = window.location.pathname;
   titulo = this.url.includes('nueva-receta') ? 'Nueva receta' : 'Actualiza tus recetas';
-  user = this.authService.getUser();
+  user!:IUser;
   id_receta!:number;
   receta!:IRepice;
   opcion = 'conservar';
-  checklist:{id:string, value:string, checked:boolean}[] = [
-    {id:'sinGluten', value:'Sin gluten', checked:false},
-    {id:'sinLactosa', value:'Sin lactosa', checked:false},
-    {id:'vegana', value:'Vegana', checked:false}
+  checklist:{id:string, titulo:string, value:string, checked:boolean}[] = [
+    {id:'sinGluten', titulo:'Sin gluten', value:'g', checked:false},
+    {id:'sinLactosa', titulo:'Sin lactosa', value:'l', checked:false},
+    {id:'vegana', titulo:'Vegana', value:'v', checked:false}
   ];
   textareas:{title:string, name:string, ej:string, value:string}[] = [
     {title:'Ingredientes', name:'ingredientes', ej:'Ingrediente nº1\nIngrediente nº2\n...', value:''},
@@ -27,14 +29,18 @@ export class RepiceManagementComponent implements OnInit {
   ];
   errores:string[] = [];
 
-  constructor(private repicesService:RepicesService, private authService:AuthService, private route:ActivatedRoute) {}
+  constructor(private usersService:UsersService, private repicesService:RepicesService,
+    private authService:AuthService, private route:ActivatedRoute) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.id_receta = (+params["id"]) ? +params["id"] : 0
       if (this.id_receta != 0) this.getReceta()
-    })
-    if (this.url.includes('nueva-receta')) this.receta = this.initRepice();
+    });
+    this.usersService.getUser().subscribe(u => {
+      this.user = u;
+      if (this.url.includes('nueva-receta')) this.receta = this.initRepice();
+    });
   }
 
   initRepice():IRepice {
@@ -48,7 +54,7 @@ export class RepiceManagementComponent implements OnInit {
       },
       nombre: '',
       tipo: '',
-      necesidades: [],
+      needs: '',
       ingredientes: [],
       elaboracion: [],
       dificultad: 0,
@@ -62,7 +68,7 @@ export class RepiceManagementComponent implements OnInit {
     this.repicesService.getRepice(this.id_receta).subscribe({
       next: resp => {
         this.receta = resp;
-        for (const item of this.checklist) item.checked = this.receta.necesidades.includes(item.value);
+        for (const item of this.checklist) item.checked = this.receta.needs.includes(item.value);
         this.textareas[0].value = this.receta.ingredientes.join("\n");
         this.textareas[1].value = this.receta.elaboracion.join("\n");
       },
@@ -101,18 +107,15 @@ export class RepiceManagementComponent implements OnInit {
   }
 
   repiceManagement(receta:IRepice, img:HTMLInputElement) {
-    receta.necesidades = this.checklist.filter(n=>n.checked).map(n=>n.value);
+    receta.needs = this.checklist.filter(n=>n.checked).map(n=>n.value).join("");
     this.url.includes('nueva-receta') ? this.addRepice(receta, img) : this.updateReceta(receta, img);
   }
 
   addRepice(receta:IRepice, img:HTMLInputElement) {
     receta.creacion = new Date(Date.now());
     this.repicesService.addRepice(receta).subscribe({
-      next:respu=>{
+      next:()=>{
         this.authService.addAlert("alertRepice", true, "Receta creada correctamente", true);
-        this.user.recetas?.push(respu);
-        this.user.recetas_seguidas?.push(respu);
-        this.authService.setUser(this.user);
         this.reset(img)
       },
       error:e=>this.errores = (e.error.errores != undefined) ? e.error.errores : []
@@ -123,19 +126,12 @@ export class RepiceManagementComponent implements OnInit {
     const copia_receta = Object.assign({}, receta)
     if (this.opcion == "conservar") copia_receta.imagen = null;
     this.repicesService.updateRepice(copia_receta).subscribe({
-      next:respu=>{
+      next:()=>{
         this.authService.addAlert("alertRepice", true, "Receta actualizada correctamente", true);
-        this.reemplazarReceta(this.user.recetas, respu)
-        this.reemplazarReceta(this.user.recetas_seguidas, respu)
-        this.authService.setUser(this.user);
         this.opcion = 'conservar'
         img.value = '';
       },
       error:e=>this.errores = (e.error.errores != undefined) ? e.error.errores : []
     });
-  }
-
-  reemplazarReceta(array:IRepice[]|undefined, receta:IRepice) {
-    if (array) for (const i in array) if(array[i].id == receta.id) array.splice(+i, 1, receta);
   }
 }

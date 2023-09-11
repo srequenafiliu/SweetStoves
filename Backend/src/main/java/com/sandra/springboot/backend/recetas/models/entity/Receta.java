@@ -1,12 +1,10 @@
 package com.sandra.springboot.backend.recetas.models.entity;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -28,6 +26,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
@@ -37,6 +36,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "receta")
 public class Receta implements java.io.Serializable {
@@ -66,10 +66,7 @@ public class Receta implements java.io.Serializable {
 	@Column(name = "tipo", nullable = false)
 	private String tipo;
 	
-	private transient List<String> necesidades;
-	
 	@Column(name = "needs", nullable = false)
-	@JsonIgnore
 	private String needs;
 	
 	@NonNull
@@ -106,51 +103,14 @@ public class Receta implements java.io.Serializable {
 					@JoinColumn(name = "usuario", nullable = false, updatable = false) })
 	@JsonIgnoreProperties({"correo","password","imagen","datosUsuario","recetas","recetas_seguidas"})
 	private Set<Usuario> usuarios = new HashSet<Usuario>(0);
-
-	public Receta(Receta r) {
-		this.id = r.id;
-		this.usuario = r.usuario;
+	
+	public void updateRepice(Receta r) {
 		this.nombre = r.nombre;
 		this.tipo = r.tipo;
-		this.necesidades = r.necesidades;
 		this.needs = r.needs;
 		this.ingredientes = r.ingredientes;
 		this.elaboracion = r.elaboracion;
 		this.dificultad = r.dificultad;
-		this.imagen = r.imagen;
-		this.creacion = r.creacion;
-		this.usuarios = r.usuarios;
-	}
-
-	public Receta(Integer id, Usuario usuario, String nombre, String tipo, String needs, List<String> ingredientes,
-			List<String> elaboracion, Integer dificultad, String imagen, Date creacion, Set<Usuario> usuarios) {
-		this.id = id;
-		this.usuario = usuario;
-		this.nombre = nombre;
-		this.tipo = tipo;
-		this.necesidades = getNecesidades();
-		this.needs = needs;
-		this.ingredientes = ingredientes;
-		this.elaboracion = elaboracion;
-		this.dificultad = dificultad;
-		this.imagen = imagen;
-		this.creacion = creacion;
-		this.usuarios = usuarios;
-	}
-	
-	public List<String> getNecesidades() {
-		necesidades = new ArrayList<>();
-		if (needs.contains("g")) necesidades.add("Sin gluten");
-		if (needs.contains("l")) necesidades.add("Sin lactosa");
-		if (needs.contains("v")) necesidades.add("Vegana");
-		return necesidades;
-	}
-	
-	public void setNeeds(String needs) {
-		if (necesidades.contains("Sin gluten")) needs += "g";
-		if (necesidades.contains("Sin lactosa")) needs += "l";
-		if (necesidades.contains("Vegana")) needs += "v";
-		this.needs = needs;
 	}
 
 }

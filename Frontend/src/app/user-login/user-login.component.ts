@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ILogin } from '../interfaces/i-login';
 import { UsersService } from '../services/users.service';
 import { AuthService } from '../services/auth.service';
-import jwtDecode from 'jwt-decode';
 
 @Component({
   selector: 'user-login',
@@ -19,7 +18,10 @@ export class UserLoginComponent {
 
   login() {
     this.authService.login(this.userLogin).subscribe({
-      next:token=>this.usersService.getUser(jwtDecode<{id:number}>(token).id).subscribe(u=>this.authService.setData(token, u)),
+      next:token=>{
+        this.authService.setToken(token);
+        this.usersService.getUser().subscribe(u=>this.authService.setData(u));
+      },
       error:e=>this.authService.addAlert("alertLogin", false, e.error.error, true)
     })
   }

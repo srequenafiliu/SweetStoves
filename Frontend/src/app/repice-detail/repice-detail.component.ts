@@ -6,6 +6,8 @@ import { RepicesService } from '../services/repices.service';
 import { AuthService } from '../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import jwtDecode from 'jwt-decode';
+import { UsersService } from '../services/users.service';
 
 @Component({
   selector: 'repice-detail',
@@ -13,34 +15,33 @@ import { Title } from '@angular/platform-browser';
   styleUrls: ['./repice-detail.component.css']
 })
 export class RepiceDetailComponent implements OnInit {
+  id_receta:number = +this.route.snapshot.params['id'];
   repice!:IRepice;
-  user:IUser = this.authService.getUser();
+  necesidades:string[] = [];
+  token = this.authService.getToken();
+  user!:IUser;
   receta_creada?:boolean;
   guardado?:boolean;
 
-  constructor(protected location: Location, private repicesService: RepicesService,
+  constructor(protected location: Location, protected repicesService: RepicesService, private usersService:UsersService,
     private authService:AuthService, private route: ActivatedRoute, private titleService: Title) {}
 
   ngOnInit() {
-    this.repicesService.getRepice(+this.route.snapshot.params['id']).subscribe({
+    if (this.token) this.usersService.getUser().subscribe(u => this.user = u);
+    this.repicesService.getRepice(this.id_receta).subscribe({
       next:p => {
         this.repice = p;
+        for (let n of p.needs) {
+          if (n == "g") this.necesidades.push("Sin gluten")
+          if (n == "l") this.necesidades.push("Sin lactosa")
+          if (n == "v") this.necesidades.push("Vegana")
+        }
         this.titleService.setTitle(this.titleService.getTitle()+" "+p.nombre)
-        this.receta_creada = this.user.recetas?.map(rec => rec.id).includes(p.id);
-        this.guardado = this.user.recetas_seguidas?.map(rec => rec.id).includes(p.id);
+        if (this.token) {
+          this.receta_creada = p.usuario.id == jwtDecode<{id:number}>(this.token).id
+          this.guardado = p.usuarios.map(u => u.id).includes(jwtDecode<{id:number}>(this.token).id)
+        }
       }
     });
-  }
-
-  updateRecetas_seguidas() {
-    (this.guardado) ? this.repice.usuarios.push(this.user) : this.repice.usuarios = this.repice.usuarios.filter(u=>u.id != this.user.id);
-    const copia_receta = Object.assign({}, this.repice)
-    copia_receta.imagen = null;
-    this.repicesService.updateRepice(copia_receta).subscribe({
-      next: r => {
-        (this.guardado) ? this.user.recetas_seguidas?.push(r) : this.user.recetas_seguidas = this.user.recetas_seguidas?.filter(rec=>rec.id != r.id);
-        this.authService.setUser(this.user);
-      }
-    })
   }
 }
