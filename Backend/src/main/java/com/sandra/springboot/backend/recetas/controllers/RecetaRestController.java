@@ -228,7 +228,7 @@ public class RecetaRestController {
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable int id){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Map<String,Object> response = new HashMap<>();
 		Receta receta = null;
 		try {
@@ -255,6 +255,6 @@ public class RecetaRestController {
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		response.put("mensaje", "La receta se ha borrado correctamente");
-		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NO_CONTENT);
 	}
 }
