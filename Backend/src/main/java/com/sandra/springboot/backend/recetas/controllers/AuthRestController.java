@@ -26,7 +26,6 @@ import com.sandra.springboot.backend.recetas.models.services.UsuarioService;
 import com.sandra.springboot.backend.recetas.utilidades.ImageUtils;
 
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +33,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 
-@RequiredArgsConstructor
 @CrossOrigin(origins = {"*"})
 @RestController
 @RequestMapping("/auth")
@@ -52,7 +50,7 @@ public class AuthRestController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody LoginDto usuario) throws NoSuchAlgorithmException {
 		Map<String,Object> response = new HashMap<>();
-        Usuario u = usuarioService.findByUsuarioAndPassword(usuario.getUsuario(), usuario.getPassword());
+	    Usuario u = usuarioService.findByUsuarioAndPassword(usuario.getUsuario(), usuario.getPassword());
 		if(u == null) {
 			response.put("error", "Usuario y/o contraseña no válidos");
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.UNAUTHORIZED);
@@ -64,12 +62,12 @@ public class AuthRestController {
     @PostMapping("/registro")
 	public ResponseEntity<?> create(@Valid @RequestBody Usuario usuario, BindingResult result) throws NoSuchAlgorithmException{
 		Usuario usuarioNew = null;
+		boolean pass_incorrecto = !usuario.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$");
 		Map<String,Object> response = new HashMap<>();
-		if(result.hasErrors() || !usuario.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$")) {
+		if(result.hasErrors() || pass_incorrecto) {
 			List<String> errors = result.getFieldErrors().stream()
 					.map(err -> String.format("El campo '%s' %s", err.getField(), err.getDefaultMessage())).collect(Collectors.toList());
-			if (!usuario.getPassword().matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$"))
-				errors.add("El campo 'password' no tiene el formato correcto");
+			if (pass_incorrecto) errors.add("El campo 'password' no tiene el formato correcto");
 			response.put("errores", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
@@ -94,14 +92,12 @@ public class AuthRestController {
 	
 	@PutMapping("/change_password")
 	public ResponseEntity<?> changePassword(@Valid @RequestBody PasswordDto passwordDto, BindingResult result) throws NoSuchAlgorithmException{
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		Usuario usuario = null;
 		Map<String,Object> response = new HashMap<>();
 		if(result.hasErrors()) {
-			List<String> errors = result.getFieldErrors()
-					.stream()
-					.map(err -> "El campo '" + err.getField() +"' "+ err.getDefaultMessage())
-					.collect(Collectors.toList());
+			List<String> errors = result.getFieldErrors().stream()
+					.map(err -> String.format("El campo '%s' %s", err.getField(), err.getDefaultMessage())).collect(Collectors.toList());
 			response.put("errors", errors);
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
 		}
@@ -121,12 +117,11 @@ public class AuthRestController {
 			usuarioService.save(usuario);
 		} catch (DataAccessException e) {  // Error al acceder a la base de datos
 			response.put("mensaje", "Error al conectar con la base de datos");
-			response.put("error", e.getMessage().concat(":")
-					.concat(e.getMostSpecificCause().getMessage()));
+			response.put("error", String.format("%s: %s", e.getMessage(), e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		response.put("mensaje", "La contraseña se ha modificado correctamente");
-		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.CREATED);
+		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 	}
 
     private String getToken(Usuario user) {
