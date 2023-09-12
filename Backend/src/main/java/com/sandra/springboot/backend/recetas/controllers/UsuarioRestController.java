@@ -76,7 +76,8 @@ public class UsuarioRestController {
 	
 	@GetMapping("/logged")
 	public ResponseEntity<?> show() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		int id_usuario = Integer.parseInt(auth.getCredentials().toString());
 		Usuario usuario = null;
 		Map<String, Object> response = new HashMap<>();
 		try {
@@ -86,14 +87,18 @@ public class UsuarioRestController {
 			response.put("error", String.format("%s: %s", e.getMessage(), e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+		if(usuario == null) {
+			response.put("mensaje", String.format("El usuario con ID %d no existe", id_usuario));
+			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.UNAUTHORIZED);
+		}
 		if(usuario.getImagen()!=null) usuario.setImagen(String.format("%s/%s", getUrl(), usuario.getImagen()));
 		return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
 	}
 	
 	@PutMapping("/logged")
 	public ResponseEntity<?> update(@Valid @RequestBody Usuario usuario, BindingResult result) throws NoSuchAlgorithmException{
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        int id_usuario = Integer.parseInt(auth.getCredentials().toString());
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		int id_usuario = Integer.parseInt(auth.getCredentials().toString());
 		Usuario usuarioActual = null, usuarioUpdated = null;
 		Map<String,Object> response = new HashMap<>();
 		if(result.hasErrors()) {
@@ -106,8 +111,7 @@ public class UsuarioRestController {
 			usuarioActual = usuarioService.findById(id_usuario);
 		} catch (DataAccessException e) {
 			response.put("mensaje", "Error al conectar con la base de datos");
-			response.put("error", e.getMessage().concat(":")
-					.concat(e.getMostSpecificCause().getMessage()));
+			response.put("error", String.format("%s: %s", e.getMessage(), e.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		if(usuarioActual == null) {
@@ -139,13 +143,13 @@ public class UsuarioRestController {
 		}
 		response.put("mensaje", "El usuario se ha modificado correctamente");
 		response.put("usuario", usuarioUpdated);
-		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.CREATED);
+		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/logged")
 	public ResponseEntity<?> delete(){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        int id_usuario = Integer.parseInt(auth.getCredentials().toString());
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		int id_usuario = Integer.parseInt(auth.getCredentials().toString());
 		Map<String,Object> response = new HashMap<>();
 		if (usuarioService.findById(id_usuario) == null) {
 			response.put("mensaje", "Error al eliminar el usuario");
@@ -160,6 +164,6 @@ public class UsuarioRestController {
 			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		response.put("mensaje", "El usuario se ha borrado correctamente");
-		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.OK);
+		return new ResponseEntity<Map<String,Object>>(response,HttpStatus.NO_CONTENT);
 	}
 }
