@@ -27,7 +27,6 @@ public class WebSecurityConfig {
 	                .authorizeHttpRequests(authorize -> {
 	                	authorize.requestMatchers("/auth/login", "/auth/registro", "/images/**").permitAll();
 	                	authorize.requestMatchers(HttpMethod.GET, "/recetas/**", "/usuarios").permitAll();
-	                	authorize.requestMatchers(HttpMethod.POST, "/recetas").authenticated();
 	                	authorize.anyRequest().authenticated();
 	                	});
 	        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

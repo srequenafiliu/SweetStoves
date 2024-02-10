@@ -44,4 +44,10 @@ export class RepiceDetailComponent implements OnInit {
       }
     });
   }
+
+  guardarReceta() {
+    this.repicesService.followRepice(this.id_receta).subscribe({
+      next:m => this.authService.addAlert("alertSave", true, <string>m, false)
+    });
+  }
 }

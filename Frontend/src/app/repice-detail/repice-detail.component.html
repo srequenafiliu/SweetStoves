@@ -50,7 +50,7 @@
             <span *ngIf="receta_creada, else guardar" class="fw-light text-danger">No puedes eliminar una receta tuya de tu lista personal</span>
             <ng-template #guardar>
               <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault" value="guardado" [(ngModel)]="guardado" (change)="this.repicesService.followRepice(this.id_receta)">
+                <input class="form-check-input" type="checkbox" name="flexSwitchCheckDefault" value="guardado" [(ngModel)]="guardado" (change)="this.guardarReceta()">
                 <label class="form-check-label" for="flexSwitchCheckDefault">Añadir esta receta a tu lista personal</label>
               </div>
             </ng-template>
